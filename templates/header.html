@@ -1,0 +1,23 @@
+{% load static %}
+<div style="background-color: white">
+    <header class="d-flex flex-wrap justify-content-around py-3 align-items-center">
+
+        <div align="left" style="width:250px">
+            <img src="{% static '/img/logo.png' %}" width="80%">
+        </div>
+
+        {% if request.user.is_authenticated %}
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a href="/logout/" class="nav-link active" style="background-color: #036749">Cerrar sesión</a>
+            </li>
+        </ul>
+        {% else %}
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a href="/login/" class="nav-link active" style="background-color: #036749">Ingresar</a>
+            </li>
+        </ul>
+        {% endif %}
+    </header>
+</div>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<div class="text-center">
+    <form method="POST" style="align-content: center;">
+        {% csrf_token %}
+
+        <h1 class="h3 mb-3 font-weight-normal">Registro de usuario</h1>
+
+        <label class="sr-only">Nombre de Usuario</label>
+        <input type="username" required="" placeholder="Nombre de Usuario" name="username">
+        {{form.errors.username}}
+        <br>
+
+        <label class="sr-only">Email</label>
+        <input type="email" required="" placeholder="Email" name="email">
+        {{form.errors.email}}
+        <br>
+
+        <label class="sr-only">Contraseña</label>
+        <input type="password" placeholder="Contraseña" required="" aria-placeholder="Contraseña" name="password1">
+        <br>
+
+        <label class="sr-only">Confirmar contraseña</label>
+        <input type="password" placeholder="Confirmar contraseña" required="" aria-placeholder="Confirmar contraseña" name="password2">
+        {{form.errors.password2}}
+        <br>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Registrarse</button>
+        <br>
+        <br>
+    </form>
+</div>
+
+{% endblock content %}
