@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-{% load socialaccount %}
-{% providers_media_js %}
+
 {% load static %}
 {% block content %}
 <head>
@@ -91,8 +90,7 @@
                     </button>
                     <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
                         <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
-                        <a href="{% provider_login_url 'facebook' %}">
-                        Ingresar con Facebook</a>
+                        Ingresar con Facebook
                     </button>
                 </form>
             </div>
