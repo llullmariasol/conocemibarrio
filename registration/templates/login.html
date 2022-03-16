@@ -88,10 +88,7 @@
                         <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                         Ingresar con Google
                     </button>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
-                        <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
-                        Ingresar con Facebook
-                    </button>
+                    <a href='{% url 'registration:social:begin' 'facebook' %}'>Ingresar con Facebook</a>
                 </form>
             </div>
         </div>
