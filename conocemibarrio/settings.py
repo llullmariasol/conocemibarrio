@@ -158,4 +158,4 @@ SOCIAL_AUTH_URL_NAMESPACE = 'registration:social'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-django_keroku.settings(locals())
+django_heroku.settings(locals())
