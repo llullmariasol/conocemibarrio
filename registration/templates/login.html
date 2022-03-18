@@ -88,7 +88,7 @@
                         <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                         Ingresar con Google
                     </button>
-                    <a href='{% url 'registration:social:begin' 'facebook' %}'>Ingresar con Facebook</a>
+                    <a href='{% url 'registration:social:begin' 'facebook' %}?next={{ request.path }}'>Ingresar con Facebook</a>
                 </form>
             </div>
         </div>
