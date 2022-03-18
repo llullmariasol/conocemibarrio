@@ -155,7 +155,7 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'cd870cd6be93e9005fe4f20c1bb5965d'
 
 SOCIAL_AUTH_URL_NAMESPACE = 'registration:social'
 
-LOGIN_REDIRECT_URL = '/complete/facebook'
+LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
 django_heroku.settings(locals())
