@@ -150,8 +150,6 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.8'
-
 SOCIAL_AUTH_FACEBOOK_KEY = '330003199184031'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'cd870cd6be93e9005fe4f20c1bb5965d'
 
