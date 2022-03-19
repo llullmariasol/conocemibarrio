@@ -55,6 +55,10 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
+MIDDLEWARE_CLASSES += (
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+)
+
 ROOT_URLCONF = 'conocemibarrio.urls'
 
 TEMPLATES = [
@@ -154,6 +158,9 @@ SOCIAL_AUTH_FACEBOOK_KEY = '330003199184031'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'cd870cd6be93e9005fe4f20c1bb5965d'
 
 SOCIAL_AUTH_URL_NAMESPACE = 'registration:social'
+
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+DEBUG = False
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
