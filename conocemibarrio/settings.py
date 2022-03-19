@@ -53,11 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-]
-
-MIDDLEWARE_CLASSES += (
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-)
+]
 
 ROOT_URLCONF = 'conocemibarrio.urls'
 
