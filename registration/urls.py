@@ -12,6 +12,7 @@ app_name = 'registration'
 
 urlpatterns = [
     path('', home, name='home'),
+    path('complete/facebook/', home, name='home'),
     path('registration/', registration, name='registration'),
     path('activation/<uidb64>/<token>/', activation, name='activation'),
     path('login/', logIn, name='logIn'),
