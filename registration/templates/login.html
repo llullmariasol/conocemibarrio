@@ -33,7 +33,10 @@
         <div class="modal-content rounded-5 shadow">
 
             <div class="modal-header p-5 pb-4 border-bottom-0">
-                <h2 class="fw-bold mb-0">logo</h2>
+                <div align="left" style="width:250px">
+                    <img src="{% static '/img/logo.png' %}" width="80%">
+                </div>
+
                 <a href="/">
                     <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </a>
@@ -84,11 +87,13 @@
                         </div>
                     </small>
                     <hr>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
+                    <button id="btn-google-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
                         <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                         Ingresar con Google
                     </button>
-                    <a href='{% url 'registration:social:begin' 'facebook' %}'>Ingresar con Facebook</a>
+                    <a id="btn-facebook-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4"
+                       href='{% url 'registration:social:begin' 'facebook' %}'
+                    style="text-decoration: none">Ingresar con Facebook</a>
                 </form>
             </div>
         </div>

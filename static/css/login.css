@@ -40,15 +40,26 @@ user-select: none;
   width: 380px;
 }
 
-.btn-outline-dark {
+#btn-google-login {
                 color: #e60023;
                 border-color: #e60023;
                 }
 
-.btn-outline-dark:hover {
-    color: #fff;
+#btn-google-login:hover {
+    color: white;
     background-color: #e60023;
     border-color: #e60023;
+}
+
+#btn-facebook-login {
+                color: #1877f2;
+                border-color: #1877f2;
+                }
+
+#btn-facebook-login:hover {
+    color: white;
+    background-color: #1877f2;
+    border-color: #1877f2;
 }
 
 .btn-primary-login{

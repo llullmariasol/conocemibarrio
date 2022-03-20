@@ -104,7 +104,7 @@ def logIn(request):
                     else:
                         return HttpResponseRedirect('/')
                 else:
-                    return HttpResponseRedirect('/admin') # todo - ver
+                    return HttpResponseRedirect('/home')
     else:
         form = LogInForm()
 
