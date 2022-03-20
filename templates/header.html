@@ -3,7 +3,9 @@
     <header class="d-flex flex-wrap justify-content-around py-3 align-items-center">
 
         <div align="left" style="width:250px">
-            <img src="{% static '/img/logo.png' %}" width="80%">
+            <a href="/">
+                <img src="{% static '/img/logo.png' %}" width="80%">
+            </a>
         </div>
         {% if request.path == '/login/' %}
         <ul class="nav nav-pills">

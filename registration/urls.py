@@ -23,6 +23,7 @@ urlpatterns = [
              email_template_name='password_reset_email.html',
              success_url=reverse_lazy('registration:password_reset_done')),
          name='password_reset'),
+    path('accounts/', include('django.contrib.auth.urls')),
 
     path('password_reset/done/',
          auth_views.PasswordResetDoneView.as_view(
@@ -40,7 +41,6 @@ urlpatterns = [
              template_name='password_reset_complete.html'),
          name='password_reset_complete'),
 
-    path('accounts/', include('django.contrib.auth.urls')),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('', include('social_django.urls', namespace='social')),
 ]

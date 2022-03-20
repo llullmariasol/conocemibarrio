@@ -62,9 +62,39 @@ user-select: none;
     border-color: #1877f2;
 }
 
-.btn-primary-login{
+#btn-login{
     background-color: #036749;
     border-color: #036749;
+    color:white;
+}
+
+#btn-login:hover{
+    background-color: black;
+    border-color: black;
+    color:white;
+}
+
+#btn-registration{
+    background-color: #036749;
+    border-color: #036749;
+    color:white;
+}
+
+#btn-registration:hover{
+    background-color: black;
+    border-color: black;
+    color:white;
+}
+
+#btn-password-reset{
+    background-color: #036749;
+    border-color: #036749;
+    color:white;
+}
+
+#btn-password-reset:hover{
+    background-color: black;
+    border-color: black;
     color:white;
 }
 
