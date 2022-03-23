@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -153,8 +154,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.8'
 SOCIAL_AUTH_FACEBOOK_KEY = '330003199184031'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'cd870cd6be93e9005fe4f20c1bb5965d'
-SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {'fields': 'id, name, email'}
-
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email, link'
+}
+SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
+    ('name', 'name'),
+    ('email', 'email'),
+    ('link', 'profile_url'),
+]
 SOCIAL_AUTH_URL_NAMESPACE = 'registration:social'
 
 LOGIN_REDIRECT_URL = '/'
