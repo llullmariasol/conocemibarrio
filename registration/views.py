@@ -31,7 +31,14 @@ class EmailThread(threading.Thread):
 
 
 def home(request):
-    return render(request, 'base.html')
+    context = {
+        'request': request,
+        'user': request.user,
+    }
+    return render(
+        request,
+        'base.html',
+        context)
 
 
 def registration(request):
