@@ -13,7 +13,7 @@
             </li>
         </ul>
         {% else %}
-        {% if context.user != null %}
+        {% if request.user.is_authenticated %}
         <ul class="nav nav-pills">
             <li class="nav-item">
                 <a href="/logout/" class="nav-link active" style="background-color: #036749">Cerrar sesión</a>

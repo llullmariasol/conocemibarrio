@@ -1,4 +1,5 @@
 import threading
+import logging
 
 from django.contrib import messages
 from django.contrib.auth.models import User
@@ -31,14 +32,9 @@ class EmailThread(threading.Thread):
 
 
 def home(request):
-    context = {
-        'request': request,
-        'user': request.user,
-    }
-    return render(
-        request,
-        'base.html',
-        context)
+    logger = logging.getLogger('testlogger')
+    logger.info(request.user)
+    return render(request, 'base.html')
 
 
 def registration(request):
