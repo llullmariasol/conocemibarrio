@@ -16,8 +16,8 @@ urlpatterns = [
     path('registration/', registration, name='registration'),
     path('activation/<uidb64>/<token>/', activation, name='activation'),
     path('login/', logIn, name='logIn'),
-    # path('logout/', logOut, name='logOut'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logOut'),
+    path('logout/', logOut, name='logOut'),
+    # path('logout/', auth_views.LogoutView.as_view(), name='logOut'),
     path('password_reset/',
          auth_views.PasswordResetView.as_view(
              template_name='password_reset_form.html',
