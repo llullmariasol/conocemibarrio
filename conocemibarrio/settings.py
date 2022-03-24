@@ -164,7 +164,9 @@ SOCIAL_AUTH_FACEBOOK_EXTRA_DATA = [
 ]
 SOCIAL_AUTH_URL_NAMESPACE = 'registration:social'
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = 'registration:logIn'
+LOGIN_REDIRECT_URL = 'registration:home'
+LOGOUT_URL = 'registration:logOut'
+LOGOUT_REDIRECT_URL = 'registration:logIn'
 
 django_heroku.settings(locals())

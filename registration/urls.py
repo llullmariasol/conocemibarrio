@@ -12,11 +12,12 @@ app_name = 'registration'
 
 urlpatterns = [
     path('', home, name='home'),
-    path('complete/facebook/', home, name='home'),
+    # path('complete/facebook/', home, name='home'),
     path('registration/', registration, name='registration'),
     path('activation/<uidb64>/<token>/', activation, name='activation'),
     path('login/', logIn, name='logIn'),
-    path('logout/', logOut, name='logOut'),
+    # path('logout/', logOut, name='logOut'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logOut'),
     path('password_reset/',
          auth_views.PasswordResetView.as_view(
              template_name='password_reset_form.html',
@@ -42,5 +43,7 @@ urlpatterns = [
          name='password_reset_complete'),
 
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
-    path('', include('social_django.urls', namespace='social')),
+    # path('', include('social_django.urls', namespace='social')),
+    path('social-auth/', include('social_django.urls', namespace="social")),
+
 ]
