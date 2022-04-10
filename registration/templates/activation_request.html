@@ -1,0 +1,2 @@
+Hola {{ user.username }}! Para confirmar tu registración hacé click en el siguiente enlace:
+http://{{ domain }}{% url 'registration:activation' uidb64=uid token=token %}
