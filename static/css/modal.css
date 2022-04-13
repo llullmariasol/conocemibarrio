@@ -40,20 +40,61 @@ user-select: none;
   width: 380px;
 }
 
-.btn-outline-dark {
+#btn-google-login {
                 color: #e60023;
                 border-color: #e60023;
                 }
 
-.btn-outline-dark:hover {
-    color: #fff;
+#btn-google-login:hover {
+    color: white;
     background-color: #e60023;
     border-color: #e60023;
 }
 
-.btn-primary-login{
+#btn-facebook-login {
+                color: #1877f2;
+                border-color: #1877f2;
+                }
+
+#btn-facebook-login:hover {
+    color: white;
+    background-color: #1877f2;
+    border-color: #1877f2;
+}
+
+#btn-login{
     background-color: #036749;
     border-color: #036749;
+    color:white;
+}
+
+#btn-login:hover{
+    background-color: black;
+    border-color: black;
+    color:white;
+}
+
+#btn-registration{
+    background-color: #036749;
+    border-color: #036749;
+    color:white;
+}
+
+#btn-registration:hover{
+    background-color: black;
+    border-color: black;
+    color:white;
+}
+
+#btn-password-reset{
+    background-color: #036749;
+    border-color: #036749;
+    color:white;
+}
+
+#btn-password-reset:hover{
+    background-color: black;
+    border-color: black;
     color:white;
 }
 
