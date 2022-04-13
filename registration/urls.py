@@ -1,5 +1,6 @@
-from django.urls import path, reverse_lazy
+from django.urls import path, reverse_lazy, include
 from django.contrib.auth import views as auth_views
+from django.views.generic import TemplateView
 
 from .views import (registration,
                     activation,
@@ -23,20 +24,21 @@ urlpatterns = [
              email_template_name='password_reset_email.html',
              success_url=reverse_lazy('registration:password_reset_done')),
          name='password_reset'),
-
+    path('accounts/', include('django.contrib.auth.urls')),
     path('password_reset/done/',
          auth_views.PasswordResetDoneView.as_view(
              template_name='password_reset_done.html'),
          name='password_reset_done'),
-
     path('reset/<uidb64>/<token>/',
          auth_views.PasswordResetConfirmView.as_view(
              template_name='password_reset_confirm.html',
              success_url=reverse_lazy('registration:password_reset_complete')),
          name='password_reset_confirm'),
-
     path('reset/done/',
          auth_views.PasswordResetCompleteView.as_view(
              template_name='password_reset_complete.html'),
-         name='password_reset_complete')
+         name='password_reset_complete'),
+    path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('social-auth/', include('social_django.urls', namespace="social")),
+
 ]

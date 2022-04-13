@@ -26,14 +26,14 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="{% static '/css/login.css' %}"></head>
+    <link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
 <body class="text-center" style="background-color: #036749;">
 <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749;" >
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-5 shadow">
 
             <div class="modal-header p-5 pb-4 border-bottom-0">
-                <h2 class="fw-bold mb-0">logo</h2>
+                <h2 class="fw-bold mb-0">Iniciar sesión</h2>
                 <a href="/">
                     <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </a>
@@ -74,7 +74,7 @@
                     {% endif %}
 
                     <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-                    <button class="w-100 mb-2 btn btn-lg rounded-4 btn-primary-login" type="submit">Ingresar</button>
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Ingresar</button>
                     <small class="text-muted d-flex flex-wrap justify-content-between py-3">
                         <div align="left">
                             <b><a href="/registration/" style="color:black">Crear una cuenta</a></b>
@@ -84,14 +84,13 @@
                         </div>
                     </small>
                     <hr>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
+                    <button id="btn-google-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
                         <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                         Ingresar con Google
                     </button>
-                    <button class="w-100 py-2 mb-2 btn btn-outline-primary rounded-4" type="submit">
-                        <svg class="bi me-1" width="16" height="16"><use xlink:href="#facebook"/></svg>
-                        Ingresar con Facebook
-                    </button>
+                    <a id="btn-facebook-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4"
+                       href='{% url 'registration:social:begin' 'facebook' %}'
+                    style="text-decoration: none">Ingresar con Facebook</a>
                 </form>
             </div>
         </div>
