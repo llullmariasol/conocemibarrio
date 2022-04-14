@@ -7,7 +7,8 @@ from .views import (registration,
                     logIn,
                     home,
                     logOut,
-                    location)
+                    location,
+                    registro)
 
 app_name = 'registration'
 
@@ -40,5 +41,6 @@ urlpatterns = [
          name='password_reset_complete'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('social-auth/', include('social_django.urls', namespace="social")),
+    path('location/<latitude>/<longitude>/', registro, name='registro'),
 
 ]

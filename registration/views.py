@@ -38,6 +38,10 @@ def location(request):
     return render(request, 'location.html')
 
 
+def registro(request, latitude, longitude):
+    return render(request, 'registro.html', {'latitude':latitude, 'longitude':longitude})
+
+
 def registration(request):
     args = {}
     if request.method == 'POST':
