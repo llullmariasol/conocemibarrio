@@ -26,72 +26,69 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+    <link rel="stylesheet" href="{% static '/css/modal.css' %}">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+    <link
+            href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+            rel="stylesheet"
+    />
+</head>
 <body class="text-center" style="background-color: #036749;">
 <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749;" >
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-5 shadow">
 
             <div class="modal-header p-5 pb-4 border-bottom-0">
-                <h2 class="fw-bold mb-0">Iniciar sesión</h2>
+                <div align="left" style="width:80px">
+                    <img src="{% static '/img/safetypin.png' %}" width="80%">
+                </div>
                 <a href="/">
                     <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </a>
             </div>
 
             <div class="modal-body p-5 pt-0">
-                <form method="post">
-                    {% csrf_token %}
 
-                    {% if not form.errors.username%}
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-4" id="floatingInput" placeholder="Nombre de usuario" name="username">
-                        <label for="floatingInput">Nombre de usuario</label>
-                    </div>
-                    {% endif %}
+                {% if result.name == None %}
+                <p>No se encontró un barrio para tu ubicación.</p>
+                {% else %}
+                <p>Tu barrio es {{ result.name }}</p>
+                {% endif %}
+                <div id="map" style="width: 400px; height: 300px"></div>
+                <script>
+                  mapboxgl.accessToken = "pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw"
 
-                    {% if form.errors.username %}
-                    <div class="form-floating mb-3 has-danger">
-                        <input type="text" class="form-control rounded-4 is-invalid" id="inputInvalid" placeholder="Nombre de usuario" name="username">
-                        <label for="floatingInput" >Nombre de usuario</label>
-                        <div class="invalid-feedback">{{form.errors.username}}</div>
-                    </div>
-                    {% endif %}
-
-                    {% if not form.errors.password %}
-                    <div class="form-floating mb-3">
-                        <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Contraseña" name="password">
-                        <label for="floatingPassword">Contraseña</label>
-                    </div>
-                    {% endif %}
-
-                    {% if form.errors.password %}
-                    <div class="form-floating mb-3 has-danger">
-                        <input type="password" class="form-control rounded-4 is-invalid" id="inputInvalid" placeholder="Contraseña" name="password">
-                        <label for="floatingPassword">Contraseña</label>
-                        <div class="invalid-feedback">{{form.errors.password}}</div>
-                    </div>
-                    {% endif %}
-
+                  var map = new mapboxgl.Map({
+                    container: "map",
+                    style: "mapbox://styles/mapbox/streets-v11",
+                    center: [{{ longitude }}, {{ latitude }}],
+                    zoom: 15
+                  });
+                  const marker = new mapboxgl.Marker({
+                  color: "#ad081b",
+                  draggable: false
+                    }).setLngLat([{{ longitude }}, {{ latitude }}])
+                        .addTo(map);
+                </script>
                     <input type="hidden" name="next" value="{{ request.GET.next }}"/>
-                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Ingresar</button>
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Unite a tu barrio</button>
                     <small class="text-muted d-flex flex-wrap justify-content-between py-3">
                         <div align="left">
-                            <b><a href="/registration/" style="color:black">Unirme a mi barrio</a></b>
+                            <b><a href="/registration/" style="color:black">Crear una cuenta</a></b>
                         </div>
                         <div align="right">
                             <b><a href="/password_reset/" style="color:black">Olvidé mi contraseña</a></b>
                         </div>
                     </small>
                     <hr>
-                    <button id="btn-google-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
+           <!--         <button id="btn-google-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
                         <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
                         Ingresar con Google
                     </button>
                     <a id="btn-facebook-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4"
                        href='{% url 'registration:social:begin' 'facebook' %}'
-                    style="text-decoration: none">Ingresar con Facebook</a>
-                </form>
+                    style="text-decoration: none">Ingresar con Facebook</a> -->
+
             </div>
         </div>
     </div>

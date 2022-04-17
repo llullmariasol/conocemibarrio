@@ -6,16 +6,18 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.conf import settings
+from django.contrib.gis.geos import GEOSGeometry
 
 from .forms import (RegistrationForm,
                     LogInForm,
                     PasswordResetForm)
+from .models import NeighborhoodShape
 
 UserModel = get_user_model()
 
@@ -36,10 +38,6 @@ def home(request):
 
 def location(request):
     return render(request, 'location.html')
-
-
-def registro(request, latitude, longitude):
-    return render(request, 'registro.html', {'latitude':latitude, 'longitude':longitude})
 
 
 def registration(request):
@@ -126,3 +124,15 @@ def logOut(request):
     return HttpResponseRedirect('/')
 
     return render(request, 'base.html', {})
+
+
+def registro(request, latitude, longitude):
+    neighborhood_shapes = NeighborhoodShape.objects.all()
+    result = None
+    for n in neighborhood_shapes:
+        if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
+            result = n
+            break
+
+    return render(request, 'find_neighborhood.html', {'latitude': latitude, 'longitude': longitude, 'result': result})
+

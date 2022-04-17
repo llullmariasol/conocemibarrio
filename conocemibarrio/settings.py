@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'conocemibarrio',
         'USER': 'root',
         'PASSWORD': 'admin1234',
