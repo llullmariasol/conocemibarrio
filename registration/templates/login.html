@@ -77,10 +77,14 @@
                     <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Ingresar</button>
                     <small class="text-muted d-flex flex-wrap justify-content-between py-3">
                         <div align="left">
-                            <b><a href="/registration/" style="color:black">Unirme a mi barrio</a></b>
+                            <b>
+                                <a id="myButton" class="float-left submit-button" style="color:black">Unirme a mi barrio</a>
+                            </b>
                         </div>
                         <div align="right">
-                            <b><a href="/password_reset/" style="color:black">Olvidé mi contraseña</a></b>
+                            <b>
+                                <a href="/password_reset/" class="float-left submit-button" style="color:black">Olvidé mi contraseña</a>
+                            </b>
                         </div>
                     </small>
                     <hr>
@@ -96,7 +100,32 @@
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript">
+    document.getElementById("myButton").onclick = function () {
+
+    function success(position) {
+    const latitude  = position.coords.latitude;
+    const longitude = position.coords.longitude;
+window.location.href = '/location/'+latitude+'/'+longitude+'/';
+  }
+
+  function error() {
+    const status = 'Unable to retrieve your location';
+  }
+
+  if(!navigator.geolocation) {
+    const status = 'Geolocation is not supported by your browser';
+  } else {
+    const status = 'Locating…';
+    navigator.geolocation.getCurrentPosition(success, error);
+  }
+
+   }
+</script>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 {% endblock content %}

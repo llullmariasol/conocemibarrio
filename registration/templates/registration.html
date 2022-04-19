@@ -2,19 +2,49 @@
 
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+<!-- Custom styles for this template -->
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet"/></head>
 <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749;" >
     <div class="modal-dialog" role="document">
         <div class="modal-content rounded-5 shadow">
 
             <div class="modal-header p-5 pb-4 border-bottom-0">
-                <h2 class="fw-bold mb-0">Registrarse</h2>
+                <div align="left" style="width:80px">
+                    <img src="{% static '/img/safetypin.png' %}" width="80%">
+                </div>
                 <a href="/">
                     <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </a>
             </div>
 
             <div class="modal-body p-5 pt-0">
+
+                {% if result.name == None %}
+                <p>No se encontró un barrio para tu ubicación.</p>
+                {% else %}
+                <p>Tu barrio es {{ result.name }}</p>
+                {% endif %}
+                <div id="map" style="margin-right:auto; margin-left:auto; height: 300px">
+                <script>
+                  mapboxgl.accessToken = "pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw"
+
+                  var map = new mapboxgl.Map({
+                    container: "map",
+                    style: "mapbox://styles/mapbox/streets-v11",
+                    center: [{{ longitude }}, {{ latitude }}],
+                    zoom: 15
+                  });
+                  const marker = new mapboxgl.Marker({
+                  color: "#ad081b",
+                  draggable: false
+                    }).setLngLat([{{ longitude }}, {{ latitude }}])
+                        .addTo(map);
+                </script>
+                </div>
+                <hr>
+
                 <form method="POST" style="align-content: center;">
                     {% csrf_token %}
 

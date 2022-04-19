@@ -40,9 +40,10 @@ def location(request):
     return render(request, 'location.html')
 
 
-def registration(request):
+def registration(request, latitude, longitude):
     args = {}
     if request.method == 'POST':
+        #agregar guardado de barrio
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
@@ -69,10 +70,20 @@ def registration(request):
 
             return HttpResponseRedirect('/')
     else:
+        neighborhood_shapes = NeighborhoodShape.objects.all()
+        result = None
+        for n in neighborhood_shapes:
+            if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
+                result = n
+                break
         form = RegistrationForm()
+        args['latitude'] = latitude
+        args['longitude'] = longitude
+        args['result'] = result
     args['form'] = form
 
     return render(request, 'registration.html', args)
+
 
 
 def activation(request, uidb64, token):
