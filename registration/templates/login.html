@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
 {% block content %}
 <head>
     <meta charset="utf-8">
@@ -84,10 +86,7 @@
                         </div>
                     </small>
                     <hr>
-                    <button id="btn-google-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" type="submit">
-                        <svg class="bi me-1" width="16" height="16"><use xlink:href="#google"/></svg>
-                        Ingresar con Google
-                    </button>
+                    <a href="{% url "registration:social:begin" "google-oauth2" %}">Google+</a>
                     <a id="btn-facebook-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4"
                        href='{% url 'registration:social:begin' 'facebook' %}'
                     style="text-decoration: none">Ingresar con Facebook</a>
