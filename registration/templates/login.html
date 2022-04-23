@@ -86,7 +86,10 @@
                         </div>
                     </small>
                     <hr>
-                    <a href="{% url "registration:social:begin" "google-oauth2" %}">Google+</a>
+                    <a id="btn-google-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4" 
+                        href='{% url "registration:social:begin" "google-oauth2" %}' style="text-decoration: none">
+                        Ingresar con Google
+                    </a>
                     <a id="btn-facebook-login" class="w-100 py-2 mb-2 btn btn-outline-dark rounded-4"
                        href='{% url 'registration:social:begin' 'facebook' %}'
                     style="text-decoration: none">Ingresar con Facebook</a>
