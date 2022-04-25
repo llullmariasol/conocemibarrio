@@ -7,8 +7,7 @@ from .views import (registration,
                     logIn,
                     home,
                     logOut,
-                    location,
-                    registro)
+                    location)
 
 app_name = 'registration'
 

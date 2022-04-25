@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% load static %}
 {% block content %}
 <!-- Custom styles for this template -->
@@ -20,12 +19,20 @@
             </div>
 
             <div class="modal-body p-5 pt-0">
-
-                {% if result.name == None %}
-                <p>No se encontró un barrio para tu ubicación.</p>
+                {% if result.is_active == 0  or result.name == None %}
+                <div align="justify">
+                    <b>
+                        [conocemibarrio] no está disponible para tu zona.
+                    </b>
+                    <br>
+                </div>
                 {% else %}
-                <p>Tu barrio es {{ result.name }}</p>
-                {% endif %}
+                <div>
+                    <h3>
+                        ¡Tu barrio es <b>{{ result.name }}</b>!
+                    </h3>
+                    <br>
+                </div>
                 <div id="map" style="margin-right:auto; margin-left:auto; height: 300px">
                 <script>
                   mapboxgl.accessToken = "pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw"
@@ -44,6 +51,11 @@
                 </script>
                 </div>
                 <hr>
+                <div align="justify">
+                        Creá tu cuenta para acceder a todas las funcionalidades:
+                    <br>
+                    <br>
+                </div>
 
                 <form method="POST" style="align-content: center;">
                     {% csrf_token %}
@@ -111,12 +123,13 @@
                     <input type="hidden" name="next" value="{{ request.GET.next }}"/>
                     <button id="btn-registration" class="w-100 mb-2 btn btn-lg btn-primary" type="submit">Registrarse</button>
                 </form>
+                <div align="justify">
+                    <small>Al registrarte, aceptás nuestros términos y condiciones.</small>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
 {% endblock content %}

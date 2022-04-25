@@ -16,8 +16,8 @@ from django.contrib.gis.geos import GEOSGeometry
 
 from .forms import (RegistrationForm,
                     LogInForm,
-                    PasswordResetForm)
-from .models import NeighborhoodShape
+                    UserNeighborhoodForm)
+from .models import Neighborhood, UserNeighborhood
 
 UserModel = get_user_model()
 
@@ -43,12 +43,35 @@ def location(request):
 def registration(request, latitude, longitude):
     args = {}
     if request.method == 'POST':
-        #agregar guardado de barrio
         form = RegistrationForm(request.POST)
+
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+
+            form2 = UserNeighborhoodForm(request.POST)
+
+            form2.fields["user_id"] = user
+
+
+            #form2.save(commit=False)
+
+            #user_neighborhood.user_id_id = user.id
+
+            neighborhoods = Neighborhood.objects.all()
+            result = None
+            for n in neighborhoods:
+                if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
+                    result = n
+                    form2.fields["neighborhood_id"] = n
+                    break
+
+            #if form2.is_valid():
+            user_neighborhood = form2.save(commit=False)
+            user_neighborhood.save()
+
+
             current_site = get_current_site(request)
             message = render_to_string('activation_request.html', {
                 'user': user,
@@ -68,11 +91,11 @@ def registration(request, latitude, longitude):
             EmailThread(email_message).start()
             messages.add_message(request, messages.SUCCESS, "El link para activar tu cuenta fue enviado.")
 
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/login')
     else:
-        neighborhood_shapes = NeighborhoodShape.objects.all()
+        neighborhoods = Neighborhood.objects.all()
         result = None
-        for n in neighborhood_shapes:
+        for n in neighborhoods:
             if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
                 result = n
                 break
@@ -135,15 +158,3 @@ def logOut(request):
     return HttpResponseRedirect('/')
 
     return render(request, 'base.html', {})
-
-
-def registro(request, latitude, longitude):
-    neighborhood_shapes = NeighborhoodShape.objects.all()
-    result = None
-    for n in neighborhood_shapes:
-        if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
-            result = n
-            break
-
-    return render(request, 'find_neighborhood.html', {'latitude': latitude, 'longitude': longitude, 'result': result})
-
