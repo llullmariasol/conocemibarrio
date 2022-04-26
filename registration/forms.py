@@ -4,14 +4,6 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import views as auth_views
 
-from registration.models import UserNeighborhood
-
-
-class UserNeighborhoodForm(forms.ModelForm):
-    class Meta:
-        model = UserNeighborhood
-        fields = ['user_id', 'neighborhood_id']
-
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=100)
@@ -115,4 +107,3 @@ class LogInForm(forms.Form):
 
 class PasswordResetForm(auth_views.PasswordResetForm):
     email = forms.EmailField(required=True)
-

@@ -14,9 +14,8 @@ class Neighborhood(models.Model):
 
 
 class UserNeighborhood(models.Model):
-    id = models.IntegerField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    neighborhood_id = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE)
 
     class Meta:
         managed = False

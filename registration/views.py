@@ -15,8 +15,7 @@ from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 
 from .forms import (RegistrationForm,
-                    LogInForm,
-                    UserNeighborhoodForm)
+                    LogInForm)
 from .models import Neighborhood, UserNeighborhood
 
 UserModel = get_user_model()
@@ -50,27 +49,17 @@ def registration(request, latitude, longitude):
             user.is_active = False
             user.save()
 
-            form2 = UserNeighborhoodForm(request.POST)
-
-            form2.fields["user_id"] = user
-
-
-            #form2.save(commit=False)
-
-            #user_neighborhood.user_id_id = user.id
-
             neighborhoods = Neighborhood.objects.all()
             result = None
             for n in neighborhoods:
                 if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
                     result = n
-                    form2.fields["neighborhood_id"] = n
                     break
 
-            #if form2.is_valid():
-            user_neighborhood = form2.save(commit=False)
+            user_neighborhood = UserNeighborhood()
+            user_neighborhood.user = user
+            user_neighborhood.neighborhood = n
             user_neighborhood.save()
-
 
             current_site = get_current_site(request)
             message = render_to_string('activation_request.html', {
@@ -91,7 +80,7 @@ def registration(request, latitude, longitude):
             EmailThread(email_message).start()
             messages.add_message(request, messages.SUCCESS, "El link para activar tu cuenta fue enviado.")
 
-            return HttpResponseRedirect('/login')
+            return HttpResponseRedirect('/')
     else:
         neighborhoods = Neighborhood.objects.all()
         result = None
@@ -106,7 +95,6 @@ def registration(request, latitude, longitude):
     args['form'] = form
 
     return render(request, 'registration.html', args)
-
 
 
 def activation(request, uidb64, token):
