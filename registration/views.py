@@ -31,7 +31,13 @@ class EmailThread(threading.Thread):
 
 
 def home(request):
-    return render(request, 'base.html')
+    args = {}
+    if request.user.is_authenticated:
+        neighborhood = UserNeighborhood()
+        neighborhood = UserNeighborhood.objects.get(user_id=request.user)
+        args['neighborhood'] = neighborhood
+
+    return render(request, 'base.html', args)
 
 
 def location(request):

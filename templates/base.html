@@ -22,6 +22,13 @@
 <main>
     {% block content %}
     {% endblock content %}
+    {% if request.user.is_authenticated %}
+    {% if neighborhood == null %}
+        <p>El user se registró con FB o Google</p>
+    {% else %}
+        <p>El user ya tiene barrio</p>
+    {% endif %}
+    {% endif %}
 </main>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 </body>
