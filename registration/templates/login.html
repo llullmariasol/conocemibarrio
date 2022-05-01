@@ -76,11 +76,16 @@
                     <input type="hidden" name="next" value="{{ request.GET.next }}"/>
                     <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Ingresar</button>
                     <small class="text-muted d-flex flex-wrap justify-content-between py-3">
-                        <div align="left">
+                        <!--<div align="left">
                             <b>
-                                <a id="myButton" class="float-left submit-button" style="color:black">Unirme a mi barrio</a>
+                                <a id="myButton" class="float-left submit-button" style="color:black">Crear una cuenta</a>
                             </b>
+                        </div>-->
+
+                        <div align="left">
+                            <b><a href="/registration/" style="color:black">Crear una cuenta</a></b>
                         </div>
+
                         <div align="right">
                             <b>
                                 <a href="/password_reset/" class="float-left submit-button" style="color:black">Olvidé mi contraseña</a>

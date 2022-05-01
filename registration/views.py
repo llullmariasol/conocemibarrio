@@ -39,7 +39,7 @@ def location(request):
     return render(request, 'location.html')
 
 
-def registration(request, latitude, longitude):
+def registration(request):
     args = {}
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -49,17 +49,25 @@ def registration(request, latitude, longitude):
             user.is_active = False
             user.save()
 
-            neighborhoods = Neighborhood.objects.all()
-            result = None
-            for n in neighborhoods:
-                if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
-                    result = n
-                    break
+            # neighborhoods = Neighborhood.objects.all()
+            # result = None
+            # for n in neighborhoods:
+            #     if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
+            #         result = n
+            #         break
 
-            user_neighborhood = UserNeighborhood()
-            user_neighborhood.user = user
-            user_neighborhood.neighborhood = n
-            user_neighborhood.save()
+            # user_neighborhood = UserNeighborhood()
+            # user_neighborhood.user = user
+            # user_neighborhood.neighborhood = n
+            # user_neighborhood.save()
+
+            if request.POST.get('barrio'):
+                neighborhood_id = request.POST.get('barrio')
+                n = Neighborhood.objects.get(pk=neighborhood_id)
+                user_neighborhood = UserNeighborhood()
+                user_neighborhood.user = user
+                user_neighborhood.neighborhood = n
+                user_neighborhood.save()
 
             current_site = get_current_site(request)
             message = render_to_string('activation_request.html', {
@@ -82,16 +90,18 @@ def registration(request, latitude, longitude):
 
             return HttpResponseRedirect('/')
     else:
-        neighborhoods = Neighborhood.objects.all()
-        result = None
-        for n in neighborhoods:
-            if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
-                result = n
-                break
+        #neighborhoods = Neighborhood.objects.all()
+        #result = None
+        #for n in neighborhoods:
+        #    if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
+        #        result = n
+        #        break
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
         form = RegistrationForm()
-        args['latitude'] = latitude
-        args['longitude'] = longitude
-        args['result'] = result
+        args['neighborhoods'] = neighborhoods
+        #args['latitude'] = latitude
+        #args['longitude'] = longitude
+        #args['result'] = result
     args['form'] = form
 
     return render(request, 'registration.html', args)
