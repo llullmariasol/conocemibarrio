@@ -6,13 +6,12 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.conf import settings
-from django.contrib.gis.geos import GEOSGeometry
 
 from .forms import (RegistrationForm,
                     LogInForm)
@@ -49,18 +48,6 @@ def registration(request):
             user.is_active = False
             user.save()
 
-            # neighborhoods = Neighborhood.objects.all()
-            # result = None
-            # for n in neighborhoods:
-            #     if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
-            #         result = n
-            #         break
-
-            # user_neighborhood = UserNeighborhood()
-            # user_neighborhood.user = user
-            # user_neighborhood.neighborhood = n
-            # user_neighborhood.save()
-
             if request.POST.get('barrio'):
                 neighborhood_id = request.POST.get('barrio')
                 n = Neighborhood.objects.get(pk=neighborhood_id)
@@ -90,18 +77,9 @@ def registration(request):
 
             return HttpResponseRedirect('/')
     else:
-        #neighborhoods = Neighborhood.objects.all()
-        #result = None
-        #for n in neighborhoods:
-        #    if n.shape.contains(GEOSGeometry('POINT(' + latitude + ' ' + longitude + ')')):
-        #        result = n
-        #        break
         neighborhoods = Neighborhood.objects.filter(is_active=1)
         form = RegistrationForm()
         args['neighborhoods'] = neighborhoods
-        #args['latitude'] = latitude
-        #args['longitude'] = longitude
-        #args['result'] = result
     args['form'] = form
 
     return render(request, 'registration.html', args)

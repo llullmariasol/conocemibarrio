@@ -40,6 +40,5 @@ urlpatterns = [
          name='password_reset_complete'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('social-auth/', include('social_django.urls', namespace="social")),
-    # path('location/<latitude>/<longitude>/', registration, name='registration'),
     path('location/', registration, name='registration'),
 ]
