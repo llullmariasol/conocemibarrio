@@ -14,7 +14,8 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.conf import settings
 
 from .forms import (RegistrationForm,
-                    LogInForm)
+                    LogInForm,
+                    JoinNeighborhoodForm)
 from .models import Neighborhood, UserNeighborhood
 
 UserModel = get_user_model()
@@ -140,3 +141,28 @@ def logOut(request):
     return HttpResponseRedirect('/')
 
     return render(request, 'base.html', {})
+
+
+def joinNeighborhood(request):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        form = JoinNeighborhoodForm(request.POST)
+
+        if form.is_valid():
+            if request.POST.get('barrio'):
+                neighborhood_id = request.POST.get('barrio')
+                n = Neighborhood.objects.get(pk=neighborhood_id)
+                user_neighborhood = UserNeighborhood()
+                user_neighborhood.user = user
+                user_neighborhood.neighborhood = n
+                user_neighborhood.save()
+
+            return HttpResponseRedirect('/')
+    else:
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        form = JoinNeighborhoodForm()
+        args['neighborhoods'] = neighborhoods
+    args['form'] = form
+
+    return render(request, 'join_neighborhood.html', args)

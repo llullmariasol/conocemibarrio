@@ -15,9 +15,8 @@
         {% else %}
         {% if request.user.is_authenticated %}
         <ul class="nav nav-pills">
-            hola {{ user.username }}
             <li class="nav-item">
-                <a href="/logout/" class="nav-link active" style="background-color: #036749">Cerrar sesión</a>
+                <a href="/logout/" class="nav-link active" style="background-color: #036749">Salir</a>
             </li>
         </ul>
         {% else %}

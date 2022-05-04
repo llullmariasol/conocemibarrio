@@ -7,7 +7,8 @@ from .views import (registration,
                     logIn,
                     home,
                     logOut,
-                    location)
+                    location,
+                    joinNeighborhood)
 
 app_name = 'registration'
 
@@ -41,4 +42,5 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
     path('social-auth/', include('social_django.urls', namespace="social")),
     path('location/', registration, name='registration'),
+    path('join_neighborhood/', joinNeighborhood, name='joinNeighborhood'),
 ]
