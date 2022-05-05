@@ -35,9 +35,10 @@ def home(request):
     args = {}
     if request.user.is_authenticated:
         users_neighborhoods = UserNeighborhood.objects.all()
-        for user_neighborhood in users_neighborhoods:
-            if user_neighborhood.user == request.user:
-                args['neighborhood'] = user_neighborhood
+        if users_neighborhoods is not None:
+            for user_neighborhood in users_neighborhoods:
+                if user_neighborhood.user == request.user:
+                    args['neighborhood'] = user_neighborhood
 
     return render(request, 'base.html', args)
 
