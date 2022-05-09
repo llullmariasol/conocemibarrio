@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.gis',
     'django.contrib.staticfiles',
     'social_django',
     'allauth',
@@ -87,7 +86,7 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'ENGINE': 'django.contrib.gis.db.backends.mysql',
         'NAME': 'conocemibarrio',
         'USER': 'root',
         'PASSWORD': 'admin1234',
@@ -180,7 +179,5 @@ LOGOUT_REDIRECT_URL = 'registration:logIn'
 
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
-
-DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
 django_heroku.settings(locals())
