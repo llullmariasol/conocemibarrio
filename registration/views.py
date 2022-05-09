@@ -51,6 +51,8 @@ def registration(request):
     args = {}
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        args['neighborhoods'] = neighborhoods
 
         if form.is_valid():
             user = form.save(commit=False)
