@@ -8,15 +8,15 @@ class Neighborhood(models.Model):
     shape = models.GeometryField()
     is_active = models.SmallIntegerField()
 
-    #class Meta:
-    #    managed = False
-    #    db_table = 'neighborhood'
+    class Meta:
+        managed = False
+        db_table = 'neighborhood'
 
 
 class UserNeighborhood(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False)
 
-    #class Meta:
-    #    managed = False
-    #    db_table = 'user_neighborhood'
+    class Meta:
+        managed = False
+        db_table = 'user_neighborhood'

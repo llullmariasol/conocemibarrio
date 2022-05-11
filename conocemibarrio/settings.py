@@ -30,21 +30,21 @@ ALLOWED_HOSTS = ['conocemibarrio.herokuapp.com', '127.0.0.1']
 
 # Application definition
 
-INSTALLED_APPS = [
-    'registration',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.gis',
-    'social_django',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-]
+#INSTALLED_APPS = [
+#    'registration',
+#    'django.contrib.admin',
+#    'django.contrib.auth',
+#    'django.contrib.contenttypes',
+#    'django.contrib.sessions',
+#    'django.contrib.messages',
+#    'django.contrib.staticfiles',
+#    'django.contrib.gis',
+#    'social_django',
+#    'allauth',
+#    'allauth.account',
+#    'allauth.socialaccount',
+#    'allauth.socialaccount.providers.google',
+#]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
