@@ -20,7 +20,7 @@
                     <div class="form-floating mb-3">
                         <div align="justify">
                             <label for="floatingInput" >Elegí tu barrio:</label>
-                                <select name="barrio">
+                                <select>
                                     {% for n in neighborhoods %}
                                     <option value="{{ n.pk }}">{{ n.name }}</option>
                                     {% endfor %}
@@ -99,12 +99,5 @@
     </div>
 </div>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    var select = document.getElementById('barrio');
-    select.addEventListener('change',
-      function(){
-        var selectedOption = this.options[select.selectedIndex];
-        console.log(selectedOption.value + ': ' + selectedOption.text);
-      });
-</script>
+
 {% endblock content %}
