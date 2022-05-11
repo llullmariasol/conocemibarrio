@@ -94,7 +94,7 @@ DATABASES = {
 }
 
 import dj_database_url
-
+ENVIRONMENT = 'production'
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
@@ -181,4 +181,4 @@ LOGOUT_REDIRECT_URL = 'registration:logIn'
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
