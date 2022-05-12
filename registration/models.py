@@ -9,14 +9,12 @@ class Neighborhood(models.Model):
     is_active = models.SmallIntegerField()
 
     class Meta:
-        managed = False
         db_table = 'neighborhood'
 
 
 class UserNeighborhood(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', null=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False, related_name='neighborhood', null=True)
 
     class Meta:
-        managed = False
         db_table = 'user_neighborhood'
