@@ -103,11 +103,10 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 #        'HOST': '127.0.0.1',
 #        'PORT': '3306',
 #    }
-#}
+# }
 
 DATABASES = {}
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES.update(default=db_from_env)
+DATABASES['default'].update(dj_database_url.config(conn_max_age=500, ssl_require=True))
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -192,6 +191,6 @@ GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
 # This should already be in your settings.py
 django_heroku.settings(locals())
 # This is new
-options = DATABASES['default'].get('OPTIONS', {})
-options.pop('sslmode', None)
+#options = DATABASES['default'].get('OPTIONS', {})
+#options.pop('sslmode', None)
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.mysql'
