@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 #}
 
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+DATABASES['default'] = dj_database_url.config()
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -196,4 +196,5 @@ django_heroku.settings(locals())
 # This is new
 options = DATABASES['default'].get('OPTIONS', {})
 options.pop('sslmode', None)
+options.pop('conn_max_age', 600)
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.mysql'
