@@ -19,6 +19,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
 # This line should already exist in your settings.py
+from django.conf.global_settings import DATABASES
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 # This is new:
 dotenv_file = os.path.join(BASE_DIR, ".env")
@@ -105,8 +107,8 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 #    }
 # }
 
-DATABASES = {}
-DATABASES.update(default=dj_database_url.config(conn_max_age=500, ssl_require=True))
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 AUTH_PASSWORD_VALIDATORS = [
     {
