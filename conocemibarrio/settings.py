@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-#DATABASES = {
+# DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.contrib.gis.db.backends.mysql',
 #        'NAME': 'conocemibarrio',
@@ -106,7 +106,7 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 # }
 
 DATABASES = {}
-DATABASES['default'].update(dj_database_url.config(conn_max_age=500, ssl_require=True))
+DATABASES.update(default=dj_database_url.config(conn_max_age=500, ssl_require=True))
 
 AUTH_PASSWORD_VALIDATORS = [
     {
