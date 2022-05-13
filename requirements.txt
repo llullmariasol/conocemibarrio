@@ -24,3 +24,5 @@ sqlparse==0.4.2
 urllib3==1.26.8
 whitenoise==6.0.0
 django-allauth==0.50.0
+dj-config-url~=0.1.1
+python-dotenv~=0.20.0
