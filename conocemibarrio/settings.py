@@ -196,5 +196,4 @@ django_heroku.settings(locals())
 # This is new
 options = DATABASES['default'].get('OPTIONS', {})
 options.pop('sslmode', None)
-options.pop('conn_max_age', 600)
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.mysql'
