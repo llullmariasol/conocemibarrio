@@ -20,7 +20,7 @@
                     <div class="form-floating mb-3">
                         <div align="justify">
                             <label for="floatingInput" >Elegí tu barrio:</label>
-                                <select>
+                                <select name="barrio">
                                     {% for n in neighborhoods %}
                                     <option value="{{ n.pk }}">{{ n.name }}</option>
                                     {% endfor %}
