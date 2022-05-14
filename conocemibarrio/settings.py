@@ -8,8 +8,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 
-import dj_database_url
-import django_heroku
+import django_on_heroku
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +23,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 'django-insecure-+gj0caznve=v!w387ens4gnv2qbz5fjbgl%k6efcvb(j+k0$7z'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['conocemibarrio.herokuapp.com', '127.0.0.1']
 
@@ -91,7 +91,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -134,7 +133,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -176,6 +174,6 @@ LOGOUT_REDIRECT_URL = 'registration:logIn'
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
 
-db_from_env = dj_database_url.config(conn_max_age=0, ssl_require=False)
-django_heroku.settings(locals() ,databases=False)
+django_on_heroku.settings(locals())
+
 
