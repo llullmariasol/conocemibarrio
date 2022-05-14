@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 
-import dj_database_url
 import dotenv
 import django_heroku
 from pathlib import Path
@@ -28,7 +27,7 @@ if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 
 # BASE_DIR = Path(__file__).resolve().parent.parent
-SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+# SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -107,8 +106,7 @@ WSGI_APPLICATION = 'conocemibarrio.wsgi.application'
 #    }
 # }
 
-db_from_env = dj_database_url.config()
-DATABASES['default'].update(db_from_env)
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -151,6 +149,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 STATIC_URL = '/static/'
 
