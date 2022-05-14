@@ -43,10 +43,6 @@ def home(request):
     return render(request, 'base.html', args)
 
 
-def location(request):
-    return render(request, 'location.html')
-
-
 def registration(request):
     args = {}
     if request.method == 'POST':

@@ -14,7 +14,8 @@ class Neighborhood(models.Model):
 
 class UserNeighborhood(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', null=True)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False, related_name='neighborhood', null=True)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False,
+                                     related_name='neighborhood', null=True)
 
     class Meta:
         db_table = 'user_neighborhood'

@@ -7,14 +7,12 @@ from .views import (registration,
                     logIn,
                     home,
                     logOut,
-                    location,
                     joinNeighborhood)
 
 app_name = 'registration'
 
 urlpatterns = [
     path('', home, name='home'),
-    path('location/', location, name='location'),
     path('registration/', registration, name='registration'),
     path('activation/<uidb64>/<token>/', activation, name='activation'),
     path('login/', logIn, name='logIn'),

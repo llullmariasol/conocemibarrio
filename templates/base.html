@@ -20,17 +20,14 @@
 </head>
 <body class="text-center" style="background-color: #036749;">
 <main>
+    {% if request.user.is_authenticated and user.is_superuser == 0 %}
+    Hola {{ user.username }}
+    {% if neighborhood == null and request.path != '/join_neighborhood/' %}
+        <a href="/join_neighborhood/" style="color: black">Unirme a un barrio</a>
+    {% endif %}
+    {% endif %}
     {% block content %}
     {% endblock content %}
-    {% if request.user.is_authenticated %}
-    Hola {{ user.username }}
-    {% if neighborhood == null %}
-        <p>El user se registró con FB o Google</p>
-        <a href="/join_neighborhood/" style="color: black">Unirme a un barrio</a>
-    {% else %}
-        <p>El user ya tiene barrio</p>
-    {% endif %}
-    {% endif %}
 </main>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 </body>

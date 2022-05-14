@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import views as auth_views
 from .models import Neighborhood
 
+
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=100)
 
@@ -112,5 +113,3 @@ class PasswordResetForm(auth_views.PasswordResetForm):
 class JoinNeighborhoodForm(forms.Form):
     ns = Neighborhood.objects.filter(is_active=1)
     n = forms.ModelMultipleChoiceField(queryset=Neighborhood.objects.all(), required=False)
-
-
