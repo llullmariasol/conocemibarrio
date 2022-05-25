@@ -1,7 +1,6 @@
 {% load static %}
 <div style="background-color: white">
     <header class="d-flex flex-wrap justify-content-around py-3 align-items-center">
-
         <div align="left" style="width:250px">
             <a href="/">
                 <img src="{% static '/img/logo.png' %}" width="80%">
@@ -15,9 +14,8 @@
         {% else %}
         {% if request.user.is_authenticated %}
         <ul class="nav nav-pills">
-            hola {{ user.username }}
             <li class="nav-item">
-                <a href="/logout/" class="nav-link active" style="background-color: #036749">Cerrar sesión</a>
+                <a href="/logout/" class="nav-link active" style="background-color: #036749">Salir</a>
             </li>
         </ul>
         {% else %}

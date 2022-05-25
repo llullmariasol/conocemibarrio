@@ -15,7 +15,8 @@ from django.conf import settings
 
 from .forms import (RegistrationForm,
                     LogInForm,
-                    PasswordResetForm)
+                    JoinNeighborhoodForm)
+from .models import Neighborhood, UserNeighborhood
 
 UserModel = get_user_model()
 
@@ -31,17 +32,37 @@ class EmailThread(threading.Thread):
 
 
 def home(request):
-    return render(request, 'base.html')
+    args = {}
+    if request.user.is_authenticated:
+        users_neighborhoods = UserNeighborhood.objects.all()
+        if users_neighborhoods is not None:
+            for user_neighborhood in users_neighborhoods:
+                if user_neighborhood.user == request.user:
+                    args['neighborhood'] = user_neighborhood
+
+    return render(request, 'base.html', args)
 
 
 def registration(request):
     args = {}
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        args['neighborhoods'] = neighborhoods
+
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
             user.save()
+
+            if request.POST.get('barrio'):
+                neighborhood_id = request.POST.get('barrio')
+                n = Neighborhood.objects.get(pk=neighborhood_id)
+                user_neighborhood = UserNeighborhood()
+                user_neighborhood.user = user
+                user_neighborhood.neighborhood = n
+                user_neighborhood.save()
+
             current_site = get_current_site(request)
             message = render_to_string('activation_request.html', {
                 'user': user,
@@ -63,7 +84,9 @@ def registration(request):
 
             return HttpResponseRedirect('/')
     else:
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
         form = RegistrationForm()
+        args['neighborhoods'] = neighborhoods
     args['form'] = form
 
     return render(request, 'registration.html', args)
@@ -118,3 +141,28 @@ def logOut(request):
     return HttpResponseRedirect('/')
 
     return render(request, 'base.html', {})
+
+
+def joinNeighborhood(request):
+    args = {}
+    user = request.user
+    if request.method == 'POST':
+        form = JoinNeighborhoodForm(request.POST)
+
+        if form.is_valid():
+            if request.POST.get('barrio'):
+                neighborhood_id = request.POST.get('barrio')
+                n = Neighborhood.objects.get(pk=neighborhood_id)
+                user_neighborhood = UserNeighborhood()
+                user_neighborhood.user = user
+                user_neighborhood.neighborhood = n
+                user_neighborhood.save()
+
+            return HttpResponseRedirect('/')
+    else:
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        form = JoinNeighborhoodForm()
+        args['neighborhoods'] = neighborhoods
+    args['form'] = form
+
+    return render(request, 'join_neighborhood.html', args)

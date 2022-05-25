@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load static %}
 {% load socialaccount %}
 {% providers_media_js %}
@@ -81,8 +80,11 @@
                         <div align="left">
                             <b><a href="/registration/" style="color:black">Crear una cuenta</a></b>
                         </div>
+
                         <div align="right">
-                            <b><a href="/password_reset/" style="color:black">Olvidé mi contraseña</a></b>
+                            <b>
+                                <a href="/password_reset/" class="float-left submit-button" style="color:black">Olvidé mi contraseña</a>
+                            </b>
                         </div>
                     </small>
                     <hr>
@@ -100,5 +102,4 @@
 </div>
 <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 {% endblock content %}
