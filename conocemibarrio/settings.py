@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
 
 INSTALLED_APPS = [
     'registration',
+    'neighborhood',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
