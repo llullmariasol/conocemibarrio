@@ -2,10 +2,10 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
 
-class Neighborhood(models.Model):
-    id = models.IntegerField(primary_key=True)
+class Neighborhood(models.Model):  # TODO - mover a neighborhood package
+    # id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=45)
-    shape = models.GeometryField()
+    shape = models.MultiPolygonField()
     is_active = models.SmallIntegerField()
 
     class Meta:

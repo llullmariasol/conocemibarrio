@@ -21,12 +21,14 @@
 <body class="text-center" style="background-color: #036749;">
 <main>
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
+    {% if request.path != '/create_neighborhood/' %}
     <br>
-        <a href="#" style="color: black">Información </a>
+    <a href="#" style="color: black">Información </a>
     <br>
-        <a href="#" style="color: black">Fotos y videos</a>
+    <a href="#" style="color: black">Fotos y videos</a>
     <br>
-        <a href="#" style="color: black">Puntos de interés</a>
+    <a href="#" style="color: black">Puntos de interés</a>
+    {% endif %}
     {% else %}
     {% if request.user.is_authenticated and user.is_superuser == 0 %}
     Hola {{ user.username }} del grupo {{ user.groups.all.0 }}
