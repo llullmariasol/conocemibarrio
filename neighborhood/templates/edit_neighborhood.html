@@ -76,6 +76,12 @@
 <div id="map"></div>
 <script>
          mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
+         var labels = [
+            {% for c in neighborhood_coords %}
+              {{ c }},
+            {% endfor %}
+          ]
+
          const map = new mapboxgl.Map({
                 container: 'map',
                 style: 'mapbox://styles/mapbox/streets-v11',
@@ -114,6 +120,70 @@
                 }
                 document.getElementById('coordinates').value = coordinates;
             }
+
+console.log(labels);
+            map.on('load', () => {
+                map.addSource('national-park', {
+                'type': 'geojson',
+                'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Polygon',
+                'coordinates': [
+                labels
+                ]
+                }
+                },
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [-121.415061, 40.506229]
+                }
+                },
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [-121.505184, 40.488084]
+                }
+                },
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [-121.354465, 40.488737]
+                }
+                }
+                ]
+                }
+                });
+
+                map.addLayer({
+                'id': 'park-boundary',
+                'type': 'fill',
+                'source': 'national-park',
+                'paint': {
+                'fill-color': '#888888',
+                'fill-opacity': 0.4
+                },
+                'filter': ['==', '$type', 'Polygon']
+                });
+
+                map.addLayer({
+                'id': 'park-volcanoes',
+                'type': 'circle',
+                'source': 'national-park',
+                'paint': {
+                'circle-radius': 6,
+                'circle-color': '#B42222'
+                },
+                'filter': ['==', '$type', 'Point']
+                });
+                });
       </script>
 </body>
 </html>

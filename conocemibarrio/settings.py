@@ -7,6 +7,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -41,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django.contrib.gis',
+    'cloudinary',
 ]
 
 MIDDLEWARE = [
@@ -101,7 +105,6 @@ else:
             'PORT': 5432,
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -183,3 +186,11 @@ LOGOUT_REDIRECT_URL = 'registration:logIn'
 
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
+
+CLOUDINARY_URL = 'cloudinary://566164783845727:WoFv-L_mVcqvdBICyWnInT-HbUY@dcexbym30'
+
+cloudinary.config(
+    cloud_name="dcexbym30",
+    api_key="566164783845727",
+    api_secret="WoFv-L_mVcqvdBICyWnInT-HbUY"
+)

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if neighborhood is not None %}
+<div class="text-center">
+    <br>
+    <h5>Fotos cargadas</h5>
+    <a href="/neighborhood/photos/upload/">Agregar nueva</a>
+</div>
+
+<br>
+<div class="container; text-center">
+    {% for photo in photos %}
+    <div class="row">
+        <p style="border: ridge #000000 2px;">
+        <div class="col-sm">
+            <img class="d-block w-100" src="{{ photo.image.url }}" alt="Imagen">
+            <br>
+        </div>
+        <div class="col-sm">
+            {{ photo.title }}
+        </div>
+        <div class="col-sm">
+            <a href="/neighborhood/photo/{{ photo.pk }}/delete/" onClick="return confirm('¿Seguro que quieres borrar la foto?');">
+                <strong>Eliminar</strong>
+            </a>
+            <br>
+        </div>
+        <br>
+        </p>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Primero debe cargar información del barrio para subir fotos del mismo</p>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cloudinary %}
+{% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
+{% block content %}
+<br>
+<h1>Foto</h1>
+</span>
+<br>
+<div>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ backend_form }}
+        <input type="submit" value="Agregar foto">
+        <a href="/neighborhood/photos/" class="btn btn-default">Cancelar</a>
+    </form>
+</div>
+{% endblock content %}

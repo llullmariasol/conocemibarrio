@@ -21,11 +21,15 @@
 <body class="text-center" style="background-color: #036749;">
 <main>
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
-    {% if request.path != '/create_neighborhood/' %}
+    {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/photos/' and request.path != '/neighborhood/photos/upload/' and request.path !=  '/neighborhood/information/' %}
     <br>
-    <a href="#" style="color: black">Información </a>
+    {% if n == null %}
+    <a href="/neighborhood/information/" style="color: black">Cargar información del barrio</a>
+    {% else %}
+    <a href="/neighborhood/information/edit/" style="color: black">Editar información del barrio</a>
+    {% endif %}
     <br>
-    <a href="#" style="color: black">Fotos y videos</a>
+    <a href="/neighborhood/photos/" style="color: black">Fotos</a>
     <br>
     <a href="#" style="color: black">Puntos de interés</a>
     {% endif %}
