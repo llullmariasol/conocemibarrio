@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
 from neighborhood.forms import NeighborhoodPhotoForm
-from neighborhood.models import NeighborhoodPhoto
+from neighborhood.models import NeighborhoodPhoto, PointOfInterest, NeighborhoodPointOfInterest
 from registration.models import Neighborhood
 
 
@@ -90,5 +90,14 @@ def deleteNeighborhoodPhoto(request, pk):
     return HttpResponseRedirect('/neighborhood/photos/')
 
 
+def addPointOfInterest(request):
+    args = {}
+
+    return render(request, 'add_point_of_interest.html', args)
+
+
 def showPointsOfInterest(request):
-    return None
+    n = Neighborhood.objects.get(user_id=request.user)
+    points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=n)
+    return render(request, 'neighborhood_photos.html', {'points_of_interest': points_of_interest, 'neighborhood': n, })
+
