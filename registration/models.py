@@ -1,7 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 
-
 class Neighborhood(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=45)

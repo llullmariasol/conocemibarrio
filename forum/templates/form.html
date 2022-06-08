@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    h2 {
+        font-family: "Trebuchet MS", Verdana, sans-serif;
+        color: white;
+    }
+    p {
+        font-family: "Trebuchet MS", Verdana, sans-serif;
+        font-size: large;
+        font-weight: bold;
+    }
+</style>
+<br/>
+<br>
+<h2 class="text-center">Nuevo tema</h2>
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        <div style="padding: 30px; width: 100%;" class="text-center">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.media }}
+                <label><p>Título: </p></label>
+                <br>
+                {{ form.title }}
+                <br>
+                <br>
+                <label><p>Descripción: </p></label>
+                <br>
+                {{ form.body }}
+                <br>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <a href="{% url 'forum:posts' %}"><button type="button" class="btn btn-light" >Cancelar</button></a>
+            </form>
+        </div>
+    </div>
+</div>
+<br/>
+{% endblock content %}
