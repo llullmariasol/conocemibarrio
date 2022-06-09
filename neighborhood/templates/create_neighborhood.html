@@ -66,14 +66,16 @@
     {% csrf_token %}
     <br>
     <label for="neighborhood-name">Nombre del barrio:</label><br>
-    <input type="text" id="neighborhood-name" name="neighborhood-name" value='{{ neighborhood.name }}'><br>
+    <input type="text" id="neighborhood-name" name="neighborhood-name"><br>
     <label for="neighborhood-description">Descripción:</label><br>
-    <input type="text" id="neighborhood-description" name="neighborhood-description" value='{{ neighborhood.description }}'><br>
+    <input type="text" id="neighborhood-description" name="neighborhood-description"><br>
     <br>
     <input type="hidden" id="coordinates" name="coordinates" value="">
     <input id="boton" type="submit" value="Submit Form"/>
 </form>
-<div id="map"></div>
+<div>
+    <div id="map"></div>
+</div>
 <script>
          mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
          const map = new mapboxgl.Map({

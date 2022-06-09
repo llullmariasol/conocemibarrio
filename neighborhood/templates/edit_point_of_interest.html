@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cloudinary %}
+{% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
+{% block content %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+  <style>
+          #map {
+         margin-right: auto;
+         margin-left: auto;
+         position: relative;
+        height: inherit;
+        width: inherit;
+         }
+
+         #map-container {
+        height: 780px;
+        width: 100%;
+        left:2px;
+         right:2px;
+        margin-right: auto;
+         margin-left: auto;
+    }
+
+         p {
+         font-family: 'Open Sans';
+         margin: 0;
+         font-size: 13px;
+         }
+
+         #boton {
+         height: 75px;
+         width: 150px;
+         position: absolute;
+         bottom: 40px;
+         left: 10px;
+         background-color: rgba(255, 255, 255, 0.9);
+         padding: 15px;
+         text-align: center;
+         }
+         p {
+         font-family: 'Open Sans';
+         margin: 0;
+         font-size: 13px;
+         }
+    </style>
+</head>
+<body>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+
+<div class="calculation-box">
+  <p>Click the map to draw a polygon.</p>
+  <div id="calculated-area"></div>
+</div>
+
+<br>
+<h1>Punto de interés</h1>
+</span>
+<br>
+<div>
+  <link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+  <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+    <div style="width: 90%; margin-right: auto;
+         margin-left: auto;">
+      <div class="modal-content rounded-5 shadow" >
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <br>
+    <label for="point-name">Nombre:</label><br>
+    <input type="text" id="point-name" name="point-name" value='{{ point.name }}'><br>
+    <input type="hidden" id="point" name="point" value="">
+    <div id="map-container"><div id="map"></div></div>
+    <input type="submit" value="Agregar punto de interés">
+    <a href="/neighborhood/points_of_interest/" class="btn btn-default">Cancelar</a>
+  </form>
+</div>
+
+<script>
+     mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
+     var labels = [
+            {% for p in coordinates %}
+              {{ p }},
+            {% endfor %}
+          ]
+
+     const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-61.49174078974892, -31.252666415093373],
+            zoom: 12
+            });
+
+        const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+            point: true,
+            trash: true
+            },
+            defaultMode: 'draw_point'
+            },
+        );
+
+        map.addControl(draw);
+        map.on('draw.create', updateArea);
+        map.on('draw.delete', updateArea);
+        map.on('draw.update', updateArea);
+
+        function updateArea(e) {
+            const data = draw.getAll();
+            const coordinates = data['features'][0]['geometry']['coordinates'];
+            document.getElementById('point').value = coordinates;
+        }
+
+
+        map.on('load', () => {
+                map.addSource('national-park', {
+                'type': 'geojson',
+                'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates':
+                labels
+                }
+                },
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [-121.415061, 40.506229]
+                }
+                },
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [-121.505184, 40.488084]
+                }
+                },
+                {
+                'type': 'Feature',
+                'geometry': {
+                'type': 'Point',
+                'coordinates': [-121.354465, 40.488737]
+                }
+                }
+                ]
+                }
+                });
+
+                map.addLayer({
+                'id': 'park-boundary',
+                'type': 'fill',
+                'source': 'national-park',
+                'paint': {
+                'fill-color': '#888888',
+                'fill-opacity': 0.4
+                },
+                'filter': ['==', '$type', 'Polygon']
+                });
+
+                map.addLayer({
+                'id': 'park-volcanoes',
+                'type': 'circle',
+                'source': 'national-park',
+                'paint': {
+                'circle-radius': 6,
+                'circle-color': '#B42222'
+                },
+                'filter': ['==', '$type', 'Point']
+                });
+                });
+</script>
+    </div></div></div>
+</body>
+{% endblock content %}

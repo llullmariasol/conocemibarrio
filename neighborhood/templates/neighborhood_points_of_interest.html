@@ -6,7 +6,7 @@
 <div class="text-center">
     <br>
     <h5>Puntos de interés cargados</h5>
-    <a href="/neighborhood/point_of_interest/">Agregar nuevo</a>
+    <a href="/neighborhood/points_of_interest/add/">Agregar nuevo</a>
 </div>
 
 <br>
@@ -14,19 +14,15 @@
     {% for point in points %}
     <div class="row">
         <p style="border: ridge #000000 2px;">
-        <div class="col-sm">
-            <img class="d-block w-100" src="{{ photo.image.url }}" alt="Imagen">
-            <br>
+        <div class="col-sm" style="color:black;">
+        {{ point.point_of_interest.name }}
         </div>
         <div class="col-sm">
-            {{ point.title }}
-        </div>
-        <div class="col-sm">
-            <a href="/neighborhood/point_of_interest/{{ photo.pk }}/delete/" onClick="return confirm('¿Seguro que quieres borrar el punto de interés {{  }}?');">
+            <a href="/neighborhood/point_of_interest/{{ point.point_of_interest.pk }}/delete/" onClick="return confirm('¿Seguro que quieres borrar el punto de interés {{ point.point_of_interest.name }}?');">
                 <strong>Eliminar</strong>
             </a>
             <br>
-            <a href="/neighborhood/point_of_interest/{{ point.pk }}/" class="btn btn-secondary btncerrar">Editar</a>
+            <a href="/neighborhood/point_of_interest/{{ point.point_of_interest.pk }}/edit/" class="btn btn-secondary btncerrar">Editar</a>
             <br>
         </div>
         <br>
