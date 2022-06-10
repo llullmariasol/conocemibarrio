@@ -5,8 +5,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
-from neighborhood.forms import NeighborhoodPhotoForm
-from neighborhood.models import NeighborhoodPhoto, PointOfInterest, NeighborhoodPointOfInterest
+from neighborhood.forms import NeighborhoodImageForm
+from neighborhood.models import NeighborhoodImage, PointOfInterest, NeighborhoodPointOfInterest
 from registration.models import Neighborhood
 
 
@@ -60,34 +60,35 @@ def editNeighborhood(request):
     return render(request, 'edit_neighborhood.html', args)
 
 
-def showNeighborhoodPhotos(request):
+def showNeighborhoodImages(request):
     n = Neighborhood.objects.get(user_id=request.user)
-    photos = NeighborhoodPhoto.objects.all().filter(neighborhood=n)
-    return render(request, 'neighborhood_photos.html', {'photos': photos, 'neighborhood': n, })
+    images = NeighborhoodImage.objects.all().filter(neighborhood=n)
+    return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
 
 
-def uploadNeighborhoodPhoto(request):
-    context = dict(backend_form=NeighborhoodPhotoForm())
+def uploadNeighborhoodImage(request):
+    context = dict(backend_form=NeighborhoodImageForm())
 
     if request.method == 'POST':
-        form = NeighborhoodPhotoForm(request.POST, request.FILES)
+        form = NeighborhoodImageForm(request.POST, request.FILES)
         context['posted'] = form.instance
         if form.is_valid():
             n = Neighborhood.objects.get(user_id=request.user)
-            neighborhood_photo = NeighborhoodPhoto()
-            neighborhood_photo.image = form.cleaned_data['image']
-            neighborhood_photo.neighborhood = n
-            neighborhood_photo.save()
-            return HttpResponseRedirect('/neighborhood/photos/')
+            neighborhood_image = NeighborhoodImage()
+            neighborhood_image.image = form.cleaned_data['image']
+            # TODO agregar descripcion al guardado
+            neighborhood_image.neighborhood = n
+            neighborhood_image.save()
+            return HttpResponseRedirect('/neighborhood/images/')
 
-    return render(request, 'upload_neighborhood_photo.html', context)
+    return render(request, 'upload_neighborhood_image.html', context)
 
 
-def deleteNeighborhoodPhoto(request, pk):
-    photo = NeighborhoodPhoto.objects.get(pk=pk)
-    photo.delete()
-    cloudinary.uploader.destroy(photo.image.public_id, invalidate=True)
-    return HttpResponseRedirect('/neighborhood/photos/')
+def deleteNeighborhoodImage(request, pk):
+    image = NeighborhoodImage.objects.get(pk=pk)
+    image.delete()
+    cloudinary.uploader.destroy(image.image.public_id, invalidate=True)
+    return HttpResponseRedirect('/neighborhood/images/')
 
 
 def addPointOfInterest(request):

@@ -5,23 +5,23 @@
 <div class="text-center">
     <br>
     <h5>Fotos cargadas</h5>
-    <a href="/neighborhood/photos/upload/">Agregar nueva</a>
+    <a href="/neighborhood/images/upload/">Agregar nueva</a>
 </div>
 
 <br>
 <div class="container; text-center">
-    {% for photo in photos %}
+    {% for image in images %}
     <div class="row">
         <p style="border: ridge #000000 2px;">
         <div class="col-sm">
-            <img class="d-block w-100" src="{{ photo.image.url }}" alt="Imagen">
+            <img class="d-block w-100" src="{{ image.image.url }}" alt="Imagen">
             <br>
         </div>
         <div class="col-sm">
-            {{ photo.title }}
+            {{ image.title }}
         </div>
         <div class="col-sm">
-            <a href="/neighborhood/photo/{{ photo.pk }}/delete/" onClick="return confirm('¿Seguro que quieres borrar la foto?');">
+            <a href="/neighborhood/image/{{ photo.pk }}/delete/" onClick="return confirm('¿Seguro que quieres borrar la imagen?');">
                 <strong>Eliminar</strong>
             </a>
             <br>
@@ -32,6 +32,6 @@
     {% endfor %}
 </div>
 {% else %}
-<p>Primero debe cargar información del barrio para subir fotos del mismo</p>
+<p>Primero debe cargar información del barrio para subir imágenes del mismo</p>
 {% endif %}
 {% endblock content %}

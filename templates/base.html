@@ -17,21 +17,52 @@
     {% block messages %}
         {% include "messages.html" %}
     {% endblock messages %}
+    <style>
+        .btn-outline-dark {
+          color: black;
+          border-color: white;
+          background-color: white;
+        }
+        .btn-outline-dark:hover {
+          color: white;
+          background-color: black;
+          border-color: black;
+        }
+    </style>
 </head>
 <body class="text-center" style="background-color: #036749;">
 <main>
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
-    {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/photos/' and request.path != '/neighborhood/photos/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path %}
+        {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path %}
     <br>
-    {% if n == null %}
-    <a href="/neighborhood/information/" style="color: black">Cargar información del barrio</a>
-    {% else %}
-    <a href="/neighborhood/information/edit/" style="color: black">Editar información del barrio</a>
-    {% endif %}
-    <br>
-    <a href="/neighborhood/photos/" style="color: black">Fotos</a>
-    <br>
-    <a href="/neighborhood/points_of_interest/" style="color: black">Puntos de interés</a>
+    <div role="group" style="width:80%; margin:auto;">
+        {% if n == null %}
+        <a href="/neighborhood/information/">
+            <button type="button" class="btn btn-outline-dark" style="width:100%;">
+                Cargar información del barrio
+            </button>
+        </a>
+        <br><br>
+        {% else %}
+        <a href="/neighborhood/information/edit/">
+            <button type="button" class="btn btn-outline-dark" style="width:100%;">
+            Editar información del barrio
+            </button>
+        </a>
+        <br><br>
+        {% endif %}
+        <a href="/neighborhood/images/">
+            <button type="button" class="btn btn-outline-dark" style="width:100%;">
+                Imágenes
+            </button>
+        </a>
+        <br><br>
+        <a href="/neighborhood/points_of_interest/">
+            <button type="button" class="btn btn-outline-dark" style="width:100%;">
+                Puntos de interés
+            </button>
+        </a>
+    </div>
     {% endif %}
     {% else %}
     {% if request.user.is_authenticated and user.is_superuser == 0 %}

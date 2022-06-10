@@ -1,9 +1,9 @@
 from django.forms import ModelForm
 
-from neighborhood.models import NeighborhoodPhoto
+from neighborhood.models import NeighborhoodImage
 
 
-class NeighborhoodPhotoForm(ModelForm):
+class NeighborhoodImageForm(ModelForm):
     class Meta:
-        model = NeighborhoodPhoto
-        fields = ['image']
+        model = NeighborhoodImage
+        fields = ['image', 'description']
