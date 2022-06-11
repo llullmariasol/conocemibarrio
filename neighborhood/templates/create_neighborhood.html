@@ -8,48 +8,31 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
     <style>
-         #map {
-         position: absolute;
-         left:2px;
-         right:2px;
-         width: 90%;
-         height: 70%;
-         bottom: 5%;
-         margin-right: auto;
-         margin-left: auto;
-         }
-
-         .calculation-box {
-         height: 75px;
-         width: 150px;
-         position: absolute;
-         bottom: 40px;
-         left: 10px;
-         background-color: rgba(255, 255, 255, 0.9);
-         padding: 15px;
-         text-align: center;
-         }
-         p {
-         font-family: 'Open Sans';
-         margin: 0;
-         font-size: 13px;
-         }
-
-         #boton {
-         height: 75px;
-         width: 150px;
-         position: absolute;
-         bottom: 40px;
-         left: 10px;
-         background-color: rgba(255, 255, 255, 0.9);
-         padding: 15px;
-         text-align: center;
-         }
-         p {
-         font-family: 'Open Sans';
-         margin: 0;
-         font-size: 13px;
-         }
+    #map {
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    height: inherit;
+    width: inherit;
+    }
+    #map-container {
+    height: 450px;
+    width: 100%;
+    left:2px;
+    right:2px;
+    margin-right: auto;
+    margin-left: auto;
+    }
+    p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+    }
+    p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+    }
     </style>
 </head>
 <body>
@@ -57,24 +40,44 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
 
-<div class="calculation-box">
-    <p>Click the map to draw a polygon.</p>
-    <div id="calculated-area"></div>
-</div>
+<link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+    <div style="width: 90%; margin-right: auto;
+         margin-left: auto;">
+        <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Crear barrio</h2>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+            <div class="modal-body p-5 pt-0">
+                <form method="post" action="">
+                    {% csrf_token %}
 
-<form method="post" action="">
-    {% csrf_token %}
-    <br>
-    <label for="neighborhood-name">Nombre del barrio:</label><br>
-    <input type="text" id="neighborhood-name" name="neighborhood-name"><br>
-    <label for="neighborhood-description">Descripción:</label><br>
-    <input type="text" id="neighborhood-description" name="neighborhood-description"><br>
-    <br>
-    <input type="hidden" id="coordinates" name="coordinates" value="">
-    <input id="boton" type="submit" value="Submit Form"/>
-</form>
-<div>
-    <div id="map"></div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre del barrio" name="neighborhood-name">
+                        <label for="neighborhood-name">Nombre del barrio</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea type="textarea" class="form-control rounded-4" id="neighborhood-description"
+                                  placeholder="Descripción del barrio" name="neighborhood-description"
+                                  style="height: 150px; resize: none; text-indent: 0;"></textarea>
+                        <label for="neighborhood-description">Descripción del barrio</label>
+                    </div>
+
+                    <input type="hidden" id="coordinates" name="coordinates" value="">
+                    <div id="map-container"><div id="map"></div></div>
+                    <br>
+
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Crear barrio</button>
+                </form>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
          mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
@@ -103,14 +106,11 @@
             function updateArea(e) {
                 const data = draw.getAll();
                 const coordinates = data['features'][0]['geometry']['coordinates'][0]
-                const answer = document.getElementById('calculated-area');
                 console.log(data['features'][0]['geometry']['coordinates'][0]);
                 if (data.features.length > 0) {
                     const area = turf.area(data);
                     const rounded_area = Math.round(area * 100) / 100;
-                    answer.innerHTML = `<p><strong>${rounded_area}</strong></p><p>square meters. Coordinates ${coordinates[0]}</p>`;
                     } else {
-                    answer.innerHTML = '';
                     if (e.type !== 'draw.delete')
                     alert('Click the map to draw a polygon.');
                 }

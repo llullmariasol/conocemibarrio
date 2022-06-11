@@ -3,185 +3,187 @@
 {% block content %}
 <head>
     <meta charset="utf-8">
-    <title>Draw a polygon and calculate its area</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
     <style>
-         #map {
-         margin-right: auto;
-         margin-left: auto;
-         position: relative;
-        height: inherit;
-        width: inherit;
-         }
-
-         #map-container {
-        height: 780px;
-        width: 100%;
-        left:2px;
-         right:2px;
-        margin-right: auto;
-         margin-left: auto;
+    #map {
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    height: inherit;
+    width: inherit;
     }
-
-         p {
-         font-family: 'Open Sans';
-         margin: 0;
-         font-size: 13px;
-         }
-         p {
-         font-family: 'Open Sans';
-         margin: 0;
-         font-size: 13px;
-         }
+    #map-container {
+    height: 450px;
+    width: 100%;
+    left:2px;
+    right:2px;
+    margin-right: auto;
+    margin-left: auto;
+    }
+    p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+    }
+    p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+    }
     </style>
 </head>
 <body>
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
-<div class="calculation-box">
-    <p>Click the map to draw a polygon.</p>
-    <div id="calculated-area"></div>
-</div>
 <link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
 <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
     <div style="width: 90%; margin-right: auto;
          margin-left: auto;">
         <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Editar barrio</h2>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+            <div class="modal-body p-5 pt-0">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre del barrio" name="neighborhood-name" value='{{ neighborhood.name }}'>
+                <label for="neighborhood-name">Nombre del barrio</label>
+            </div>
 
-<form method="post" action="">
-    {% csrf_token %}
-    <br>
-    <label for="neighborhood-name">Nombre del barrio:</label><br>
-    <input type="text" id="neighborhood-name" name="neighborhood-name" value='{{ neighborhood.name }}'><br>
-    <label for="neighborhood-description">Descripción:</label><br>
-    <input type="text" id="neighborhood-description" name="neighborhood-description" value='{{ neighborhood.description }}'><br>
-    <br>
-    <input type="hidden" id="coordinates" name="coordinates" value="">
-    <div id="map-container"><div id="map"></div></div>
-    <br>
-    <input type="submit" value="Submit Form"/>
-    <br>
-</form>
+            <div class="form-floating mb-3">
+                <textarea type="textarea" class="form-control rounded-4" id="neighborhood-description"
+                          placeholder="Descripción del barrio" name="neighborhood-description"
+                          style="height: 150px; resize: none; text-indent: 0;">{{ neighborhood.description }}</textarea>
+                <label for="neighborhood-description">Descripción del barrio</label>
+            </div>
+
+            <input type="hidden" id="coordinates" name="coordinates" value="">
+            <div id="map-container"><div id="map"></div></div>
+            <br>
+
+            <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Editar barrio</button>
+        </form>
+</div>
 <div>
-    <br>
 </div>
-        </div>
-    </div>
 </div>
-        <script>
-         mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
-         var labels = [
-            {% for c in neighborhood_coords %}
-              {{ c }},
-            {% endfor %}
-          ]
+</div>
+</div>
+<script>
+ mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
+ var labels = [
+    {% for c in neighborhood_coords %}
+      {{ c }},
+    {% endfor %}
+  ]
 
-         const map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [-61.49174078974892, -31.252666415093373],
-                zoom: 12
-                });
+ const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [-61.49174078974892, -31.252666415093373],
+        zoom: 12
+        });
 
-            const draw = new MapboxDraw({
-                displayControlsDefault: false,
-                controls: {
-                polygon: true,
-                trash: true
-                },
-                defaultMode: 'draw_polygon'
-                },
-            );
+    const draw = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+        polygon: true,
+        trash: true
+        },
+        defaultMode: 'draw_polygon'
+        },
+    );
 
-            map.addControl(draw);
-            map.on('draw.create', updateArea);
-            map.on('draw.delete', updateArea);
-            map.on('draw.update', updateArea);
+    map.addControl(draw);
+    map.on('draw.create', updateArea);
+    map.on('draw.delete', updateArea);
+    map.on('draw.update', updateArea);
 
-            function updateArea(e) {
-                const data = draw.getAll();
-                const coordinates = data['features'][0]['geometry']['coordinates'][0]
-                const answer = document.getElementById('calculated-area');
-                console.log(data['features'][0]['geometry']['coordinates'][0]);
-                if (data.features.length > 0) {
-                    const area = turf.area(data);
-                    const rounded_area = Math.round(area * 100) / 100;
-                    answer.innerHTML = `<p><strong>${rounded_area}</strong></p><p>square meters. Coordinates ${coordinates[0]}</p>`;
-                    } else {
-                    answer.innerHTML = '';
-                    if (e.type !== 'draw.delete')
-                    alert('Click the map to draw a polygon.');
-                }
-                document.getElementById('coordinates').value = coordinates;
-            }
+    function updateArea(e) {
+        const data = draw.getAll();
+        const coordinates = data['features'][0]['geometry']['coordinates'][0]
+        console.log(data['features'][0]['geometry']['coordinates'][0]);
+        if (data.features.length > 0) {
+            const area = turf.area(data);
+            const rounded_area = Math.round(area * 100) / 100;
+            } else {
+            if (e.type !== 'draw.delete')
+            alert('Click the map to draw a polygon.');
+        }
+        document.getElementById('coordinates').value = coordinates;
+    }
 
 console.log(labels);
-            map.on('load', () => {
-                map.addSource('national-park', {
-                'type': 'geojson',
-                'data': {
-                'type': 'FeatureCollection',
-                'features': [
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Polygon',
-                'coordinates': [
-                labels
-                ]
-                }
-                },
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates': [-121.415061, 40.506229]
-                }
-                },
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates': [-121.505184, 40.488084]
-                }
-                },
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates': [-121.354465, 40.488737]
-                }
-                }
-                ]
-                }
-                });
+    map.on('load', () => {
+        map.addSource('national-park', {
+        'type': 'geojson',
+        'data': {
+        'type': 'FeatureCollection',
+        'features': [
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Polygon',
+        'coordinates': [
+        labels
+        ]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.415061, 40.506229]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.505184, 40.488084]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.354465, 40.488737]
+        }
+        }
+        ]
+        }
+        });
 
-                map.addLayer({
-                'id': 'park-boundary',
-                'type': 'fill',
-                'source': 'national-park',
-                'paint': {
-                'fill-color': '#888888',
-                'fill-opacity': 0.4
-                },
-                'filter': ['==', '$type', 'Polygon']
-                });
+        map.addLayer({
+        'id': 'park-boundary',
+        'type': 'fill',
+        'source': 'national-park',
+        'paint': {
+        'fill-color': '#888888',
+        'fill-opacity': 0.4
+        },
+        'filter': ['==', '$type', 'Polygon']
+        });
 
-                map.addLayer({
-                'id': 'park-volcanoes',
-                'type': 'circle',
-                'source': 'national-park',
-                'paint': {
-                'circle-radius': 6,
-                'circle-color': '#B42222'
-                },
-                'filter': ['==', '$type', 'Point']
-                });
-                });
-      </script>
+        map.addLayer({
+        'id': 'park-volcanoes',
+        'type': 'circle',
+        'source': 'national-park',
+        'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
+        },
+        'filter': ['==', '$type', 'Point']
+        });
+        });
+</script>
 </body>
 </html>
 {% endblock content %}

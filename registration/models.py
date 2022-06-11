@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 
 
 class Neighborhood(models.Model):  # TODO - mover a neighborhood package
-    # id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=45)
     description = models.TextField(default='')
     shape = models.MultiPolygonField()
