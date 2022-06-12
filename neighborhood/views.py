@@ -1,6 +1,7 @@
 import json
 
 import cloudinary
+from cloudinary.models import CloudinaryField
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
@@ -63,6 +64,7 @@ def editNeighborhood(request):
 def showNeighborhoodImages(request):
     n = Neighborhood.objects.get(user_id=request.user)
     images = NeighborhoodImage.objects.all().filter(neighborhood=n)
+    print(images)
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
 
 
@@ -70,16 +72,28 @@ def uploadNeighborhoodImage(request):
     context = dict(backend_form=NeighborhoodImageForm())
 
     if request.method == 'POST':
-        form = NeighborhoodImageForm(request.POST, request.FILES)
-        context['posted'] = form.instance
-        if form.is_valid():
-            n = Neighborhood.objects.get(user_id=request.user)
-            neighborhood_image = NeighborhoodImage()
-            neighborhood_image.image = form.cleaned_data['image']
-            # TODO agregar descripcion al guardado
-            neighborhood_image.neighborhood = n
-            neighborhood_image.save()
-            return HttpResponseRedirect('/neighborhood/images/')
+        desc = request.POST.get('image-description')
+        archivo = request.FILES['image-file']
+
+        n = Neighborhood.objects.get(user_id=request.user)
+        neighborhood_image = NeighborhoodImage()
+        neighborhood_image.neighborhood = n
+        neighborhood_image.image = archivo
+        neighborhood_image.description = desc
+        neighborhood_image.save()
+        # form = NeighborhoodImageForm(request.POST, request.FILES)
+        # context['posted'] = form.instance
+        #
+        # if form.is_valid():
+        #     # image-file
+        #     # image-description
+#
+        #     n = Neighborhood.objects.get(user_id=request.user)
+        #     neighborhood_image = NeighborhoodImage()
+        #     neighborhood_image.image = form.cleaned_data['image']
+        #     neighborhood_image.neighborhood = n
+        #     neighborhood_image.save()
+        return HttpResponseRedirect('/neighborhood/images/')
 
     return render(request, 'upload_neighborhood_image.html', context)
 

@@ -3,16 +3,82 @@
 {% load cloudinary %}
 {% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
 {% block content %}
-<br>
-<h1>Foto</h1>
-</span>
-<br>
-<div>
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ backend_form }}
-        <input type="submit" value="Agregar imagen">
-        <a href="/neighborhood/images/" class="btn btn-default">Cancelar</a>
-    </form>
+<style>
+    #custom-button {
+      padding: 10px;
+      color: white;
+      background-color: black;
+      border: 1px solid black;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #custom-button:hover {
+      color: black;
+      background-color: white;
+      border: 1px solid black;
+    }
+
+    #custom-text {
+      margin-left: 10px;
+      font-family: sans-serif;
+      color: #aaa;
+    }
+</style>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+<link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+    <div style="width: 90%; margin-right: auto;
+         margin-left: auto;">
+        <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Cargar imagen</h2>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+            <div class="modal-body p-5 pt-0" style="text-align:left">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <small>
+                    <input type="file" id="image-file" hidden="hidden" name="image-file" accept="image/*"/>
+                    <button type="button" id="custom-button">Elegir archivo</button>
+                    <br><br>
+                    <span id="custom-text">No seleccionaste ningún archivo.</span>
+                    </small>
+                    <br><br>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-4" id="image-description" placeholder="Descripción"
+                               value="description" name="image-description">
+                        <label for="image-description">Descripción</label>
+                    </div>
+
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
+                </form>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    const imageFileBtn = document.getElementById("image-file");
+    const customBtn = document.getElementById("custom-button");
+    const customTxt = document.getElementById("custom-text");
+
+    customBtn.addEventListener("click", function() {
+      imageFileBtn.click();
+    });
+
+    imageFileBtn.addEventListener("change", function() {
+      if (imageFileBtn.value) {
+        customTxt.innerHTML = imageFileBtn.value.match(
+          /[\/\\]([\w\d\s\.\-\(\)]+)$/
+        )[1];
+      } else {
+        customTxt.innerHTML = "No seleccionaste ningún archivo.";
+      }
+    });
+</script>
 {% endblock content %}

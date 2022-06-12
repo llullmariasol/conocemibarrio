@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Neighborhood(models.Model):  # TODO - mover a neighborhood package
-    name = models.CharField(max_length=45)
+    name = models.CharField(max_length=45)  # TODO - que en el form le deje elegir entre los disponibles??
     description = models.TextField(default='')
     shape = models.MultiPolygonField()
     is_active = models.SmallIntegerField()

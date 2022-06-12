@@ -7,7 +7,7 @@ from registration.models import Neighborhood
 class NeighborhoodImage(models.Model):
     image = CloudinaryField('image')
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False, null=True)
-    description = models.CharField(max_length=45)
+    description = models.TextField(default='')
 
     class Meta:
         db_table = 'neighborhood_image'

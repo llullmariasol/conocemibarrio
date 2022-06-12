@@ -53,22 +53,22 @@
         <form method="post" action="">
             {% csrf_token %}
             <div class="form-floating mb-3">
-                <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre del barrio" name="neighborhood-name" value='{{ neighborhood.name }}'>
-                <label for="neighborhood-name">Nombre del barrio</label>
+                <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="neighborhood-name" value='{{ neighborhood.name }}'>
+                <label for="neighborhood-name">Nombre</label>
             </div>
 
             <div class="form-floating mb-3">
                 <textarea type="textarea" class="form-control rounded-4" id="neighborhood-description"
-                          placeholder="Descripción del barrio" name="neighborhood-description"
+                          placeholder="Descripción" name="neighborhood-description"
                           style="height: 150px; resize: none; text-indent: 0;">{{ neighborhood.description }}</textarea>
-                <label for="neighborhood-description">Descripción del barrio</label>
+                <label for="neighborhood-description">Descripción</label>
             </div>
 
             <input type="hidden" id="coordinates" name="coordinates" value="">
             <div id="map-container"><div id="map"></div></div>
             <br>
 
-            <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Editar barrio</button>
+            <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
         </form>
 </div>
 <div>
