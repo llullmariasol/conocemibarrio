@@ -3,11 +3,16 @@
 {% block content %}
 
 {% if neighborhood is not None %}
-<div class="text-center">
-    <br>
-    <h5>Puntos de interés cargados</h5>
-    <a href="/neighborhood/points_of_interest/add/">Agregar nuevo</a>
+<br>
+<div class="text-center" style="width:200px; margin:auto;">
+    <a href="/neighborhood/points_of_interest/add/">
+        <button type="button" class="btn btn-outline-dark" style="width:100%;">
+            Nuevo punto de interés
+        </button>
+    </a>
 </div>
+
+
 
 <br>
 <div class="container; text-center">

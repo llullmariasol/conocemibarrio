@@ -53,34 +53,46 @@
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
 
-<div class="calculation-box">
-    <p>Click the map to draw a polygon.</p>
-    <div id="calculated-area"></div>
-</div>
-
-<br>
-<h1>Punto de interés</h1>
-</span>
-<br>
-<div>
-    <link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
-    <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
-        <div style="width: 90%; margin-right: auto;
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+    <div style="width: 90%; margin-right: auto;
          margin-left: auto;">
-            <div class="modal-content rounded-5 shadow" >
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <br>
-        <label for="point-name">Nombre:</label><br>
-        <input type="text" id="point-name" name="point-name"><br>
-        <label for="point-description">Descripción:</label><br>
-        <input type="text" id="point-description" name="point-description"><br>
-        <input type="hidden" id="point" name="point" value="">
-        <div id="map-container"><div id="map"></div></div>
-        <input type="submit" value="Agregar punto de interés">
-        <a href="/neighborhood/points_of_interest/" class="btn btn-default">Cancelar</a>
-    </form>
+        <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Punto de interés</h2>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+            <div class="modal-body p-5 pt-0">
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="point-name">
+                        <label for="point-name">Nombre</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea type="textarea" class="form-control rounded-4" id="point-description"
+                                  placeholder="Descripción" name="point-description"
+                                  style="height: 150px; resize: none; text-indent: 0;"></textarea>
+                        <label for="point-description">Descripción</label>
+                    </div>
+
+                    <input type="hidden" id="point" name="point" value="">
+                    <div id="map-container"><div id="map"></div></div>
+                    <br>
+
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
+
+                </form>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
      mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
@@ -112,8 +124,5 @@
             document.getElementById('point').value = coordinates;
         }
 </script>
-            </div>
-    </div>
-</div>
 </body>
 {% endblock content %}
