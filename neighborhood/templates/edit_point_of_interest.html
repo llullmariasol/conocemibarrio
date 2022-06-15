@@ -85,7 +85,7 @@
             <label for="point-description">Descripción</label>
           </div>
 
-          <input type="hidden" id="point" name="point" value="">
+          <input type="hidden" id="point-coordinates" name="point-coordinates" value="">
           <div id="map-container"><div id="map"></div></div>
           <br>
 
@@ -130,67 +130,34 @@
         function updateArea(e) {
             const data = draw.getAll();
             const coordinates = data['features'][0]['geometry']['coordinates'];
-            document.getElementById('point').value = coordinates;
+            document.getElementById('point-coordinates').value = coordinates;
         }
 
-
         map.on('load', () => {
-                map.addSource('national-park', {
+                map.addSource('point-of-interest', {
                 'type': 'geojson',
                 'data': {
                 'type': 'FeatureCollection',
                 'features': [
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates':
-                labels
-                }
-                },
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates': [-121.415061, 40.506229]
-                }
-                },
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates': [-121.505184, 40.488084]
-                }
-                },
-                {
-                'type': 'Feature',
-                'geometry': {
-                'type': 'Point',
-                'coordinates': [-121.354465, 40.488737]
-                }
-                }
+                  {
+                  'type': 'Feature',
+                  'geometry': {
+                    'type': 'Point',
+                    'coordinates':
+                    labels
+                    }
+                  }
                 ]
                 }
                 });
 
                 map.addLayer({
-                'id': 'park-boundary',
-                'type': 'fill',
-                'source': 'national-park',
-                'paint': {
-                'fill-color': '#888888',
-                'fill-opacity': 0.4
-                },
-                'filter': ['==', '$type', 'Polygon']
-                });
-
-                map.addLayer({
-                'id': 'park-volcanoes',
+                'id': 'point-of-interest',
                 'type': 'circle',
-                'source': 'national-park',
+                'source': 'point-of-interest',
                 'paint': {
                 'circle-radius': 6,
-                'circle-color': '#B42222'
+                'circle-color': 'red'
                 },
                 'filter': ['==', '$type', 'Point']
                 });
