@@ -47,6 +47,14 @@
          margin: 0;
          font-size: 13px;
          }
+         #point-name:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+      #point-description:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
     </style>
 </head>
 <body>
@@ -70,7 +78,7 @@
                     {% csrf_token %}
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="point-name">
+                        <input type="text" class="form-control rounded-4" id="point-name" placeholder="Nombre" name="point-name">
                         <label for="point-name">Nombre</label>
                     </div>
 
