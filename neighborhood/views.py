@@ -139,8 +139,17 @@ def editPointOfInterest(request, pk):
     args['point'] = point_of_interest
 
     if request.method == 'POST':
-        coords = request.POST.get('coordinates')
+        # TODO - si no tiene nada, es porque no cambió la ubicación, queda =, VALIDAR LO MISMO EN BARRIO
+        coords = request.POST.get('point-coordinates')
+
+        if coords is not None:
+            print("COORDS DEL POINT")
+            print(coords)
+        else:
+            print("COORDS DEL POINT ----> NONE")
+
         final_coords = ""
+
 
         for xy in range(0, len(coords.split(',')), 2):
             final_coords = final_coords + coords.split(',')[xy] + ' ' + coords.split(',')[xy + 1] + ','
