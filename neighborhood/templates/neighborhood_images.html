@@ -27,12 +27,15 @@
 .fullwrap:hover .fullcap {
   visibility: visible; opacity: 1;
 }
+#btn-upload-img:focus{
+ box-shadow: none;
+}
 </style>
 {% if neighborhood is not None %}
 <br>
 <div class="text-center" style="width:150px; margin:auto;">
     <a href="/neighborhood/images/upload/">
-    <button type="button" class="btn btn-outline-dark" style="width:100%;">
+    <button id="btn-upload-img" type="button" class="btn btn-outline-dark" style="width:100%;">
         Cargar imagen
     </button>
     </a>

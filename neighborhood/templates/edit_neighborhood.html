@@ -87,7 +87,7 @@
 <script>
  mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
  var labels = [
-    {% for c in neighborhood_coords %}
+    {% for c in coordinates %}
       {{ c }},
     {% endfor %}
   ]
