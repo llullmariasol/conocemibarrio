@@ -68,7 +68,6 @@ def editNeighborhood(request):
 def showNeighborhoodImages(request):
     n = Neighborhood.objects.get(user_id=request.user)
     images = NeighborhoodImage.objects.all().filter(neighborhood=n)
-    print(images)
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
 
 
@@ -112,6 +111,12 @@ def addPointOfInterest(request):
         neighborhood_point_of_interest.neighborhood = Neighborhood.objects.filter(user=request.user).first()
         neighborhood_point_of_interest.point_of_interest = point_of_interest
         neighborhood_point_of_interest.save()
+
+        images = request.FILES.getlist('image-file')
+
+        for image in images:
+            # TODO - guardar en tabla
+            cloudinary.uploader.upload(image)
 
         return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
