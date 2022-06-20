@@ -81,6 +81,7 @@ def postDetail(request, pk):
         'detail.html',
         {
             'post': post,
+            'form': form,
             'comments': comments,
             'complaints': reported_comments,
         }

@@ -25,7 +25,7 @@
 </style>
 
 <h2 class="text-center">Respuestas</h2>
-{% for comment in comentarios %}
+{% for comment in comments %}
     <div class="container">
         <div class="alert alert-warning" role="alert">
             <div class="date">
@@ -96,7 +96,8 @@
 
 <div id="respond" class="comment-respond; text-center">
     <form method="post" id="form" class="comment-form">{% csrf_token %}
-        <input class="form-control" required="" placeholder="Tu respuesta" name="content">
+        {{ form.content }}
+        <br>
         <br>
         <button class="btn btn-lg btn-primary btn-block publicar" type="submit">Responder</button>
     </form>
