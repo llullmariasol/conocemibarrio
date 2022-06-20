@@ -9,6 +9,8 @@ from .views import (createNeighborhood,
                     addPointOfInterest,
                     deletePointOfInterest,
                     editPointOfInterest,
+                    deletePointOfInterestImage,
+                    uploadPointOfInterestImage,
                     )
 
 app_name = 'neighborhood'
@@ -23,4 +25,6 @@ urlpatterns = [
     path('neighborhood/point_of_interest/<int:pk>/edit/', editPointOfInterest, name='editPointOfInterest'),
     path('neighborhood/points_of_interest/', showPointsOfInterest, name='showPointsOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/delete/', deletePointOfInterest, name='deletePointOfInterest'),
+    path('neighborhood/points_of_interest/image/<int:pk>/delete/', deletePointOfInterestImage, name='deletePointOfInterestImage'),
+    path('neighborhood/point_of_interest/image/upload/', uploadPointOfInterestImage, name='uploadPointOfInterestImage')
 ]

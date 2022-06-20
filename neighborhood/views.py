@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
 from neighborhood.forms import NeighborhoodImageForm
-from neighborhood.models import NeighborhoodImage, PointOfInterest, NeighborhoodPointOfInterest
+from neighborhood.models import NeighborhoodImage, PointOfInterest, NeighborhoodPointOfInterest, PointOfInterestImage
 from registration.models import Neighborhood
 
 
@@ -44,7 +44,7 @@ def editNeighborhood(request):
     if request.method == 'POST':
         coords = request.POST.get('coordinates')
 
-        if coords is '':
+        if coords == '':
             neighborhood.name = request.POST.get('neighborhood-name')
             neighborhood.description = request.POST.get('neighborhood-description')
         else:
@@ -115,8 +115,10 @@ def addPointOfInterest(request):
         images = request.FILES.getlist('image-file')
 
         for image in images:
-            # TODO - guardar en tabla
-            cloudinary.uploader.upload(image)
+            point_of_interest_image = PointOfInterestImage()
+            point_of_interest_image.point_of_interest = point_of_interest
+            point_of_interest_image.image = image
+            point_of_interest_image.save()
 
         return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
@@ -131,19 +133,27 @@ def editPointOfInterest(request, pk):
     coordinates_data = json.loads(input_string)
     args['coordinates'] = coordinates_data['coordinates']
     args['point'] = point_of_interest
-
+    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+    args['images'] = images
+    # TODO agregar guardado de nuevas imágenes
     if request.method == 'POST':
         coords = request.POST.get('point-coordinates')
-        if coords is '':
+        if coords == '':
             point_of_interest.name = request.POST.get('point-name')
             point_of_interest.description = request.POST.get('point-description')
         else:
-            print("COORDS DEL POINT")
-            print(coords)
             point_of_interest.name = request.POST.get('point-name')
             point_of_interest.description = request.POST.get('point-description')
             point = request.POST.get('point-coordinates').split(',')
             point_of_interest.location = GEOSGeometry('POINT(' + point[0] + ' ' + point[1] + ')')
+
+        new_images = request.FILES.getlist('image-file')
+
+        for image in new_images:
+            point_of_interest_image = PointOfInterestImage()
+            point_of_interest_image.point_of_interest = point_of_interest
+            point_of_interest_image.image = image
+            point_of_interest_image.save()
 
         point_of_interest.save()
 
@@ -161,5 +171,31 @@ def showPointsOfInterest(request):
 
 def deletePointOfInterest(request, pk):
     point_of_interest = PointOfInterest.objects.get(pk=pk)
+
+    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+    for image in images:
+        cloudinary.uploader.destroy(image.image.public_id, invalidate=True)
+
     point_of_interest.delete()
+    return HttpResponseRedirect('/neighborhood/points_of_interest/')
+
+
+def deletePointOfInterestImage(request, pk):
+    image = PointOfInterestImage.objects.get(pk=pk)
+    image.delete()
+    cloudinary.uploader.destroy(image.image.public_id, invalidate=True)
+
+    return HttpResponseRedirect('/neighborhood/points_of_interest/')
+
+
+def uploadPointOfInterestImage(request):
+    point_of_interest = PointOfInterest.objects.get(pk=32)
+    uploaded_files = request.FILES.getlist('file')
+
+    for image in uploaded_files:
+        point_of_interest_image = PointOfInterestImage()
+        point_of_interest_image.point_of_interest = point_of_interest
+        point_of_interest_image.image = image
+        point_of_interest_image.save()
+
     return HttpResponseRedirect('/neighborhood/points_of_interest/')

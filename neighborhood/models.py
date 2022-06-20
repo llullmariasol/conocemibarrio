@@ -17,10 +17,17 @@ class PointOfInterest(models.Model):
     name = models.CharField(max_length=45)
     location = models.PointField()
     description = models.TextField(default='')
-    # TODO - imagenes
 
     class Meta:
         db_table = 'point_of_interest'
+
+
+class PointOfInterestImage(models.Model):
+    image = CloudinaryField('image')
+    point_of_interest = models.ForeignKey(PointOfInterest, on_delete=models.CASCADE, db_constraint=False, null=True)
+
+    class Meta:
+        db_table = 'point_of_interest_image'
 
 
 class NeighborhoodPointOfInterest(models.Model):
@@ -30,4 +37,3 @@ class NeighborhoodPointOfInterest(models.Model):
 
     class Meta:
         db_table = 'neighborhood_point_of_interest'
-

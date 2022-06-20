@@ -81,7 +81,7 @@
 <body>
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
-<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+<link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
 <link rel="stylesheet" href="{% static '/css/modal.css' %}">
 
 <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
@@ -116,7 +116,7 @@
 
                     <hr>
                     <div style="text-align:left">
-                        <h5 class="fw-bold mb-0">Imágenes del punto de interés</h5>
+                        <h5 class="fw-bold mb-0">Imágenes</h5>
                         <br>
                         <small>
                             <input type="file" multiple id="image-file" hidden="hidden" required name="image-file" accept="image/*"
@@ -177,9 +177,7 @@
 
     imageFileBtn.addEventListener("change", function() {
       if (imageFileBtn.value) {
-        customTxt.innerHTML = imageFileBtn.value.match(
-          /[\/\\]([\w\d\s\.\-\(\)]+)$/
-        )[1];
+        customTxt.innerHTML = imageFileBtn.files.length + " archivo/s seleccionado/s.";
       } else {
         customTxt.innerHTML = "No seleccionaste ningún archivo.";
       }
