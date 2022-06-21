@@ -140,45 +140,6 @@
           <div id="map-container"><div id="map"></div></div>
           <br>
 
-          <hr>
-          <div id="gallery7" style="text-align:left">
-            <h5 class="fw-bold mb-0">Imágenes</h5>
-            <br>
-            <small>
-              <input id="image-file" type="file" multiple hidden="hidden" required name="image-file" accept="image/*"
-                     class="form-control-file"/>
-              <button type="button" id="custom-button">Elegir archivos</button>
-              <br><br>
-              <span id="custom-text">No seleccionaste ningún archivo.</span>
-            </small>
-          </div>
-          <!-- IMAGENES DEL PUNTO DE INTERÉS -->
-          {% if images.count == 0 %}
-          no hay ninguna img cargada
-          {% endif %}
-          <br>
-          <div id="gallery" class="container; text-center">
-            <div class="row">
-              {% for image in images %}
-              <div class="col-sm-6 col-md-3">
-                <div class="fullwrap">
-                  <img class="d-block w-100" src="{{ image.image.url }}" alt="Imagen">
-                  <div class="fullcap">
-
-                      <button type="button" class="btn btn-outline-danger delete-image" data-pk="{{ image.pk }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                          <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
-                          <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
-                        </svg>
-                      </button>
-
-                  </div>
-                </div>
-                <br>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
           <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
         </form>
       </div>
@@ -257,45 +218,6 @@
                 'filter': ['==', '$type', 'Point']
                 });
                 });
-
-        (function($) {
-            'use strict';
-            $('.delete-image').on('click', function() {
-                var pk = $(this).data('pk');
-                $.ajax({
-                    method: "POST",
-                    url: "/neighborhood/points_of_interest/image/" + pk + "/delete/",
-                    data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
-                    cache: false
-                })
-                $('#gallery').load(location.href + " #gallery");
-            });
-        })(jQuery);
-
-        var imageFileBtn = document.getElementById("image-file");
-        const customBtn = document.getElementById("custom-button");
-        const customTxt = document.getElementById("custom-text");
-
-        customBtn.addEventListener("click", function() {
-          imageFileBtn.click();
-        });
-
-        $("#image-file").change(function () {
-            'use strict';
-            var url = "/neighborhood/point_of_interest/image/upload/"
-            var data = new FormData();
-            $.each($("#image-file")[0].files, function(i, file) {
-              data.append("file", file);
-            });
-            data.append("csrfmiddlewaretoken", '{{ csrf_token }}');
-            $.ajax({
-              url: url,
-              data: data,
-              type: 'post',
-              cache: false
-            });
-            $('#gallery').load(location.href + " #gallery");
-          });
 </script>
 </body>
 {% endblock content %}
