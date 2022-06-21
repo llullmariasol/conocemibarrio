@@ -4,6 +4,8 @@ from .views import (
     posts,
     postDetail,
     deletePost,
+    likeComment,
+    deleteComment,
 )
 
 app_name = 'forum'
@@ -13,4 +15,6 @@ urlpatterns = [
     path('new-topic/', addPost, name='addPost'),
     path('topic/<int:pk>/', postDetail, name='postDetail'),
     path('topic/<int:pk>/delete/', deletePost, name='deletePost'),
+    path('like-comment/<int:pk>/', likeComment, name='likeComment'),
+    path('comment/<int:pk>/delete/', deleteComment, name='deleteComment'),
 ]

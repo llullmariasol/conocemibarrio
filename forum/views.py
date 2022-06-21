@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render, get_object_or_404
+from django.urls import reverse
 from registration.models import UserNeighborhood
 from .models import (
     Post,
@@ -89,7 +89,21 @@ def postDetail(request, pk):
 
 @login_required
 def deletePost(request, pk):
-    # pk del forum post
-    post = Post.objects.get(pk = pk)
+    post = Post.objects.get(pk=pk)
     post.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def likeComment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if comment.likes.filter(id=request.user.id).exists():
+        comment.likes.remove(request.user)
+    else:
+        comment.likes.add(request.user)
+    return HttpResponseRedirect(reverse('forum:postDetail', args=[str(comment.post.id)]))
+
+@login_required
+def deleteComment(request, pk):
+    comment = Comment.objects.get(pk=pk)
+    comment.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

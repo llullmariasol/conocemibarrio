@@ -31,7 +31,7 @@
             <div class="date">
                 <div class="text-right">
                     {% if comment.author == request.user %}
-                    <a href="#"class="badge badge-danger"
+                    <a href="{% url 'forum:deleteComment' comment.pk %}"class="badge badge-danger"
                        onClick="return confirm('¿Seguro que quieres borrar tu respuesta?');">
                         <strong>Eliminar</strong>
                     </a>
@@ -71,7 +71,7 @@
                 {% if comment.author == user %}
 
                 {% else %}
-                <form action="#" method="POST">
+                <form action="{% url 'forum:likeComment' comment.pk %}" method="POST">
                     {% csrf_token %}
                     {% if comment.liked %}
                     <button type="submit", name="answer_id", value="{{ comment.id }}"
