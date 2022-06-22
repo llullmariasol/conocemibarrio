@@ -82,12 +82,14 @@
             'use strict';
             $('.delete-image').on('click', function() {
                 var pk = $(this).data('pk');
-                $.ajax({
+                if (confirm('¿Seguro que quieres eliminar la imagen?') == true) {
+                    $.ajax({
                     method: "POST",
                     url: "/neighborhood/image/" + pk + "/delete/",
                     data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
-                })
-                window.location.reload()
+                    })
+                    window.location.reload();
+                }
             });
         })(jQuery);
 </script>

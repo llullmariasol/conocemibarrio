@@ -43,6 +43,7 @@ def editNeighborhood(request):
 
     if request.method == 'POST':
         coords = request.POST.get('coordinates')
+        coords_length = request.POST.get('coordinates-length')
 
         if coords == '':
             neighborhood.name = request.POST.get('neighborhood-name')
@@ -71,7 +72,7 @@ def showNeighborhoodImages(request):
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
 
 
-def showPointOfInterestImages(request, pk):  # TODO pk del punto de interés
+def showPointOfInterestImages(request, pk):
     point_of_interest = PointOfInterest.objects.get(pk=pk)
     images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
     return render(request,
