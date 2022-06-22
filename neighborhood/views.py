@@ -71,6 +71,13 @@ def showNeighborhoodImages(request):
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
 
 
+def showPointOfInterestImages(request, pk):  # TODO pk del punto de interés
+    point_of_interest = PointOfInterest.objects.get(pk=pk)
+    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+    return render(request,
+                  'point_of_interest_images.html', {'images': images, 'point': point_of_interest, })
+
+
 def uploadNeighborhoodImage(request):
     context = dict(backend_form=NeighborhoodImageForm())
 
@@ -182,10 +189,12 @@ def deletePointOfInterest(request, pk):
 
 def deletePointOfInterestImage(request, pk):
     image = PointOfInterestImage.objects.get(pk=pk)
+    point_of_interest = image.point_of_interest
     image.delete()
     cloudinary.uploader.destroy(image.image.public_id, invalidate=True)
-
-    return HttpResponseRedirect('/neighborhood/points_of_interest/')
+    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+    return render(request,
+                  'point_of_interest_images.html', {'images': images, 'point': point_of_interest, })
 
 
 def uploadPointOfInterestImage(request):

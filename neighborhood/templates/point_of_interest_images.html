@@ -12,17 +12,17 @@
    object-fit:scale-down;
 }
 
-#images-table td {
-    vertical-align:middle;
+#images-table td { 
+    vertical-align:middle; 
 }
 </style>
-{% if neighborhood is not None %}
+{% if point is not None %}
 <br>
 <div class="text-center" style="width:150px; margin:auto;">
-    <a href="/neighborhood/images/upload/">
-    <button id="btn-upload-img" type="button" class="btn btn-outline-dark" style="width:100%;">
-        Cargar imagen
-    </button>
+    <a href="/neighborhood/images/upload/">  <!--  TODO - CAMBIAR-->
+        <button id="btn-upload-img" type="button" class="btn btn-outline-dark" style="width:100%;">
+            Cargar imagen
+        </button>
     </a>
 </div>
 <br>
@@ -69,7 +69,7 @@
     </table>
 </div>
 {% else %}
-<p>Primero debe cargar información del barrio para subir imágenes del mismo.</p>
+<p>Primero debe cargar información del punto de interés para subir imágenes del mismo.</p>
 {% endif %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -84,7 +84,7 @@
                 var pk = $(this).data('pk');
                 $.ajax({
                     method: "POST",
-                    url: "/neighborhood/image/" + pk + "/delete/",
+                    url: "/neighborhood/points_of_interest/image/" + pk + "/delete/",
                     data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
                 })
                 window.location.reload()
