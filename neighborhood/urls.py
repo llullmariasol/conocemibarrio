@@ -27,7 +27,7 @@ urlpatterns = [
     path('neighborhood/points_of_interest/', showPointsOfInterest, name='showPointsOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/delete/', deletePointOfInterest, name='deletePointOfInterest'),
     path('neighborhood/points_of_interest/image/<int:pk>/delete/', deletePointOfInterestImage, name='deletePointOfInterestImage'),
-    path('neighborhood/point_of_interest/image/upload/', uploadPointOfInterestImage, name='uploadPointOfInterestImage'),
+    path('neighborhood/point_of_interest/<int:pk>/image/upload/', uploadPointOfInterestImage, name='uploadPointOfInterestImage'),
 
     path('neighborhood/point_of_interest/<int:pk>/images/', showPointOfInterestImages, name='showPointOfInterestImages')
 ]

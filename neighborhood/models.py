@@ -1,6 +1,5 @@
 from cloudinary.models import CloudinaryField
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User
 from registration.models import Neighborhood
 
 
@@ -25,6 +24,7 @@ class PointOfInterest(models.Model):
 class PointOfInterestImage(models.Model):
     image = CloudinaryField('image')
     point_of_interest = models.ForeignKey(PointOfInterest, on_delete=models.CASCADE, db_constraint=False, null=True)
+    description = models.TextField(default='')
 
     class Meta:
         db_table = 'point_of_interest_image'

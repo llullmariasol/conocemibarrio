@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
-from neighborhood.forms import NeighborhoodImageForm
+from neighborhood.forms import NeighborhoodImageForm, PointOfInterestImageForm
 from neighborhood.models import NeighborhoodImage, PointOfInterest, NeighborhoodPointOfInterest, PointOfInterestImage
 from registration.models import Neighborhood
 
@@ -197,14 +197,30 @@ def deletePointOfInterestImage(request, pk):
                   'point_of_interest_images.html', {'images': images, 'point': point_of_interest, })
 
 
-def uploadPointOfInterestImage(request):
-    point_of_interest = PointOfInterest.objects.get(pk=32)
-    uploaded_files = request.FILES.getlist('file')
+def uploadPointOfInterestImage(request, pk):
+    #point_of_interest = PointOfInterest.objects.get(pk=32)
+    #uploaded_files = request.FILES.getlist('file')
+    #for image in uploaded_files:
+    #    point_of_interest_image = PointOfInterestImage()
+    #    point_of_interest_image.point_of_interest = point_of_interest
+    #    point_of_interest_image.image = image
+    #    point_of_interest_image.save()
+    #return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
-    for image in uploaded_files:
+    context = dict(backend_form=PointOfInterestImageForm())
+
+    if request.method == 'POST':
+        desc = request.POST.get('image-description')
+        image = request.FILES['image-file']
+
+        point_of_interest = PointOfInterest.objects.get(pk=pk)
+
         point_of_interest_image = PointOfInterestImage()
         point_of_interest_image.point_of_interest = point_of_interest
         point_of_interest_image.image = image
+        point_of_interest_image.description = desc
         point_of_interest_image.save()
 
-    return HttpResponseRedirect('/neighborhood/points_of_interest/')
+        return HttpResponseRedirect("/neighborhood/point_of_interest/" + str(pk) + "/images/")
+
+    return render(request, 'upload_point_of_interest_image.html', context)
