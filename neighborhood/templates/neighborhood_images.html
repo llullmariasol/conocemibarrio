@@ -69,7 +69,27 @@
     </table>
 </div>
 {% else %}
-<p>Primero debe cargar información del barrio para subir imágenes del mismo.</p>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749;" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-5 shadow">
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <div align="left" style="width:80px">
+                    <img src="{% static '/img/safetypin.png' %}" width="80%">
+                </div>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+            <div class="modal-body p-5 pt-0">
+                <div align="justify">
+                    <b>
+                        Primero debe cargar información del barrio para subir imágenes del mismo.
+                    </b>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endif %}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

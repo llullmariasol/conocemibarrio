@@ -56,34 +56,15 @@
     border: black;
     }
 
-    #custom-button {
-      padding: 10px;
-      color: white;
-      background-color: black;
-      border: 1px solid black;
-      border-radius: 5px;
-      cursor: pointer;
-    }
 
-    #custom-button:hover {
-      color: black;
-      background-color: white;
-      border: 1px solid black;
-    }
-
-    #custom-text {
-      margin-left: 10px;
-      font-family: sans-serif;
-      color: #aaa;
-    }
     </style>
 </head>
 <body>
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
-<link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
 <link rel="stylesheet" href="{% static '/css/modal.css' %}">
-
 <div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
     <div style="width: 90%; margin-right: auto;
          margin-left: auto;">
@@ -113,23 +94,7 @@
                     <input type="hidden" id="point" name="point" value="">
                     <div id="map-container"><div id="map"></div></div>
                     <br>
-
-                    <hr>
-                    <div style="text-align:left">
-                        <h5 class="fw-bold mb-0">Imágenes</h5>
-                        <br>
-                        <small>
-                            <input type="file" multiple id="image-file" hidden="hidden" required name="image-file" accept="image/*"
-                            class="form-control-file"/>
-                            <button type="button" id="custom-button">Elegir archivos</button>
-                            <br><br>
-                            <span id="custom-text">No seleccionaste ningún archivo.</span>
-                        </small>
-                    </div>
-
-                    <br>
                     <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
-
                 </form>
             </div>
             <div>
@@ -146,42 +111,26 @@
             zoom: 12
             });
 
-        const draw = new MapboxDraw({
-            displayControlsDefault: false,
-            controls: {
-            point: true,
-            trash: true
-            },
-            defaultMode: 'draw_point'
-            },
-        );
+    const draw = new MapboxDraw({
+        displayControlsDefault: false,
+        controls: {
+        point: true,
+        trash: true
+        },
+        defaultMode: 'draw_point'
+        },
+    );
 
-        map.addControl(draw);
-        map.on('draw.create', updateArea);
-        map.on('draw.delete', updateArea);
-        map.on('draw.update', updateArea);
+    map.addControl(draw);
+    map.on('draw.create', updateArea);
+    map.on('draw.delete', updateArea);
+    map.on('draw.update', updateArea);
 
-        function updateArea(e) {
-            const data = draw.getAll();
-            const coordinates = data['features'][0]['geometry']['coordinates'];
-            document.getElementById('point').value = coordinates;
-        }
-
-    const imageFileBtn = document.getElementById("image-file");
-    const customBtn = document.getElementById("custom-button");
-    const customTxt = document.getElementById("custom-text");
-
-    customBtn.addEventListener("click", function() {
-      imageFileBtn.click();
-    });
-
-    imageFileBtn.addEventListener("change", function() {
-      if (imageFileBtn.value) {
-        customTxt.innerHTML = imageFileBtn.files.length + " archivo/s seleccionado/s.";
-      } else {
-        customTxt.innerHTML = "No seleccionaste ningún archivo.";
-      }
-    });
+    function updateArea(e) {
+        const data = draw.getAll();
+        const coordinates = data['features'][0]['geometry']['coordinates'];
+        document.getElementById('point').value = coordinates;
+    }
 </script>
 </body>
 {% endblock content %}

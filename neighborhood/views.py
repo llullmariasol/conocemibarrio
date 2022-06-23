@@ -67,8 +67,10 @@ def editNeighborhood(request):
 
 
 def showNeighborhoodImages(request):
-    n = Neighborhood.objects.get(user_id=request.user)
-    images = NeighborhoodImage.objects.all().filter(neighborhood=n)
+    images = None
+    n = Neighborhood.objects.all().filter(user_id=request.user).first()
+    if n is not None:
+        images = NeighborhoodImage.objects.all().filter(neighborhood=n)
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
 
 
@@ -171,8 +173,10 @@ def editPointOfInterest(request, pk):
 
 
 def showPointsOfInterest(request):
-    n = Neighborhood.objects.get(user_id=request.user)
-    points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=n)
+    points_of_interest = None
+    n = Neighborhood.objects.all().filter(user_id=request.user).first()
+    if n is not None:
+        points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=n)
     return render(request, 'neighborhood_points_of_interest.html',
                   {'points': points_of_interest, 'neighborhood': n, })
 

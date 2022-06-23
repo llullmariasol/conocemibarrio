@@ -108,7 +108,7 @@
 
             map.addControl(draw);
             map.on('draw.create', updateArea);
-            map.on('draw.delete', updateArea);
+            map.on('draw.delete', updateAreaWhenDelete);
             map.on('draw.update', updateArea);
 
             function updateArea(e) {
@@ -119,8 +119,33 @@
                     const area = turf.area(data);
                     const rounded_area = Math.round(area * 100) / 100;
                     } else {
-                    if (e.type !== 'draw.delete')
-                    alert('Click the map to draw a polygon.');
+                        if (e.type !== 'draw.delete')
+                            alert('Click the map to draw a polygon.');
+                }
+                if (data.features.length > 1) {
+                    alert("Debes delimitar el barrio con una sola área.");
+                    document.querySelector('#btn-login').disabled = true;
+                } else {
+                     document.querySelector('#btn-login').disabled = false;
+                }
+                document.getElementById('coordinates').value = coordinates;
+            }
+
+            function updateAreaWhenDelete(e) {
+                const data = draw.getAll();
+                const coordinates = data['features'][0]['geometry']['coordinates'][0]
+                console.log(data['features'][0]['geometry']['coordinates'][0]);
+                if (data.features.length > 0) {
+                    const area = turf.area(data);
+                    const rounded_area = Math.round(area * 100) / 100;
+                    } else {
+                        if (e.type !== 'draw.delete')
+                            alert('Click the map to draw a polygon.');
+                }
+                if (data.features.length > 1) {
+                    document.querySelector('#btn-login').disabled = true;
+                } else {
+                     document.querySelector('#btn-login').disabled = false;
                 }
                 document.getElementById('coordinates').value = coordinates;
             }
