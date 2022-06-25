@@ -108,7 +108,7 @@
 
             map.addControl(draw);
             map.on('draw.create', updateArea);
-            map.on('draw.delete', updateAreaWhenDelete);
+            map.on('draw.delete', updateAreaWhenDeleting);
             map.on('draw.update', updateArea);
 
             function updateArea(e) {
@@ -131,7 +131,7 @@
                 document.getElementById('coordinates').value = coordinates;
             }
 
-            function updateAreaWhenDelete(e) {
+            function updateAreaWhenDeleting(e) {
                 const data = draw.getAll();
                 const coordinates = data['features'][0]['geometry']['coordinates'][0]
                 console.log(data['features'][0]['geometry']['coordinates'][0]);

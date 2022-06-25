@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load cloudinary %}
-{% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
 {% block content %}
 <head>
   <meta charset="utf-8">
@@ -136,7 +135,8 @@
             <label for="point-description">Descripción</label>
           </div>
 
-          <input type="hidden" id="point-coordinates" name="point-coordinates" value="">
+          <input type="hidden" id="point" name="point" value="">
+          <input type="hidden" id="coordinates-length" name="coordinates-length" value="">
           <div id="map-container"><div id="map"></div></div>
           <br>
 
@@ -180,13 +180,33 @@
 
         map.addControl(draw);
         map.on('draw.create', updateArea);
-        map.on('draw.delete', updateArea);
+        map.on('draw.delete', updateAreaWhenDeleting);
         map.on('draw.update', updateArea);
 
         function updateArea(e) {
             const data = draw.getAll();
             const coordinates = data['features'][0]['geometry']['coordinates'];
-            document.getElementById('point-coordinates').value = coordinates;
+            document.getElementById('point').value = coordinates;
+            if (data.features.length > 1) {
+                alert("Debes selecccionar un solo punto.");
+                document.querySelector('#btn-login').disabled = true;
+            } else {
+                 document.querySelector('#btn-login').disabled = false;
+            }
+            document.getElementById('coordinates-length').value = data.features.length;
+        }
+
+        function updateAreaWhenDeleting(e) {
+            const data = draw.getAll();
+            const coordinates = data['features'][0]['geometry']['coordinates'];
+            document.getElementById('point').value = coordinates;
+            if (data.features.length > 1) {
+                alert("Debes selecccionar un solo punto.");
+                document.querySelector('#btn-login').disabled = true;
+            } else {
+                 document.querySelector('#btn-login').disabled = false;
+            }
+            document.getElementById('coordinates-length').value = data.features.length;
         }
 
         map.on('load', () => {

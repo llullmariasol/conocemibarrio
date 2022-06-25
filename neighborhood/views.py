@@ -43,7 +43,6 @@ def editNeighborhood(request):
 
     if request.method == 'POST':
         coords = request.POST.get('coordinates')
-        coords_length = request.POST.get('coordinates-length')
 
         if coords == '':
             neighborhood.name = request.POST.get('neighborhood-name')
@@ -122,14 +121,6 @@ def addPointOfInterest(request):
         neighborhood_point_of_interest.point_of_interest = point_of_interest
         neighborhood_point_of_interest.save()
 
-        images = request.FILES.getlist('image-file')
-
-        for image in images:
-            point_of_interest_image = PointOfInterestImage()
-            point_of_interest_image.point_of_interest = point_of_interest
-            point_of_interest_image.image = image
-            point_of_interest_image.save()
-
         return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
     return render(request, 'add_point_of_interest.html')
@@ -143,31 +134,20 @@ def editPointOfInterest(request, pk):
     coordinates_data = json.loads(input_string)
     args['coordinates'] = coordinates_data['coordinates']
     args['point'] = point_of_interest
-    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
-    args['images'] = images
-    # TODO agregar guardado de nuevas imágenes
+
     if request.method == 'POST':
-        coords = request.POST.get('point-coordinates')
+        coords = request.POST.get('point')
         if coords == '':
             point_of_interest.name = request.POST.get('point-name')
             point_of_interest.description = request.POST.get('point-description')
         else:
             point_of_interest.name = request.POST.get('point-name')
             point_of_interest.description = request.POST.get('point-description')
-            point = request.POST.get('point-coordinates').split(',')
+            point = request.POST.get('point').split(',')
             point_of_interest.location = GEOSGeometry('POINT(' + point[0] + ' ' + point[1] + ')')
-
-        new_images = request.FILES.getlist('image-file')
-
-        for image in new_images:
-            point_of_interest_image = PointOfInterestImage()
-            point_of_interest_image.point_of_interest = point_of_interest
-            point_of_interest_image.image = image
-            point_of_interest_image.save()
-
         point_of_interest.save()
 
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
     return render(request, 'edit_point_of_interest.html', args)
 
@@ -203,16 +183,10 @@ def deletePointOfInterestImage(request, pk):
 
 
 def uploadPointOfInterestImage(request, pk):
-    #point_of_interest = PointOfInterest.objects.get(pk=32)
-    #uploaded_files = request.FILES.getlist('file')
-    #for image in uploaded_files:
-    #    point_of_interest_image = PointOfInterestImage()
-    #    point_of_interest_image.point_of_interest = point_of_interest
-    #    point_of_interest_image.image = image
-    #    point_of_interest_image.save()
-    #return HttpResponseRedirect('/neighborhood/points_of_interest/')
-
+    args = {}
     context = dict(backend_form=PointOfInterestImageForm())
+    args['context'] = context
+    args['pk'] = str(pk)
 
     if request.method == 'POST':
         desc = request.POST.get('image-description')
@@ -228,4 +202,4 @@ def uploadPointOfInterestImage(request, pk):
 
         return HttpResponseRedirect("/neighborhood/point_of_interest/" + str(pk) + "/images/")
 
-    return render(request, 'upload_point_of_interest_image.html', context)
+    return render(request, 'upload_point_of_interest_image.html', args)

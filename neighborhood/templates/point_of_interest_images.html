@@ -12,8 +12,8 @@
    object-fit:scale-down;
 }
 
-#images-table td { 
-    vertical-align:middle; 
+#images-table td {
+    vertical-align:middle;
 }
 </style>
 {% if point is not None %}
@@ -29,6 +29,7 @@
 <div class="table-responsive" style="background:white;">
     <table class="table table-hover light" id="images-table">
         <thead>
+        <tr><small>"{{ point.name }}"</small></tr>
         <tr>
             <th scope="col">Imagen</th>
             <th scope="col">Descripción</th>
