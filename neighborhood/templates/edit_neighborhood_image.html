@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cloudinary %}
+{% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
+{% block content %}
+<style>
+    #image-description:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+
+    .holder img {
+    width:90px;
+   height:90px;
+   object-fit:scale-down;
+  }
+</style>
+<link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+  <div style="width: 90%; margin-right: auto;
+         margin-left: auto;">
+    <div class="modal-content rounded-5 shadow" >
+      <div class="modal-header p-5 pb-4 border-bottom-0">
+        <h2 class="fw-bold mb-0">Editar</h2>
+        <a href="/neighborhood/images/">
+          <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </a>
+      </div>
+      <div class="modal-body p-5 pt-0" style="text-align:left">
+        <form action="" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="holder">
+            <img class="d-block w-100" src="{{ image.image.url }}" alt="Imagen">
+          </div>
+          <br>
+          <div class="form-floating mb-3">
+            <textarea type="textarea" class="form-control rounded-4" id="image-description"
+                      placeholder="Descripción" name="image-description"
+                      style="height: 150px; resize: none; text-indent: 0;">{{ image.description }}</textarea>
+            <label for="image-description">Descripción</label>
+          </div>
+          <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
+        </form>
+      </div>
+      <div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

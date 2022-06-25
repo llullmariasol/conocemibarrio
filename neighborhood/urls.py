@@ -12,6 +12,8 @@ from .views import (createNeighborhood,
                     deletePointOfInterestImage,
                     uploadPointOfInterestImage,
                     showPointOfInterestImages,
+                    editNeighborhoodImage,
+                    editPointOfInterestImage,
                     )
 
 app_name = 'neighborhood'
@@ -22,12 +24,15 @@ urlpatterns = [
     path('neighborhood/images/', showNeighborhoodImages, name='showNeighborhoodImages'),
     path('neighborhood/images/upload/', uploadNeighborhoodImage, name='uploadNeighborhoodImage'),
     path('neighborhood/image/<int:pk>/delete/', deleteNeighborhoodImage, name='deleteNeighborhoodImage'),
+    path('neighborhood/image/<int:pk>/edit/', editNeighborhoodImage, name='editNeighborhoodImage'),
     path('neighborhood/points_of_interest/add/', addPointOfInterest, name='addPointOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/edit/', editPointOfInterest, name='editPointOfInterest'),
     path('neighborhood/points_of_interest/', showPointsOfInterest, name='showPointsOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/delete/', deletePointOfInterest, name='deletePointOfInterest'),
     path('neighborhood/points_of_interest/image/<int:pk>/delete/', deletePointOfInterestImage, name='deletePointOfInterestImage'),
     path('neighborhood/point_of_interest/<int:pk>/image/upload/', uploadPointOfInterestImage, name='uploadPointOfInterestImage'),
+
+    path('neighborhood/points_of_interest/image/<int:pk>/edit/', editPointOfInterestImage, name='editPointOfInterestImage'),
 
     path('neighborhood/point_of_interest/<int:pk>/images/', showPointOfInterestImages, name='showPointOfInterestImages')
 ]

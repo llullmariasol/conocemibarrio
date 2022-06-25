@@ -99,6 +99,20 @@ def uploadNeighborhoodImage(request):
     return render(request, 'upload_neighborhood_image.html', context)
 
 
+def editNeighborhoodImage(request, pk):
+    args = {}
+    image = NeighborhoodImage.objects.get(pk=pk)
+    args['image'] = image
+
+    if request.method == 'POST':
+        image.description = request.POST.get('image-description')
+        image.save()
+
+        return HttpResponseRedirect('/neighborhood/images/')
+
+    return render(request, 'edit_neighborhood_image.html', args)
+
+
 def deleteNeighborhoodImage(request, pk):
     image = NeighborhoodImage.objects.get(pk=pk)
     image.delete()
@@ -203,3 +217,19 @@ def uploadPointOfInterestImage(request, pk):
         return HttpResponseRedirect("/neighborhood/point_of_interest/" + str(pk) + "/images/")
 
     return render(request, 'upload_point_of_interest_image.html', args)
+
+
+def editPointOfInterestImage(request, pk):
+    args = {}
+    image = PointOfInterestImage.objects.get(pk=pk)
+    point_of_interest = image.point_of_interest
+    args['image'] = image
+    args['point'] = point_of_interest
+
+    if request.method == 'POST':
+        image.description = request.POST.get('image-description')
+        image.save()
+
+        return HttpResponseRedirect("/neighborhood/point_of_interest/" + str(point_of_interest.pk) + "/images/")
+
+    return render(request, 'edit_point_of_interest_image.html', args)
