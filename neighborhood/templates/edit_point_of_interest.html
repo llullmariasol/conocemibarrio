@@ -99,6 +99,7 @@
 </head>
 <body>
 <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
@@ -137,6 +138,8 @@
 
           <input type="hidden" id="point" name="point" value="">
           <input type="hidden" id="coordinates-length" name="coordinates-length" value="">
+          <input type="hidden" id="p1" name="p1" value="">
+          <input type="hidden" id="p2" name="p2" value="">
           <div id="map-container"><div id="map"></div></div>
           <br>
 
@@ -161,6 +164,17 @@
             {% endfor %}
           ]
 
+      var labels2 = [
+      {% for c in coordinates_neighborhood %}
+      {{ c }},
+      {% endfor %}
+      ]
+
+      var labels3 = [
+      {% for c in coordinates_neighborhood %}
+      [{{c}}],
+      {% endfor %}
+      ]
      const map = new mapboxgl.Map({
             container: 'map',
             style: 'mapbox://styles/mapbox/streets-v11',
@@ -183,6 +197,22 @@
         map.on('draw.delete', updateAreaWhenDeleting);
         map.on('draw.update', updateArea);
 
+function inside(point, vs) {
+    var x = point[0], y = point[1];
+
+    var inside = false;
+    for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+        var xi = vs[i][0], yi = vs[i][1];
+        var xj = vs[j][0], yj = vs[j][1];
+
+        var intersect = ((yi > y) != (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
+};
+
         function updateArea(e) {
             const data = draw.getAll();
             const coordinates = data['features'][0]['geometry']['coordinates'];
@@ -194,6 +224,16 @@
                  document.querySelector('#btn-login').disabled = false;
             }
             document.getElementById('coordinates-length').value = data.features.length;
+
+            var polygon = labels2;
+            console.log(inside(coordinates, polygon));
+
+            if (inside(coordinates, polygon) == false) {
+              alert("El punto de interés debe estar dentro del área del barrio.");
+              document.querySelector('#btn-login').disabled = true;
+            } else {
+              document.querySelector('#btn-login').disabled = false;
+            }
         }
 
         function updateAreaWhenDeleting(e) {
@@ -238,6 +278,69 @@
                 'filter': ['==', '$type', 'Point']
                 });
                 });
+
+                map.on('load', () => {
+        map.addSource('national-park', {
+        'type': 'geojson',
+        'data': {
+        'type': 'FeatureCollection',
+        'features': [
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Polygon',
+        'coordinates': [
+        labels2
+        ]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.415061, 40.506229]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.505184, 40.488084]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.354465, 40.488737]
+        }
+        }
+        ]
+        }
+        });
+
+        map.addLayer({
+        'id': 'park-boundary',
+        'type': 'fill',
+        'source': 'national-park',
+        'paint': {
+        'fill-color': '#036749',
+        'fill-opacity': 0.4
+        },
+        'filter': ['==', '$type', 'Polygon']
+        });
+
+        map.addLayer({
+        'id': 'park-volcanoes',
+        'type': 'circle',
+        'source': 'national-park',
+        'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
+        },
+        'filter': ['==', '$type', 'Point']
+        });
+        });
 </script>
 </body>
 {% endblock content %}

@@ -121,6 +121,14 @@ def deleteNeighborhoodImage(request, pk):
 
 
 def addPointOfInterest(request):
+    args = {}
+    neighborhood = Neighborhood.objects.filter(user=request.user).first()
+    shape = GEOSGeometry(neighborhood.shape)
+    input_string = shape.geojson
+    coordinates_data = json.loads(input_string)
+    args['coordinates'] = coordinates_data['coordinates'][0][0]
+    #args['neighborhood'] = neighborhood
+
     if request.method == 'POST':
         point = request.POST.get('point').split(',')
 
@@ -137,7 +145,7 @@ def addPointOfInterest(request):
 
         return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
-    return render(request, 'add_point_of_interest.html')
+    return render(request, 'add_point_of_interest.html', args)
 
 
 def editPointOfInterest(request, pk):
@@ -148,6 +156,12 @@ def editPointOfInterest(request, pk):
     coordinates_data = json.loads(input_string)
     args['coordinates'] = coordinates_data['coordinates']
     args['point'] = point_of_interest
+
+    neighborhood = Neighborhood.objects.filter(user=request.user).first()
+    shape = GEOSGeometry(neighborhood.shape)
+    input_string_shape = shape.geojson
+    coordinates_data_neighborhood = json.loads(input_string_shape)
+    args['coordinates_neighborhood'] = coordinates_data_neighborhood['coordinates'][0][0]
 
     if request.method == 'POST':
         coords = request.POST.get('point')
