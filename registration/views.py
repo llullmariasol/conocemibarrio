@@ -76,7 +76,7 @@ def registration(request):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user),
             })
-            email_subject = 'Activa tu cuenta'
+            email_subject = 'Activá tu cuenta'
             to_email = form.cleaned_data.get('email')
             email_message = mail.EmailMessage(
                 email_subject,
@@ -96,6 +96,52 @@ def registration(request):
     args['form'] = form
 
     return render(request, 'registration.html', args)
+
+
+def registrationNeighborhoodAdmin(request):  # TODO - hacer----
+    args = {}
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        args['neighborhoods'] = neighborhoods
+
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+
+            if request.POST.get('barrio'):
+                neighborhood_id = request.POST.get('barrio')
+                n = Neighborhood.objects.get(pk=neighborhood_id)
+                user_neighborhood = UserNeighborhood()
+                user_neighborhood.user = user
+                user_neighborhood.neighborhood = n
+                user_neighborhood.save()
+
+            message = render_to_string('registration_neighborhood_admin_mail.html', {
+                'user': user,
+                'neighborhood': "EJEMPLO -- CAMBIAR",
+            })
+            email_subject = 'Solicitud de registro'
+            to_email = form.cleaned_data.get('email')
+            email_message = mail.EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [to_email]
+            )
+
+            EmailThread(email_message).start()
+            messages.add_message(request, messages.SUCCESS, "El link para activar tu cuenta fue enviado.")
+
+            return HttpResponseRedirect('/')
+    else:
+        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        form = RegistrationForm()
+        args['neighborhoods'] = neighborhoods
+    args['form'] = form
+
+    return render(request, 'registration_neighborhood_admin.html', args)
 
 
 def activation(request, uidb64, token):

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    #floatingInput:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+    #floatingPassword:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+</style>
+<link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749;" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-5 shadow">
+
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Crear una cuenta</h2>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+
+            <div class="modal-body p-5 pt-0">
+                <form method="POST" style="align-content: center;">
+                    {% csrf_token %}
+
+                    <div class="form-floating mb-3">
+                        <div align="justify">
+                            <label for="floatingInput" >Elegí tu barrio:</label>
+                            <select name="barrio">
+                                {% for n in neighborhoods %}
+                                <option value="{{ n.pk }}">{{ n.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    {% if not form.errors.username%}
+                    <div class="form-floating mb-3">
+                        <input type="username" class="form-control rounded-4" id="floatingInput" placeholder="Nombre de usuario" name="username">
+                        <label for="floatingInput">Nombre de usuario</label>
+                    </div>
+                    {% endif %}
+
+                    {% if form.errors.username %}
+                    <div class="form-floating mb-3 has-danger">
+                        <input type="username" class="form-control rounded-4 is-invalid" id="inputInvalid" placeholder="Nombre de usuario" name="username">
+                        <label for="floatingInput" >Nombre de usuario</label>
+                        <div class="invalid-feedback">{{form.errors.username}}</div>
+                    </div>
+                    {% endif %}
+
+                    {% if not form.errors.email%}
+                    <div class="form-floating mb-3">
+                        <input type="email" class="form-control rounded-4" id="floatingInput" placeholder="Email" name="email">
+                        <label for="floatingInput">Email</label>
+                    </div>
+                    {% endif %}
+
+                    {% if form.errors.email %}
+                    <div class="form-floating mb-3 has-danger">
+                        <input type="email" class="form-control rounded-4 is-invalid" id="inputInvalid" placeholder="Email" name="email">
+                        <label for="floatingInput" >Email</label>
+                        <div class="invalid-feedback">{{form.errors.email}}</div>
+                    </div>
+                    {% endif %}
+
+                    {% if not form.errors.password1 %}
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Contraseña" name="password1">
+                        <label for="floatingPassword">Contraseña</label>
+                    </div>
+                    {% endif %}
+
+                    {% if form.errors.password1 %}
+                    <div class="form-floating mb-3 has-danger">
+                        <input type="password" class="form-control rounded-4 is-invalid" id="inputInvalid" placeholder="Contraseña" name="password1">
+                        <label for="floatingPassword">Contraseña</label>
+                        <div class="invalid-feedback">{{form.errors.password1}}</div>
+                    </div>
+                    {% endif %}
+
+                    {% if not form.errors.password2 %}
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control rounded-4" id="floatingPassword" placeholder="Confirmar contraseña" name="password2">
+                        <label for="floatingPassword">Confirmar contraseña</label>
+                    </div>
+                    {% endif %}
+
+                    {% if form.errors.password2 %}
+                    <div class="form-floating mb-3 has-danger">
+                        <input type="password" class="form-control rounded-4 is-invalid" id="inputInvalid" placeholder="Confirmar contraseña" name="password2">
+                        <label for="floatingPassword">Confirmar contraseña</label>
+                        <div class="invalid-feedback">{{form.errors.password2}}</div>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <small>
+                            Al registrarte como administrador/a de un barrio, pasarás por un proceso de aprobación. Te contactaremos por mail.
+                        </small>
+                    </div>
+                    <br>
+                    <input type="hidden" name="next" value="{{ request.GET.next }}"/>
+                    <button id="btn-registration" class="w-100 mb-2 btn btn-lg btn-primary" type="submit">Registrarse</button>
+                </form>
+                <div align="justify">
+                    <small>Al registrarte, aceptás nuestros <a href="/">términos y condiciones</a>.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock content %}
