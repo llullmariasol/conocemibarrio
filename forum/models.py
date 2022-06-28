@@ -17,7 +17,8 @@ class Comment(models.Model):
     creationDate = models.DateTimeField(auto_now_add=True)
     liked = models.BooleanField(default=False)
     likes = models.ManyToManyField(User, related_name='forum_answers')
-    complaint = models.ManyToManyField(User, related_name='complaint')
+    complaints = models.ManyToManyField(User, related_name='complaints')
+    removed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.content
@@ -25,8 +26,8 @@ class Comment(models.Model):
     def total_likes(self):
         return self.likes.count()
 
-    def total_complaint(self):
-        return self.complaint.count()
+    def total_complaints(self):
+        return self.complaints.count()
 
 class Complaint(models.Model):
     REASONS = (

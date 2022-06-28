@@ -12,6 +12,7 @@ from .models import (
 from .forms import (
     PostForm,
     CommentForm,
+    ComplaintForm,
 )
 
 @login_required
@@ -50,9 +51,6 @@ def addPost(request):
 def postDetail(request, pk):
     post = Post.objects.get(pk = pk)
     comments = Comment.objects.filter(post = post).annotate(like_count=Count('likes')).order_by('-like_count')
-    #ordenar las respuestas por cantidad de likes
-    #Article.objects.annotate(like_count=Count('likes')).order_by('-like_count')
-    #COMENTARIOS o sea RESPUESTAS
     if request.method == "POST":
         form = CommentForm(data=request.POST)
         if form.is_valid():
@@ -63,7 +61,6 @@ def postDetail(request, pk):
     else:
         form = CommentForm()
 
-    # ver si el usuario le puso o no like a la respuesta
     for comment in comments:
         comment.total = comment.likes.count()
         if comment.likes.filter(id=request.user.id).exists():
@@ -73,7 +70,7 @@ def postDetail(request, pk):
 
     reported_comments = []
     for complaint in user_complaints:
-        comment = complaint.comentario
+        comment = complaint.comment
         reported_comments.append(comment)
 
     return render(
@@ -107,3 +104,28 @@ def deleteComment(request, pk):
     comment = Comment.objects.get(pk=pk)
     comment.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def reportComment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    if request.method == 'POST':
+        form = ComplaintForm(data=request.POST)
+        complaint = Complaint()
+        if form.is_valid:
+            comment.complaints.add(request.user)
+            if comment.complaints > 4:
+                comment.removed = True
+            complaint.comment = comment
+            complaint.user = request.user
+            complaint.save()
+            return HttpResponseRedirect(reverse('forum:postDetail', args=[str(comment.post.id)]))
+    else:
+        form = ComplaintForm()
+    return render(
+        request,
+        'report.html',
+        {
+            'form': form,
+            'comment': comment,
+        },
+    )

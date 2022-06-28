@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+<script type="text/javascript" src="lib.js"></script>
+{% block content %}
+<div class="text-center">
+    <form action="" method="POST" class="post-form">{% csrf_token %}
+        <br>
+        <p><strong>Elija un motivo de denuncia</strong></p>
+
+        {{ form.reason }}
+        <br>
+        <br>
+        <a class="btn btn-secondary" type="button" value="Cancelar" href="{% url 'forum:postDetail' comment.post.pk %}">Cancelar</a>
+        <button class="btn btn-danger btn-denunciar" type="submit" value="Denunciar">Denunciar</button>
+        <br>
+        <br>
+    </form>
+    {% endblock content %}
+</div>

@@ -24,68 +24,59 @@
     }
 </style>
 
-<h2 class="text-center">Respuestas</h2>
+<h2 class="text-center" style="color: whitesmoke">Respuestas</h2>
 {% for comment in comments %}
-    <div class="container">
-        <div class="alert alert-warning" role="alert">
-            <div class="date">
-                <div class="text-right">
-                    {% if comment.author == request.user %}
-                    <a href="{% url 'forum:deleteComment' comment.pk %}"class="badge badge-danger"
-                       onClick="return confirm('¿Seguro que quieres borrar tu respuesta?');">
-                        <strong>Eliminar</strong>
-                    </a>
-                    {% endif %}
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <p><small>El {{ comment.creationDate }}</small>
-                            {% if comment.author == request.user %}
-                            <strong>usted</strong> respondió:
-                            {% else %}
-                            <strong>{{ comment.author }}</strong> respondió:
-                            {% endif %}
-                        </p>
+    {% if comment.removed == False %}
+        <div class="container">
+            <div class="alert alert-warning" role="alert">
+                <div class="date">
+                    <div class="text-right">
+                        {% if comment.author == request.user %}
+                        <a href="{% url 'forum:deleteComment' comment.pk %}"class="badge rounded-pill bg-dark" style="width: 75px"
+                           onClick="return confirm('¿Seguro que quieres borrar tu respuesta?');">
+                            <strong>Eliminar</strong>
+                        </a>
+                        {% endif %}
+                        {% if comment.author != user and comment not in complaints %}
+                        <div class="text-right">
+                            <a class="badge rounded-pill bg-dark" href="{% url 'forum:reportComment' comment.pk %}" style="width: 150px">Denunciar comentario</a>
+                        </div>
+                        {% endif %}
                     </div>
-
-                    {% if comment.author != user and comment not in complaints %}
-                    <div class="col-sm-6 text-right">
-                        <div class="btn-group">
-                            {% comment %}
-                            <button type="button" class="btn btn-default dropdown-toggle"
-                                    data-toggle="dropdown">
-                                Opciones <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                <!-- Button trigger modal -->
-                                {% endcomment %}
-                                <a class="badge badge-danger" href="#">Denunciar comentario</a>
-                            </ul>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p><small>El {{ comment.creationDate }}</small>
+                                {% if comment.author == request.user %}
+                                <strong>usted</strong> respondió:
+                                {% else %}
+                                <strong>{{ comment.author }}</strong> respondió:
+                                {% endif %}
+                            </p>
                         </div>
                     </div>
-                    {% endif %}
-                </div>
-                <p>{{ comment.content|linebreaks }}</p>
-                </p>
+                    <p>{{ comment.content|linebreaks }}</p>
+                    </p>
 
-                {% if comment.author == user %}
+                    {% if comment.author == user %}
 
-                {% else %}
-                <form action="{% url 'forum:likeComment' comment.pk %}" method="POST">
-                    {% csrf_token %}
-                    {% if comment.liked %}
-                    <button type="submit", name="answer_id", value="{{ comment.id }}"
-                            class="btn btn-danger btn-sm">No me gusta</button>
                     {% else %}
-                    <button type="submit", name="answer_id", value="{{ comment.id }}"
-                            class="btn btn-success btn-sm">Me gusta</button>
+                    <form action="{% url 'forum:likeComment' comment.pk %}" method="POST">
+                        {% csrf_token %}
+                        {% if comment.liked %}
+                        <button type="submit", name="answer_id", value="{{ comment.id }}"
+                                class="btn btn-danger btn-sm">No me gusta</button>
+                        {% else %}
+                        <button type="submit", name="answer_id", value="{{ comment.id }}"
+                                class="btn btn-success btn-sm">Me gusta</button>
+                        {% endif %}
+                    </form>
                     {% endif %}
-                </form>
-                {% endif %}
-                {{ comment.total_likes }} me gusta
+                    {{ comment.total_likes }} me gusta
+                </div>
             </div>
         </div>
-    </div>
+    {% endif %}
 {% empty %}
     <div class="container">
         <div class="comment">
@@ -96,8 +87,7 @@
 
 <div id="respond" class="comment-respond; text-center">
     <form method="post" id="form" class="comment-form">{% csrf_token %}
-        {{ form.content }}
-        <br>
+        <input class="form-control" required="" placeholder="Tu respuesta" name="content">
         <br>
         <button class="btn btn-lg btn-primary btn-block publicar" type="submit">Responder</button>
     </form>
