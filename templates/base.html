@@ -75,6 +75,41 @@
     {% endif %}
     {% endif %}
     {% endif %}
+
+    {% if request.user.is_authenticated and user.is_superuser == 1 %}
+    {% if request.path == '/' %}
+    <br>
+    <div role="group" style="width:80%; margin:auto;">
+        {% if n == null %}
+        <a href="/administration/requests/">
+            <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Solicitudes de administración de barrios
+            </button>
+        </a>
+        <br><br>
+        {% else %}
+        <a href="/neighborhood/information/edit/">
+            <button id="btn-edit-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Opción 2
+            </button>
+        </a>
+        <br><br>
+        {% endif %}
+        <a href="/neighborhood/images/">
+            <button id="btn-imgs-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Opción 3
+            </button>
+        </a>
+        <br><br>
+        <a href="/neighborhood/points_of_interest/">
+            <button id="btn-points-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Opción 4
+            </button>
+        </a>
+    </div>
+    {% endif %}
+    {% endif %}
+
     {% block content %}
     {% endblock content %}
 </main>

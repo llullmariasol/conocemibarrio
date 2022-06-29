@@ -127,7 +127,6 @@ def addPointOfInterest(request):
     input_string = shape.geojson
     coordinates_data = json.loads(input_string)
     args['coordinates'] = coordinates_data['coordinates'][0][0]
-    #args['neighborhood'] = neighborhood
 
     if request.method == 'POST':
         point = request.POST.get('point').split(',')

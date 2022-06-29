@@ -12,6 +12,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.conf import settings
+from django.contrib.auth.models import Group
 
 from .forms import (RegistrationForm,
                     LogInForm,
@@ -44,8 +45,6 @@ def home(request):
             for n in neighborhoods_of_admin:
                 if n.user_id == request.user.pk:
                     args['n'] = n
-                    print("!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(n)
     return render(request, 'base.html', args)
 
 
@@ -98,7 +97,7 @@ def registration(request):
     return render(request, 'registration.html', args)
 
 
-def registrationNeighborhoodAdmin(request):  # TODO - hacer----
+def registrationNeighborhoodAdmin(request):
     args = {}
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
@@ -108,6 +107,9 @@ def registrationNeighborhoodAdmin(request):  # TODO - hacer----
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
+            group = Group.objects.get(name='neighborhood-admin')
+            user.save()
+            user.groups.add(group)
             user.save()
 
             if request.POST.get('barrio'):
@@ -120,7 +122,7 @@ def registrationNeighborhoodAdmin(request):  # TODO - hacer----
 
             message = render_to_string('registration_neighborhood_admin_mail.html', {
                 'user': user,
-                'neighborhood': "EJEMPLO -- CAMBIAR",
+                'neighborhood': n.name,
             })
             email_subject = 'Solicitud de registro'
             to_email = form.cleaned_data.get('email')
@@ -218,3 +220,67 @@ def joinNeighborhood(request):
     args['form'] = form
 
     return render(request, 'join_neighborhood.html', args)
+
+
+def administrationRequests(request):
+    args = {}
+    group = Group.objects.all().filter(name='neighborhood-admin').first()
+    users = group.user_set.all().filter(is_active=0)
+    users_neighborhoods = UserNeighborhood.objects.all()
+    users_list = []
+    if len(users) > 0:
+        for u in users_neighborhoods:
+            try:
+                users.get(id=u.user.id)
+                users_list.append(u)
+            except User.DoesNotExist:
+                pass
+
+    args['users_list'] = users_list
+    return render(request, 'administration_requests.html', args)
+
+
+def approveAdministrationRequest(request, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = True
+    user.signup_confirmation = True
+    user.save()
+
+    # TODO - MANDAR MAIL
+
+    args = {}
+    group = Group.objects.all().filter(name='neighborhood-admin').first()
+    users = group.user_set.all().filter(is_active=0)
+    users_neighborhoods = UserNeighborhood.objects.all()
+    users_list = []
+    if len(users) > 0:
+        for u in users_neighborhoods:
+            try:
+                users.get(id=u.user.id)
+                users_list.append(u)
+            except User.DoesNotExist:
+                pass
+
+    args['users_list'] = users_list
+
+    return render(request, 'administration_requests.html', args)
+
+
+def rejectAdministrationRequest(request, pk):
+    # TODO - MANDAR MAIL diciendo que fue rechazado y que puede registrarse como usuario normal
+    args = {}
+    group = Group.objects.all().filter(name='neighborhood-admin').first()
+    users = group.user_set.all().filter(is_active=0)
+    users_neighborhoods = UserNeighborhood.objects.all()
+    users_list = []
+    if len(users) > 0:
+        for u in users_neighborhoods:
+            try:
+                users.get(id=u.user.id)
+                users_list.append(u)
+            except User.DoesNotExist:
+                pass
+
+    args['users_list'] = users_list
+
+    return render(request, 'administration_requests.html', args)

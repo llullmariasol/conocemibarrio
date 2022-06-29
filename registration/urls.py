@@ -8,7 +8,10 @@ from .views import (registration,
                     home,
                     logOut,
                     joinNeighborhood,
-                    registrationNeighborhoodAdmin)
+                    registrationNeighborhoodAdmin,
+                    administrationRequests,
+                    approveAdministrationRequest,
+                    rejectAdministrationRequest)
 
 app_name = 'registration'
 
@@ -43,4 +46,8 @@ urlpatterns = [
     path('social-auth/', include('social_django.urls', namespace="social")),
     path('location/', registration, name='registration'),
     path('join_neighborhood/', joinNeighborhood, name='joinNeighborhood'),
+    path('administration/requests/', administrationRequests, name='administrationRequests'),
+    path('administration/request/<int:pk>/approve/', approveAdministrationRequest, name='approveAdministrationRequest'),
+    path('administration/request/<int:pk>/reject/', rejectAdministrationRequest, name='rejectAdministrationRequest'),
+
 ]
