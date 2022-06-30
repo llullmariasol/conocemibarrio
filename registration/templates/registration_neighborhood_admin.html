@@ -6,6 +6,10 @@
     box-shadow: 0 0 0 0.25rem black;
     border: black;
     }
+    #justification:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
     #floatingPassword:focus{
     box-shadow: 0 0 0 0.25rem black;
     border: black;
@@ -97,6 +101,14 @@
                         <div class="invalid-feedback">{{form.errors.password2}}</div>
                     </div>
                     {% endif %}
+
+                    <div class="form-floating mb-3">
+                        <textarea type="textarea" class="form-control rounded-4" id="justification"
+                          placeholder="Justificación" name="justification"
+                          style="height: 150px; resize: none; text-indent: 0;"></textarea>
+                        <label for="justification">Justificación</label>
+                    </div>
+
                     <div>
                         <small>
                             Al registrarte como administrador/a de un barrio, pasarás por un proceso de aprobación. Te contactaremos por mail.

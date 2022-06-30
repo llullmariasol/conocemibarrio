@@ -118,6 +118,7 @@ def registrationNeighborhoodAdmin(request):
                 user_neighborhood = UserNeighborhood()
                 user_neighborhood.user = user
                 user_neighborhood.neighborhood = n
+                user_neighborhood.justification = request.POST.get('justification')
                 user_neighborhood.save()
 
             message = render_to_string('registration_neighborhood_admin_mail.html', {
@@ -245,7 +246,6 @@ def approveAdministrationRequest(request, pk):
     user.is_active = True
     user.signup_confirmation = True
     user.save()
-
     # TODO - MANDAR MAIL
 
     args = {}
