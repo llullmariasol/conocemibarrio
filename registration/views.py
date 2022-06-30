@@ -34,17 +34,20 @@ class EmailThread(threading.Thread):
 
 def home(request):
     args = {}
+
     if request.user.is_authenticated:
         users_neighborhoods = UserNeighborhood.objects.all()
         if users_neighborhoods is not None:
             for user_neighborhood in users_neighborhoods:
                 if user_neighborhood.user == request.user:
                     args['neighborhood'] = user_neighborhood
-        neighborhoods_of_admin = Neighborhood.objects.all()
-        if neighborhoods_of_admin is not None:
-            for n in neighborhoods_of_admin:
-                if n.user_id == request.user.pk:
-                    args['n'] = n
+                    neighborhood_id = user_neighborhood.neighborhood.pk
+                    break
+
+        if request.user.groups.all().exists() and request.user.groups.all()[0].name == "neighborhood-admin":
+            n = Neighborhood.objects.get(pk=neighborhood_id)
+            args['n'] = n
+
     return render(request, 'base.html', args)
 
 
@@ -66,6 +69,7 @@ def registration(request):
                 user_neighborhood = UserNeighborhood()
                 user_neighborhood.user = user
                 user_neighborhood.neighborhood = n
+                user_neighborhood.justification = None
                 user_neighborhood.save()
 
             current_site = get_current_site(request)
@@ -101,7 +105,7 @@ def registrationNeighborhoodAdmin(request):
     args = {}
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        neighborhoods = Neighborhood.objects.all()
         args['neighborhoods'] = neighborhoods
 
         if form.is_valid():
@@ -135,11 +139,11 @@ def registrationNeighborhoodAdmin(request):
             )
 
             EmailThread(email_message).start()
-            messages.add_message(request, messages.SUCCESS, "El link para activar tu cuenta fue enviado.")
+            messages.add_message(request, messages.SUCCESS, "Procesaremos tu solicitud y te avisaremos vía mail.")
 
             return HttpResponseRedirect('/')
     else:
-        neighborhoods = Neighborhood.objects.filter(is_active=1)
+        neighborhoods = Neighborhood.objects.all()
         form = RegistrationForm()
         args['neighborhoods'] = neighborhoods
     args['form'] = form
@@ -246,7 +250,24 @@ def approveAdministrationRequest(request, pk):
     user.is_active = True
     user.signup_confirmation = True
     user.save()
-    # TODO - MANDAR MAIL
+
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+
+    message = render_to_string('neighborhood_admin_request_approved.html', {
+        'user': user,
+        'neighborhood': n.name,
+    })
+    email_subject = 'Aprobamos tu solicitud'
+    to_email = str(user.email)
+    email_message = mail.EmailMessage(
+        email_subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [to_email]
+    )
+
+    EmailThread(email_message).start()
 
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
@@ -267,7 +288,25 @@ def approveAdministrationRequest(request, pk):
 
 
 def rejectAdministrationRequest(request, pk):
-    # TODO - MANDAR MAIL diciendo que fue rechazado y que puede registrarse como usuario normal
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    user = request.user
+
+    message = render_to_string('neighborhood_admin_request_rejected.html', {
+        'user': user,
+        'neighborhood': n.name,
+    })
+    email_subject = 'Rechazamos tu solicitud'
+    to_email = str(user.email)
+    email_message = mail.EmailMessage(
+        email_subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [to_email]
+    )
+
+    EmailThread(email_message).start()
+
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
     users = group.user_set.all().filter(is_active=0)

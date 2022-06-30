@@ -7,11 +7,14 @@ from django.contrib.gis.geos import GEOSGeometry
 
 from neighborhood.forms import NeighborhoodImageForm, PointOfInterestImageForm
 from neighborhood.models import NeighborhoodImage, PointOfInterest, NeighborhoodPointOfInterest, PointOfInterestImage
-from registration.models import Neighborhood
+from registration.models import Neighborhood, UserNeighborhood
 
 
 def createNeighborhood(request):
     args = {}
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    args['name'] = neighborhood.name
     if request.method == 'POST':
         coords = request.POST.get('coordinates')
         final_coords = ""
@@ -20,7 +23,6 @@ def createNeighborhood(request):
             final_coords = final_coords + coords.split(',')[xy] + ' ' + coords.split(',')[xy + 1] + ','
 
         final_coords = final_coords[:-1]
-        neighborhood = Neighborhood()
         neighborhood.name = request.POST.get('neighborhood-name')
         neighborhood.shape = GEOSGeometry('MULTIPOLYGON(((' + final_coords + ')))')
         neighborhood.is_active = True
@@ -34,7 +36,8 @@ def createNeighborhood(request):
 
 def editNeighborhood(request):
     args = {}
-    neighborhood = Neighborhood.objects.filter(user=request.user).first()
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
     shape = GEOSGeometry(neighborhood.shape)
     input_string = shape.geojson
     coordinates_data = json.loads(input_string)
@@ -67,7 +70,9 @@ def editNeighborhood(request):
 
 def showNeighborhoodImages(request):
     images = None
-    n = Neighborhood.objects.all().filter(user_id=request.user).first()
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    # n = Neighborhood.objects.all().filter(user_id=request.user).first()
     if n is not None:
         images = NeighborhoodImage.objects.all().filter(neighborhood=n)
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
@@ -156,7 +161,9 @@ def editPointOfInterest(request, pk):
     args['coordinates'] = coordinates_data['coordinates']
     args['point'] = point_of_interest
 
-    neighborhood = Neighborhood.objects.filter(user=request.user).first()
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    # neighborhood = Neighborhood.objects.filter(user=request.user).first()
     shape = GEOSGeometry(neighborhood.shape)
     input_string_shape = shape.geojson
     coordinates_data_neighborhood = json.loads(input_string_shape)
@@ -181,7 +188,9 @@ def editPointOfInterest(request, pk):
 
 def showPointsOfInterest(request):
     points_of_interest = None
-    n = Neighborhood.objects.all().filter(user_id=request.user).first()
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    # n = Neighborhood.objects.all().filter(user_id=request.user).first()
     if n is not None:
         points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=n)
     return render(request, 'neighborhood_points_of_interest.html',
