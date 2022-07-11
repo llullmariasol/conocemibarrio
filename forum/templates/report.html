@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 <script type="text/javascript" src="lib.js"></script>
 {% block content %}
+<style>
+    h2 {
+        font-family: "Trebuchet MS", Verdana, sans-serif;
+        color: white;
+    }
+    p {
+        font-family: "Trebuchet MS", Verdana, sans-serif;
+        font-size: large;
+        font-weight: bold;
+    }
+</style>
 <div class="text-center">
     <form action="" method="POST" class="post-form">{% csrf_token %}
         <br>
-        <p><strong>Elija un motivo de denuncia</strong></p>
-
+        <h2>Elija un motivo de denuncia</h2>
         {{ form.reason }}
         <br>
         <br>

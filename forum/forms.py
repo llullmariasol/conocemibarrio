@@ -8,7 +8,7 @@ from .models import (
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'body',)
+        fields = ('tittle', 'body',)
 
 class CommentForm(forms.ModelForm):
     class Meta:

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
 class Post(models.Model):
-    title = models.CharField(max_length=30)
+    tittle = models.CharField(max_length=30)
     body = RichTextField(blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
