@@ -105,7 +105,7 @@
                         url: "/administration/request/" + pk + "/reject/",
                         data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
                     })
-                    window.location.reload();
+                    window.location.href = window.location.href;
                 }
             });
         })(jQuery);
@@ -120,7 +120,7 @@
                         url: "/administration/request/" + pk + "/approve/",
                         data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
                     })
-                    window.location.reload();
+                    window.location.href = window.location.href;
                 }
             });
         })(jQuery);

@@ -231,7 +231,7 @@ def administrationRequests(request):
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
     users = group.user_set.all().filter(is_active=0)
-    users_neighborhoods = UserNeighborhood.objects.all()
+    users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
     users_list = []
     if len(users) > 0:
         for u in users_neighborhoods:
@@ -251,15 +251,17 @@ def approveAdministrationRequest(request, pk):
     user.signup_confirmation = True
     user.save()
 
-    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()
     n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
-
+    current_site = get_current_site(request)
     message = render_to_string('neighborhood_admin_request_approved.html', {
         'user': user,
+        'domain': current_site.domain,
         'neighborhood': n.name,
     })
     email_subject = 'Aprobamos tu solicitud'
     to_email = str(user.email)
+
     email_message = mail.EmailMessage(
         email_subject,
         message,
@@ -272,7 +274,7 @@ def approveAdministrationRequest(request, pk):
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
     users = group.user_set.all().filter(is_active=0)
-    users_neighborhoods = UserNeighborhood.objects.all()
+    users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
     users_list = []
     if len(users) > 0:
         for u in users_neighborhoods:
@@ -288,14 +290,18 @@ def approveAdministrationRequest(request, pk):
 
 
 def rejectAdministrationRequest(request, pk):
-    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    user = User.objects.get(pk=pk)
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()
+    user_neighborhood.rejected = True
+    user_neighborhood.save()
     n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
-    user = request.user
-
+    current_site = get_current_site(request)
     message = render_to_string('neighborhood_admin_request_rejected.html', {
         'user': user,
+        'domain': current_site.domain,
         'neighborhood': n.name,
     })
+
     email_subject = 'Rechazamos tu solicitud'
     to_email = str(user.email)
     email_message = mail.EmailMessage(
@@ -310,9 +316,9 @@ def rejectAdministrationRequest(request, pk):
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
     users = group.user_set.all().filter(is_active=0)
-    users_neighborhoods = UserNeighborhood.objects.all()
+    users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
     users_list = []
-    if len(users) > 0:
+    if len(users) > 0 and len(users_neighborhoods) > 0:
         for u in users_neighborhoods:
             try:
                 users.get(id=u.user.id)

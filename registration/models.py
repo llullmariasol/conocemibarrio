@@ -18,6 +18,7 @@ class UserNeighborhood(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False,
                                      related_name='neighborhood', null=True)
     justification = models.TextField(default='', null=True)
+    rejected = models.SmallIntegerField(default=0)
 
     class Meta:
         db_table = 'user_neighborhood'
