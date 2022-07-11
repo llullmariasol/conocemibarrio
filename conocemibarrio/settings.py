@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'django.contrib.gis',
     'cloudinary',
+    'forum',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [

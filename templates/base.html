@@ -33,7 +33,7 @@
        }
     </style>
 </head>
-<body class="text-center" style="background-color: #036749;">
+<body class="text-center" style="background-color: #036749; padding-bottom: 50px">
 <main>
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
         {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path and 'image' not in request.path %}
@@ -101,6 +101,9 @@
 
     {% block content %}
     {% endblock content %}
+    {% block menu %}
+        {% include "menu.html" %}
+    {% endblock menu %}
 </main>
 <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
 </body>

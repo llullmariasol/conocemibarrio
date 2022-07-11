@@ -15,13 +15,13 @@
         {% if request.user.is_authenticated %}
         <ul class="nav nav-pills">
             <li class="nav-item">
-                <a href="/logout/" class="nav-link active" style="background-color: #036749">Salir</a>
+                <a href="/logout/" class="nav-link active" style="background-color: #036749; width:100%">Salir</a>
             </li>
         </ul>
         {% else %}
         <ul class="nav nav-pills">
             <li class="nav-item">
-                <a href="/login/" class="nav-link active" style="background-color: #036749">Ingresar</a>
+                <a href="/login/" class="nav-link active" style="background-color: #036749; width:100%">Ingresar</a>
             </li>
         </ul>
         {% endif %}
