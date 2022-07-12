@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'forum',
     'ckeditor',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -196,3 +197,23 @@ cloudinary.config(
     api_key="566164783845727",
     api_secret="WoFv-L_mVcqvdBICyWnInT-HbUY"
 )
+
+PWA_APP_NAME = 'conocemibarrio'
+PWA_APP_DESCRIPTION = 'conocemibarrio app'
+PWA_APP_THEME_COLOR = '#036749'
+PWA_APP_BACKGROUND_COLOR = '#FFFFFF'
+
+PWA_APP_ICONS = [
+    {
+        'src': 'static/img/square.png',
+        'sizes': '160x160'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': 'static/img/square.png',
+        'sizes': '160x160'
+    }
+]
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'serviceworker.js')

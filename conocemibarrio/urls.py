@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('registration.urls')),
     path('', include('neighborhood.urls')),
     path('forum/', include('forum.urls')),
+    path('', include('pwa.urls')),
 ]
