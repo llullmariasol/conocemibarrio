@@ -31,3 +31,4 @@ dj-config-url~=0.1.1
 python-dotenv~=0.20.0
 django-on-heroku==1.1.2
 django-ckeditor==6.4.2
+django-pwa==1.0.10
