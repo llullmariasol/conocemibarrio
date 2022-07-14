@@ -199,20 +199,25 @@ cloudinary.config(
 )
 
 PWA_APP_NAME = 'conocemibarrio'
+PWA_APP_SHORT_NAME = 'conocemibarrio'
 PWA_APP_DESCRIPTION = 'conocemibarrio app'
 PWA_APP_THEME_COLOR = '#036749'
 PWA_APP_BACKGROUND_COLOR = '#FFFFFF'
-
+PWA_APP_START_URL = '/'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
 PWA_APP_ICONS = [
     {
         'src': 'static/img/square.png',
-        'sizes': '160x160'
+        'sizes': '512x512 192x192',
+        "purpose": "maskable any"
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
         'src': 'static/img/square.png',
-        'sizes': '160x160'
+        'sizes': '512x512 192x192',
+        "purpose": "maskable any"
     }
 ]
 
