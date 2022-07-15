@@ -1,0 +1,94 @@
+{% load static %}
+<style>
+    .comment-form {
+        width: 100%;
+        max-width: 500px;
+        padding: 15px;
+        margin: auto;
+    }
+    .btn-primary {
+        color: #079748;
+        background-color: #fff;
+        border-color: #079748;
+    }
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #d4bd22;
+        border-color: #fff;}
+
+    .comment {
+        width: 100%;
+
+        padding: 15px;
+        margin: auto;
+    }
+</style>
+
+<h2 class="text-center" style="color: whitesmoke">Respuestas</h2>
+{% for comment in comments %}
+    {% if comment.removed == False %}
+        <div class="container">
+            <div class="alert alert-warning" role="alert">
+                <div class="date">
+                    <div class="text-right">
+                        {% if comment.author == request.user %}
+                        <a href="{% url 'forum:deleteComment' comment.pk %}"class="badge rounded-pill bg-dark" style="width: 75px"
+                           onClick="return confirm('¿Seguro que quieres borrar tu respuesta?');">
+                            <strong>Eliminar</strong>
+                        </a>
+                        {% endif %}
+                        {% if comment.author != user and comment not in complaints %}
+                        <div class="text-right">
+                            <a class="badge rounded-pill bg-dark" href="{% url 'forum:reportComment' comment.pk %}" style="width: 150px">Denunciar comentario</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <p><small>El {{ comment.creationDate }}</small>
+                                {% if comment.author == request.user %}
+                                <strong>usted</strong> respondió:
+                                {% else %}
+                                <strong>{{ comment.author }}</strong> respondió:
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <p>{{ comment.content|linebreaks }}</p>
+                    </p>
+
+                    {% if comment.author == user %}
+
+                    {% else %}
+                    <form action="{% url 'forum:likeComment' comment.pk %}" method="POST">
+                        {% csrf_token %}
+                        {% if comment.liked %}
+                        <button type="submit", name="answer_id", value="{{ comment.id }}"
+                                class="btn btn-danger btn-sm">No me gusta</button>
+                        {% else %}
+                        <button type="submit", name="answer_id", value="{{ comment.id }}"
+                                class="btn btn-success btn-sm">Me gusta</button>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                    {{ comment.total_likes }} me gusta
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% empty %}
+    <div class="container">
+        <div class="comment">
+            <strong>Todavía no hay respuestas</strong>
+        </div>
+    </div>
+{% endfor %}
+
+<div id="respond" class="comment-respond; text-center">
+    <form method="post" id="form" class="comment-form">{% csrf_token %}
+        <input class="form-control" required="" placeholder="Tu respuesta" name="content">
+        <br>
+        <button class="btn btn-lg btn-primary btn-block publicar" type="submit">Responder</button>
+    </form>
+</div>
