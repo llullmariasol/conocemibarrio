@@ -6,6 +6,10 @@
     box-shadow: 0 0 0 0.25rem black;
     border: black;
     }
+    #justification:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
     #floatingPassword:focus{
     box-shadow: 0 0 0 0.25rem black;
     border: black;
@@ -30,11 +34,11 @@
                     <div class="form-floating mb-3">
                         <div align="justify">
                             <label for="floatingInput" >Elegí tu barrio:</label>
-                                <select name="barrio">
-                                    {% for n in neighborhoods %}
-                                    <option value="{{ n.pk }}">{{ n.name }}</option>
-                                    {% endfor %}
-                                </select>
+                            <select name="barrio">
+                                {% for n in neighborhoods %}
+                                <option value="{{ n.pk }}">{{ n.name }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
 
@@ -98,6 +102,19 @@
                     </div>
                     {% endif %}
 
+                    <div class="form-floating mb-3">
+                        <textarea type="textarea" class="form-control rounded-4" id="justification"
+                          placeholder="Justificación" name="justification"
+                          style="height: 150px; resize: none; text-indent: 0;"></textarea>
+                        <label for="justification">Justificación</label>
+                    </div>
+
+                    <div>
+                        <small>
+                            Al registrarte como administrador/a de un barrio, pasarás por un proceso de aprobación. Te contactaremos por mail.
+                        </small>
+                    </div>
+                    <br>
                     <input type="hidden" name="next" value="{{ request.GET.next }}"/>
                     <button id="btn-registration" class="w-100 mb-2 btn btn-lg btn-primary" type="submit">Registrarse</button>
                 </form>

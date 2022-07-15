@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+#btn-upload-img:focus{
+ box-shadow: none;
+}
+
+.holder img {
+    width:80px;
+   height:80px;
+   object-fit:scale-down;
+}
+
+#images-table td {
+    vertical-align:middle;
+}
+</style>
+{% if point is not None %}
+<br>
+<div class="text-center" style="width:150px; margin:auto;">
+    <a href="/neighborhood/point_of_interest/{{ point.pk }}/image/upload/">
+        <button id="btn-upload-img" type="button" class="btn btn-outline-dark" style="width:100%;">
+            Cargar imagen
+        </button>
+    </a>
+</div>
+<br>
+<div class="table-responsive" style="background:white;">
+    <table class="table table-hover light" id="images-table">
+        <thead>
+        <tr><small>"{{ point.name }}"</small></tr>
+        <tr>
+            <th scope="col">Imagen</th>
+            <th scope="col">Descripción</th>
+            <th scope="col"><small>Editar descripción</small></th>
+            <th scope="col">Borrar</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for image in images %}
+        <tr>
+            <td>
+                <div class="holder">
+                    <img class="d-block w-100" src="{{ image.image.url }}" alt="Imagen">
+                </div>
+            </td>
+            <td><small>{{ image.description }}</small></td>
+            <td>
+                <a href="/neighborhood/points_of_interest/image/{{image.pk}}/edit/">
+                    <button type="button" class="btn btn-outline-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                            <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"></path>
+                        </svg>
+                    </button>
+                </a>
+            </td>
+            <td>
+                <button type="button" class="btn btn-outline-danger delete-image" data-pk="{{ image.pk }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                    </svg>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p>Primero debe cargar información del punto de interés para subir imágenes del mismo.</p>
+{% endif %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+<!-- Third party plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+<script>
+    (function($) {
+            'use strict';
+            $('.delete-image').on('click', function() {
+                var pk = $(this).data('pk');
+                if (confirm('¿Seguro que quieres eliminar la imagen?') == true) {
+                    $.ajax({
+                        method: "POST",
+                        url: "/neighborhood/points_of_interest/image/" + pk + "/delete/",
+                        data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
+                    })
+                    window.location.reload();
+                }
+            });
+        })(jQuery);
+</script>
+{% endblock content %}
