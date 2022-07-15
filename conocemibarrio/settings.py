@@ -44,9 +44,10 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django.contrib.gis',
+    'cloudinary',
     'forum',
     'ckeditor',
-    'cloudinary',
+    'pwa',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +59,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 
 ROOT_URLCONF = 'conocemibarrio.urls'
 
@@ -196,3 +201,28 @@ cloudinary.config(
     api_key="566164783845727",
     api_secret="WoFv-L_mVcqvdBICyWnInT-HbUY"
 )
+
+PWA_APP_NAME = 'conocemibarrio'
+PWA_APP_SHORT_NAME = 'conocemibarrio'
+PWA_APP_DESCRIPTION = 'conocemibarrio app'
+PWA_APP_THEME_COLOR = '#036749'
+PWA_APP_BACKGROUND_COLOR = '#FFFFFF'
+PWA_APP_START_URL = '/'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ICONS = [
+    {
+        'src': 'static/img/square.png',
+        'sizes': '512x512 192x192',
+        "purpose": "maskable any"
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': 'static/img/square.png',
+        'sizes': '512x512 192x192',
+        "purpose": "maskable any"
+    }
+]
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'serviceworker.js')

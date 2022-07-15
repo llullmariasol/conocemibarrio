@@ -1,0 +1,13 @@
+{
+  "name": "conocemibarrio",
+  "short_name": "conocemibarrio",
+  "description": "conocemibarrio app",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "orientation": "any",
+  "background_color": "#FFFFFF",
+  "theme_color": "#036749",
+  "icons": [{"src": "static/img/square.png", "sizes": "512x512 192x192", "purpose": "maskable"}]
+}
