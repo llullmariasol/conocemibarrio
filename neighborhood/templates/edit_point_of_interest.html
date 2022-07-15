@@ -1,0 +1,346 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load cloudinary %}
+{% block content %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+  <style>
+          #map {
+         margin-right: auto;
+         margin-left: auto;
+         position: relative;
+        height: inherit;
+        width: inherit;
+         }
+
+         #map-container {
+        height: 780px;
+        width: 100%;
+        left:2px;
+         right:2px;
+        margin-right: auto;
+         margin-left: auto;
+    }
+
+         p {
+         font-family: 'Open Sans';
+         margin: 0;
+         font-size: 13px;
+         }
+
+         #boton {
+         height: 75px;
+         width: 150px;
+         position: absolute;
+         bottom: 40px;
+         left: 10px;
+         background-color: rgba(255, 255, 255, 0.9);
+         padding: 15px;
+         text-align: center;
+         }
+         p {
+         font-family: 'Open Sans';
+         margin: 0;
+         font-size: 13px;
+         }
+         #point-name:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+    #custom-button {
+      padding: 10px;
+      color: white;
+      background-color: black;
+      border: 1px solid black;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #custom-button:hover {
+      color: black;
+      background-color: white;
+      border: 1px solid black;
+    }
+
+    #custom-text {
+      margin-left: 10px;
+      font-family: sans-serif;
+      color: #aaa;
+    }
+    .fullwrap {
+  position: relative;
+  max-width: 500px;
+}
+
+.fullwrap img { width: 100%; }
+    .fullcap {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  text-align: center;
+  padding-top: 30%;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+.fullcap {
+  visibility: none; opacity: 0;
+  transition: opacity 0.3s;
+}
+.fullwrap:hover .fullcap {
+  visibility: visible; opacity: 1;
+}
+    </style>
+</head>
+<body>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="//jqueryui.com/jquery-wp-content/themes/jquery/js/plugins.js"></script>
+<script src="//jqueryui.com/jquery-wp-content/themes/jquery/js/main.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+  <div style="width: 90%; margin-right: auto;
+         margin-left: auto;">
+    <div class="modal-content rounded-5 shadow" >
+      <div class="modal-header p-5 pb-4 border-bottom-0">
+        <h2 class="fw-bold mb-0">Punto de interés</h2>
+        <a href="/neighborhood/points_of_interest/">
+          <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </a>
+      </div>
+      <div class="modal-body p-5 pt-0">
+        <form id="form1" action="" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control rounded-4" id="point-name" placeholder="Nombre" name="point-name" value='{{ point.name }}'>
+            <label for="point-name">Nombre</label>
+          </div>
+
+          <div class="form-floating mb-3">
+                        <textarea type="textarea" class="form-control rounded-4" id="point-description"
+                                  placeholder="Descripción" name="point-description"
+                                  style="height: 150px; resize: none; text-indent: 0;">{{ point.description }}</textarea>
+            <label for="point-description">Descripción</label>
+          </div>
+
+          <input type="hidden" id="point" name="point" value="">
+          <input type="hidden" id="coordinates-length" name="coordinates-length" value="">
+          <input type="hidden" id="p1" name="p1" value="">
+          <input type="hidden" id="p2" name="p2" value="">
+          <div id="map-container"><div id="map"></div></div>
+          <br>
+
+          <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
+        </form>
+      </div>
+      <div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+<!-- Third party plugin JS-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js"></script>
+<script>
+     mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
+     var labels = [
+            {% for p in coordinates %}
+              {{ p }},
+            {% endfor %}
+          ]
+
+      var labels2 = [
+      {% for c in coordinates_neighborhood %}
+      {{ c }},
+      {% endfor %}
+      ]
+
+      var labels3 = [
+      {% for c in coordinates_neighborhood %}
+      [{{c}}],
+      {% endfor %}
+      ]
+     const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-61.49174078974892, -31.252666415093373],
+            zoom: 12
+            });
+
+        const draw = new MapboxDraw({
+            displayControlsDefault: false,
+            controls: {
+            point: true,
+            trash: true
+            },
+            defaultMode: 'draw_point'
+            },
+        );
+
+        map.addControl(draw);
+        map.on('draw.create', updateArea);
+        map.on('draw.delete', updateAreaWhenDeleting);
+        map.on('draw.update', updateArea);
+
+function inside(point, vs) {
+    var x = point[0], y = point[1];
+
+    var inside = false;
+    for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+        var xi = vs[i][0], yi = vs[i][1];
+        var xj = vs[j][0], yj = vs[j][1];
+
+        var intersect = ((yi > y) != (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        if (intersect) inside = !inside;
+    }
+
+    return inside;
+};
+
+        function updateArea(e) {
+            const data = draw.getAll();
+            const coordinates = data['features'][0]['geometry']['coordinates'];
+            document.getElementById('point').value = coordinates;
+            if (data.features.length > 1) {
+                alert("Debes selecccionar un solo punto.");
+                document.querySelector('#btn-login').disabled = true;
+            } else {
+                 document.querySelector('#btn-login').disabled = false;
+            }
+            document.getElementById('coordinates-length').value = data.features.length;
+
+            var polygon = labels2;
+            console.log(inside(coordinates, polygon));
+
+            if (inside(coordinates, polygon) == false) {
+              alert("El punto de interés debe estar dentro del área del barrio.");
+              document.querySelector('#btn-login').disabled = true;
+            } else {
+              document.querySelector('#btn-login').disabled = false;
+            }
+        }
+
+        function updateAreaWhenDeleting(e) {
+            const data = draw.getAll();
+            const coordinates = data['features'][0]['geometry']['coordinates'];
+            document.getElementById('point').value = coordinates;
+            if (data.features.length > 1) {
+                alert("Debes selecccionar un solo punto.");
+                document.querySelector('#btn-login').disabled = true;
+            } else {
+                 document.querySelector('#btn-login').disabled = false;
+            }
+            document.getElementById('coordinates-length').value = data.features.length;
+        }
+
+        map.on('load', () => {
+                map.addSource('point-of-interest', {
+                'type': 'geojson',
+                'data': {
+                'type': 'FeatureCollection',
+                'features': [
+                  {
+                  'type': 'Feature',
+                  'geometry': {
+                    'type': 'Point',
+                    'coordinates':
+                    labels
+                    }
+                  }
+                ]
+                }
+                });
+
+                map.addLayer({
+                'id': 'point-of-interest',
+                'type': 'circle',
+                'source': 'point-of-interest',
+                'paint': {
+                'circle-radius': 6,
+                'circle-color': 'red'
+                },
+                'filter': ['==', '$type', 'Point']
+                });
+                });
+
+                map.on('load', () => {
+        map.addSource('national-park', {
+        'type': 'geojson',
+        'data': {
+        'type': 'FeatureCollection',
+        'features': [
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Polygon',
+        'coordinates': [
+        labels2
+        ]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.415061, 40.506229]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.505184, 40.488084]
+        }
+        },
+        {
+        'type': 'Feature',
+        'geometry': {
+        'type': 'Point',
+        'coordinates': [-121.354465, 40.488737]
+        }
+        }
+        ]
+        }
+        });
+
+        map.addLayer({
+        'id': 'park-boundary',
+        'type': 'fill',
+        'source': 'national-park',
+        'paint': {
+        'fill-color': '#036749',
+        'fill-opacity': 0.4
+        },
+        'filter': ['==', '$type', 'Polygon']
+        });
+
+        map.addLayer({
+        'id': 'park-volcanoes',
+        'type': 'circle',
+        'source': 'national-park',
+        'paint': {
+        'circle-radius': 6,
+        'circle-color': '#B42222'
+        },
+        'filter': ['==', '$type', 'Point']
+        });
+        });
+</script>
+</body>
+{% endblock content %}

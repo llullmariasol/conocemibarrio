@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<head>
+    <meta charset="utf-8">
+    <title>Draw a polygon and calculate its area</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
+    <style>
+    #map {
+    margin-right: auto;
+    margin-left: auto;
+    position: relative;
+    height: inherit;
+    width: inherit;
+    }
+    #map-container {
+    height: 450px;
+    width: 100%;
+    left:2px;
+    right:2px;
+    margin-right: auto;
+    margin-left: auto;
+    }
+    p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+    }
+    p {
+    font-family: 'Open Sans';
+    margin: 0;
+    font-size: 13px;
+    }
+    #neighborhood-name:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+    #neighborhood-description:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+    </style>
+</head>
+<body>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css" type="text/css">
+
+<link rel="stylesheet" href="{% static '/css/modal.css' %}"></head>
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+    <div style="width: 90%; margin-right: auto;
+         margin-left: auto;">
+        <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+                <h2 class="fw-bold mb-0">Crear barrio</h2>
+                <a href="/">
+                    <button id="btn-close" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </a>
+            </div>
+            <div class="modal-body p-5 pt-0">
+                <form method="post" action="">
+                    {% csrf_token %}
+
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="neighborhood-name">
+                        <label for="neighborhood-name">Nombre</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <textarea type="textarea" class="form-control rounded-4" id="neighborhood-description"
+                                  placeholder="Descripción" name="neighborhood-description"
+                                  style="height: 150px; resize: none; text-indent: 0;"></textarea>
+                        <label for="neighborhood-description">Descripción</label>
+                    </div>
+
+                    <input type="hidden" id="coordinates" name="coordinates" value="">
+                    <div id="map-container"><div id="map"></div></div>
+                    <br>
+
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar</button>
+                </form>
+            </div>
+            <div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+         mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
+         const map = new mapboxgl.Map({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/streets-v11',
+                center: [-61.49174078974892, -31.252666415093373],
+                zoom: 12
+                });
+
+            const draw = new MapboxDraw({
+                displayControlsDefault: false,
+                controls: {
+                polygon: true,
+                trash: true
+                },
+                defaultMode: 'draw_polygon'
+                },
+            );
+
+            map.addControl(draw);
+            map.on('draw.create', updateArea);
+            map.on('draw.delete', updateAreaWhenDeleting);
+            map.on('draw.update', updateArea);
+
+            function updateArea(e) {
+                const data = draw.getAll();
+                const coordinates = data['features'][0]['geometry']['coordinates'][0]
+                console.log(data['features'][0]['geometry']['coordinates'][0]);
+                if (data.features.length > 0) {
+                    const area = turf.area(data);
+                    const rounded_area = Math.round(area * 100) / 100;
+                    } else {
+                        if (e.type !== 'draw.delete')
+                            alert('Click the map to draw a polygon.');
+                }
+                if (data.features.length > 1) {
+                    alert("Debes delimitar el barrio con una sola área.");
+                    document.querySelector('#btn-login').disabled = true;
+                } else {
+                     document.querySelector('#btn-login').disabled = false;
+                }
+                document.getElementById('coordinates').value = coordinates;
+            }
+
+            function updateAreaWhenDeleting(e) {
+                const data = draw.getAll();
+                const coordinates = data['features'][0]['geometry']['coordinates'][0]
+                console.log(data['features'][0]['geometry']['coordinates'][0]);
+                if (data.features.length > 0) {
+                    const area = turf.area(data);
+                    const rounded_area = Math.round(area * 100) / 100;
+                    } else {
+                        if (e.type !== 'draw.delete')
+                            alert('Click the map to draw a polygon.');
+                }
+                if (data.features.length > 1) {
+                    document.querySelector('#btn-login').disabled = true;
+                } else {
+                     document.querySelector('#btn-login').disabled = false;
+                }
+                document.getElementById('coordinates').value = coordinates;
+            }
+      </script>
+</body>
+</html>
+{% endblock content %}

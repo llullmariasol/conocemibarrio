@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/headers/">
     <!-- Bootstrap core CSS -->
-    <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/base.css' %}">
     <link rel="stylesheet" href="{% static '/css/modal.css' %}">
     {% block header %}
@@ -17,18 +17,67 @@
     {% block messages %}
         {% include "messages.html" %}
     {% endblock messages %}
+    <style>
+        .btn-outline-dark {
+          color: black;
+          border-color: white;
+          background-color: white;
+        }
+        .btn-outline-dark:hover {
+          color: white;
+          background-color: black;
+          border-color: black;
+        }
+        #btn-create-n, #btn-edit-n, #btn-imgs-n, #btn-points-n:focus{
+         box-shadow: none;
+       }
+    </style>
 </head>
 <body class="text-center" style="background-color: #036749;">
 <main>
+    {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
+        {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path and 'image' not in request.path %}
+    <br>
+    <div role="group" style="width:80%; margin:auto;">
+        {% if n == null %}
+        <a href="/neighborhood/information/">
+            <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Cargar información del barrio
+            </button>
+        </a>
+        <br><br>
+        {% else %}
+        <a href="/neighborhood/information/edit/">
+            <button id="btn-edit-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+            Editar información del barrio
+            </button>
+        </a>
+        <br><br>
+        {% endif %}
+        <a href="/neighborhood/images/">
+            <button id="btn-imgs-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Imágenes
+            </button>
+        </a>
+        <br><br>
+        <a href="/neighborhood/points_of_interest/">
+            <button id="btn-points-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Puntos de interés
+            </button>
+        </a>
+    </div>
+    {% endif %}
+    {% else %}
     {% if request.user.is_authenticated and user.is_superuser == 0 %}
-    Hola {{ user.username }}
-    {% if neighborhood == null and request.path != '/join_neighborhood/' %}
+    Hola {{ user.username }} del grupo {{ user.groups.all.0 }}
+    {% if neighborhood == null and request.path != '/join_neighborhood/' and user.groups.all.0.name != "neighborhood-admin"%}
         <a href="/join_neighborhood/" style="color: black">Unirme a un barrio</a>
+    {% endif %}
     {% endif %}
     {% endif %}
     {% block content %}
     {% endblock content %}
 </main>
-<script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 </html>

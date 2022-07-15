@@ -43,7 +43,12 @@ user-select: none;
 #btn-google-login {
                 color: #e60023;
                 border-color: #e60023;
+
                 }
+
+#btn-google-login:focus{
+         box-shadow: none;
+       }
 
 #btn-google-login:hover {
     color: white;
@@ -56,6 +61,10 @@ user-select: none;
                 border-color: #1877f2;
                 }
 
+#btn-facebook-login:focus{
+         box-shadow: none;
+       }
+
 #btn-facebook-login:hover {
     color: white;
     background-color: #1877f2;
@@ -67,6 +76,10 @@ user-select: none;
     border-color: #036749;
     color:white;
 }
+
+#btn-login:focus{
+         box-shadow: none;
+       }
 
 #btn-login:hover{
     background-color: black;
@@ -86,6 +99,10 @@ user-select: none;
     color:white;
 }
 
+#btn-registration:focus{
+         box-shadow: none;
+       }
+
 #btn-password-reset{
     background-color: #036749;
     border-color: #036749;
@@ -98,6 +115,14 @@ user-select: none;
     color:white;
 }
 
+#btn-password-reset:focus{
+         box-shadow: none;
+       }
+
 #btn-close:active{
     color:black;
 }
+
+#btn-close:focus{
+         box-shadow: none;
+       }

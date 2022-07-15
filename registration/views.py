@@ -39,7 +39,13 @@ def home(request):
             for user_neighborhood in users_neighborhoods:
                 if user_neighborhood.user == request.user:
                     args['neighborhood'] = user_neighborhood
-
+        neighborhoods_of_admin = Neighborhood.objects.all()
+        if neighborhoods_of_admin is not None:
+            for n in neighborhoods_of_admin:
+                if n.user_id == request.user.pk:
+                    args['n'] = n
+                    print("!!!!!!!!!!!!!!!!!!!!!!!")
+                    print(n)
     return render(request, 'base.html', args)
 
 
