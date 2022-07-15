@@ -39,7 +39,7 @@
         {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path and 'image' not in request.path %}
     <br>
     <div role="group" style="width:80%; margin:auto;">
-        {% if n == null %}
+        {% if n.is_active == 0 %}
         <a href="/neighborhood/information/">
             <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
                 Cargar información del barrio
@@ -75,6 +75,30 @@
     {% endif %}
     {% endif %}
     {% endif %}
+
+    {% if request.user.is_authenticated and user.is_superuser == 1 %}
+    {% if request.path == '/' %}
+    <br>
+    <div role="group" style="width:80%; margin:auto;">
+        {% if n == null %}
+        <a href="/administration/requests/">
+            <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Solicitudes de administración de barrios
+            </button>
+        </a>
+        <br><br>
+        {% else %}
+        <a href="/neighborhood/information/edit/">
+            <button id="btn-edit-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Opción 2
+            </button>
+        </a>
+        <br><br>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% endif %}
+
     {% block content %}
     {% endblock content %}
 </main>

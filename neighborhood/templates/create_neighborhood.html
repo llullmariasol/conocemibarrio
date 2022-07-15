@@ -64,7 +64,7 @@
                     {% csrf_token %}
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="neighborhood-name">
+                        <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="neighborhood-name" value="{{ name }}">
                         <label for="neighborhood-name">Nombre</label>
                     </div>
 

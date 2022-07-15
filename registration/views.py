@@ -12,6 +12,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.conf import settings
+from django.contrib.auth.models import Group
 
 from .forms import (RegistrationForm,
                     LogInForm,
@@ -33,19 +34,20 @@ class EmailThread(threading.Thread):
 
 def home(request):
     args = {}
+
     if request.user.is_authenticated:
         users_neighborhoods = UserNeighborhood.objects.all()
         if users_neighborhoods is not None:
             for user_neighborhood in users_neighborhoods:
                 if user_neighborhood.user == request.user:
                     args['neighborhood'] = user_neighborhood
-        neighborhoods_of_admin = Neighborhood.objects.all()
-        if neighborhoods_of_admin is not None:
-            for n in neighborhoods_of_admin:
-                if n.user_id == request.user.pk:
-                    args['n'] = n
-                    print("!!!!!!!!!!!!!!!!!!!!!!!")
-                    print(n)
+                    neighborhood_id = user_neighborhood.neighborhood.pk
+                    break
+
+        if request.user.groups.all().exists() and request.user.groups.all()[0].name == "neighborhood-admin":
+            n = Neighborhood.objects.get(pk=neighborhood_id)
+            args['n'] = n
+
     return render(request, 'base.html', args)
 
 
@@ -67,6 +69,7 @@ def registration(request):
                 user_neighborhood = UserNeighborhood()
                 user_neighborhood.user = user
                 user_neighborhood.neighborhood = n
+                user_neighborhood.justification = None
                 user_neighborhood.save()
 
             current_site = get_current_site(request)
@@ -76,7 +79,7 @@ def registration(request):
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user),
             })
-            email_subject = 'Activa tu cuenta'
+            email_subject = 'Activá tu cuenta'
             to_email = form.cleaned_data.get('email')
             email_message = mail.EmailMessage(
                 email_subject,
@@ -96,6 +99,56 @@ def registration(request):
     args['form'] = form
 
     return render(request, 'registration.html', args)
+
+
+def registrationNeighborhoodAdmin(request):
+    args = {}
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        neighborhoods = Neighborhood.objects.all()
+        args['neighborhoods'] = neighborhoods
+
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            group = Group.objects.get(name='neighborhood-admin')
+            user.save()
+            user.groups.add(group)
+            user.save()
+
+            if request.POST.get('barrio'):
+                neighborhood_id = request.POST.get('barrio')
+                n = Neighborhood.objects.get(pk=neighborhood_id)
+                user_neighborhood = UserNeighborhood()
+                user_neighborhood.user = user
+                user_neighborhood.neighborhood = n
+                user_neighborhood.justification = request.POST.get('justification')
+                user_neighborhood.save()
+
+            message = render_to_string('registration_neighborhood_admin_mail.html', {
+                'user': user,
+                'neighborhood': n.name,
+            })
+            email_subject = 'Solicitud de registro'
+            to_email = form.cleaned_data.get('email')
+            email_message = mail.EmailMessage(
+                email_subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [to_email]
+            )
+
+            EmailThread(email_message).start()
+            messages.add_message(request, messages.SUCCESS, "Procesaremos tu solicitud y te avisaremos vía mail.")
+
+            return HttpResponseRedirect('/')
+    else:
+        neighborhoods = Neighborhood.objects.all()
+        form = RegistrationForm()
+        args['neighborhoods'] = neighborhoods
+    args['form'] = form
+
+    return render(request, 'registration_neighborhood_admin.html', args)
 
 
 def activation(request, uidb64, token):
@@ -172,3 +225,107 @@ def joinNeighborhood(request):
     args['form'] = form
 
     return render(request, 'join_neighborhood.html', args)
+
+
+def administrationRequests(request):
+    args = {}
+    group = Group.objects.all().filter(name='neighborhood-admin').first()
+    users = group.user_set.all().filter(is_active=0)
+    users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
+    users_list = []
+    if len(users) > 0:
+        for u in users_neighborhoods:
+            try:
+                users.get(id=u.user.id)
+                users_list.append(u)
+            except User.DoesNotExist:
+                pass
+
+    args['users_list'] = users_list
+    return render(request, 'administration_requests.html', args)
+
+
+def approveAdministrationRequest(request, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = True
+    user.signup_confirmation = True
+    user.save()
+
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()
+    n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    current_site = get_current_site(request)
+    message = render_to_string('neighborhood_admin_request_approved.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'neighborhood': n.name,
+    })
+    email_subject = 'Aprobamos tu solicitud'
+    to_email = str(user.email)
+
+    email_message = mail.EmailMessage(
+        email_subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [to_email]
+    )
+
+    EmailThread(email_message).start()
+
+    args = {}
+    group = Group.objects.all().filter(name='neighborhood-admin').first()
+    users = group.user_set.all().filter(is_active=0)
+    users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
+    users_list = []
+    if len(users) > 0:
+        for u in users_neighborhoods:
+            try:
+                users.get(id=u.user.id)
+                users_list.append(u)
+            except User.DoesNotExist:
+                pass
+
+    args['users_list'] = users_list
+
+    return render(request, 'administration_requests.html', args)
+
+
+def rejectAdministrationRequest(request, pk):
+    user = User.objects.get(pk=pk)
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()
+    user_neighborhood.rejected = True
+    user_neighborhood.save()
+    n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    current_site = get_current_site(request)
+    message = render_to_string('neighborhood_admin_request_rejected.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'neighborhood': n.name,
+    })
+
+    email_subject = 'Rechazamos tu solicitud'
+    to_email = str(user.email)
+    email_message = mail.EmailMessage(
+        email_subject,
+        message,
+        settings.EMAIL_HOST_USER,
+        [to_email]
+    )
+
+    EmailThread(email_message).start()
+
+    args = {}
+    group = Group.objects.all().filter(name='neighborhood-admin').first()
+    users = group.user_set.all().filter(is_active=0)
+    users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
+    users_list = []
+    if len(users) > 0 and len(users_neighborhoods) > 0:
+        for u in users_neighborhoods:
+            try:
+                users.get(id=u.user.id)
+                users_list.append(u)
+            except User.DoesNotExist:
+                pass
+
+    args['users_list'] = users_list
+
+    return render(request, 'administration_requests.html', args)
