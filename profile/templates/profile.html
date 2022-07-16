@@ -4,6 +4,29 @@
 {% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
 {% block content %}
 <style>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      #floatingInput:focus{
+          box-shadow: 0 0 0 0.25rem black;
+          border: black;
+        }
+      #floatingPassword:focus{
+          box-shadow: 0 0 0 0.25rem black;
+          border: black;
+        }
+
     .circle-img {
       width: 150px;
       height: 150px;
@@ -18,8 +41,6 @@
       margin-left: auto;
       margin-right: auto;
     }
-
-
 
     #custom-text {
       margin-left: 10px;
