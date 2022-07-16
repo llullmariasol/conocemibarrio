@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static %}
+{% load cloudinary %}
+{% cloudinary photo.image format="jpg" width=120 height=80 crop="fill" %}
+{% block content %}
+<style>
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+      #floatingInput:focus{
+          box-shadow: 0 0 0 0.25rem black;
+          border: black;
+        }
+      #floatingPassword:focus{
+          box-shadow: 0 0 0 0.25rem black;
+          border: black;
+        }
+
+    .circle-img {
+      width: 150px;
+      height: 150px;
+      overflow: hidden;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .circle-img img {
+      height: 100%;
+      margin-left: 50%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #custom-text {
+      margin-left: 10px;
+      font-family: sans-serif;
+      color: #aaa;
+    }
+
+    #image-description:focus{
+    box-shadow: 0 0 0 0.25rem black;
+    border: black;
+    }
+
+    #btn-reset{
+    background-color: #036749;
+    border-color: #036749;
+    color:white;
+    }
+
+    #btn-reset:focus{
+             box-shadow: none;
+           }
+
+    #btn-reset:hover{
+        background-color: black;
+        border-color: black;
+        color:white;
+    }
+</style>
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749;" >
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-5 shadow">
+            <br>
+            <div class="circle-img rounded-circle">
+                {% if user.profile.avatar.url == None %}
+                <img src="{% static '/img/default.jpeg' %}" style="cursor: pointer;"/>
+                {% else %}
+                <img src="{{ user.profile.avatar.url }}" style="cursor: pointer;"/>
+                {% endif %}
+            </div>
+            <br>
+            <div class="modal-body p-5 pt-0">
+            {% if user_form.errors %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <div id="form_errors">
+                    {% for key, value in user_form.errors.items %}
+                    <strong>{{ value }}</strong>
+                    {% endfor %}
+                </div>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            {% endif %}
+            <div class="form-content">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <small>
+                        <input type="file" id="image-file" hidden="hidden" name="image-file" accept="image/*"/>
+                        <button type="button" id="custom-button" class="btn btn-outline-secondary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
+                                <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                                <path d="M14.002 13a2 2 0 0 1-2 2h-10a2 2 0 0 1-2-2V5A2 2 0 0 1 2 3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-1.998 2zM14 2H4a1 1 0 0 0-1 1h9.002a2 2 0 0 1 2 2v7A1 1 0 0 0 15 11V3a1 1 0 0 0-1-1zM2.002 4a1 1 0 0 0-1 1v8l2.646-2.354a.5.5 0 0 1 .63-.062l2.66 1.773 3.71-3.71a.5.5 0 0 1 .577-.094l1.777 1.947V5a1 1 0 0 0-1-1h-10z"/>
+                            </svg>
+                        </button>
+                        <span id="custom-text">Cambiar avatar</span>
+                    </small>
+                    <hr>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-4" id="floatingInput"
+                                       placeholder="Nombre de usuario" name="username" value="{{ user_form.username.value }}">
+                                <label for="floatingInput">Nombre de usuario</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control rounded-4" id="floatingInput"
+                                       placeholder="Email" name="email" value="{{ user_form.email.value }}">
+                                <label for="floatingInput">Email</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="btn-login" class="w-100 mb-2 btn btn-lg rounded-4" type="submit">Guardar cambios</button>
+                    <button id="btn-reset" class="w-100 mb-2 btn btn-lg rounded-4" type="reset">Reestablecer</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const imageFileBtn = document.getElementById("image-file");
+    const customBtn = document.getElementById("custom-button");
+    const customTxt = document.getElementById("custom-text");
+    const resetBtn = document.getElementById("btn-reset");
+
+    customBtn.addEventListener("click", function() {
+      imageFileBtn.click();
+    });
+
+    imageFileBtn.addEventListener("change", function() {
+      if (imageFileBtn.value) {
+        customTxt.innerHTML = imageFileBtn.value.match(
+          /[\/\\]([\w\d\s\.\-\(\)]+)$/
+        )[1];
+      } else {
+        customTxt.innerHTML = "No seleccionaste ningún archivo.";
+      }
+    });
+
+    resetBtn.addEventListener("click", function() {
+      customTxt.innerHTML = "Cambiar avatar";
+    });
+</script>
+{% endblock content %}
