@@ -1,14 +1,14 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
     nav {
         position: relative;
         width: 100%;
         height: 50px;
-        background-color: whitesmoke;
-        border-radius: 8px;
+        background-color: white;
         font-size: 0;
     }
     nav a {
-        line-height: 5%;
+        line-height: 8%;
         height: 100%;
         font-size: 15px;
         display: inline-block;
@@ -38,7 +38,7 @@
     }
 
     span {
-        color: #2BD6B4;
+        color: white;
     }
 
     footer {
@@ -49,26 +49,35 @@
         color: white;
         top: 95%;
     }
+
+    #footer-div {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        height: 6%;
+        background-color: white;
+        top: 94%;
+    }
 </style>
 
 <footer>
+    <div id="footer-div"></div>
     <nav>
-        <a href="{% url 'registration:home' %}"><img src="/static/img/casa.jpg"
-                           width="30"
-                           height="30"></a>
+        <a href="{% url 'registration:home' %}"><img src="/static/img/home.png"
+                                                     width="25"
+                                                     height="25"></a>
         <a href="{% url 'forum:posts' %}"><img src="/static/img/forum.png"
-                         width="40"
-                         height="40"></a></a>
-        <a href="#"><img src="/static/img/location.jpg"
-                         width="30"
-                         height="35"></a></a>
-        <a href="#"><img src="/static/img/chat.jpg"
-                         width="30"
-                         height="30"></a></a>
-        <a href="#"><img src="/static/img/profile.png"
-                         width="30"
-                         height="29"></a></a>
-        <div class="animation start-home"></div>
+                         width="25"
+                         height="25"></a>
+        <a href="#"><img src="/static/img/location.png"
+                         width="25"
+                         height="25"></a>
+        <a href="#"><img src="/static/img/chat.png"
+                         width="25"
+                         height="25"></a>
+        <a href="{% url 'profile:users-profile' %}"><img src="/static/img/profile.png"
+                         width="25"
+                         height="25"></a>
     </nav>
 </footer>
 

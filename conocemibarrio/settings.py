@@ -25,7 +25,8 @@ SECRET_KEY = 'django-insecure-+gj0caznve=v!w387ens4gnv2qbz5fjbgl%k6efcvb(j+k0$7z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
+# ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -44,9 +45,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'django.contrib.gis',
+    'cloudinary',
     'forum',
     'ckeditor',
-    'cloudinary',
+    'pwa',
+    'profile',
 ]
 
 MIDDLEWARE = [
@@ -58,7 +61,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
 
 ROOT_URLCONF = 'conocemibarrio.urls'
 
@@ -196,3 +203,28 @@ cloudinary.config(
     api_key="566164783845727",
     api_secret="WoFv-L_mVcqvdBICyWnInT-HbUY"
 )
+
+PWA_APP_NAME = 'conocemibarrio'
+PWA_APP_SHORT_NAME = 'conocemibarrio'
+PWA_APP_DESCRIPTION = 'conocemibarrio app'
+PWA_APP_THEME_COLOR = '#036749'
+PWA_APP_BACKGROUND_COLOR = '#FFFFFF'
+PWA_APP_START_URL = '/'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ICONS = [
+    {
+        'src': 'static/img/square.png',
+        'sizes': '512x512 192x192',
+        "purpose": "maskable any"
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': 'static/img/square.png',
+        'sizes': '512x512 192x192',
+        "purpose": "maskable any"
+    }
+]
+
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'serviceworker.js')
