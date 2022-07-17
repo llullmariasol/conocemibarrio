@@ -32,6 +32,45 @@
          box-shadow: none;
        }
     </style>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js";
+        import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-messaging.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdGZanwe4TlpxENzBV8EuUoRxgClGf-RQ",
+            authDomain: "conocemibarrio.firebaseapp.com",
+            projectId: "conocemibarrio",
+            storageBucket: "conocemibarrio.appspot.com",
+            messagingSenderId: "497938302411",
+            appId: "1:497938302411:web:cd5cea068c5df16ca1e24e"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        let messaging = getMessaging();
+
+        // Enlazamos el serviceWorker
+        navigator.serviceWorker
+            .register('./serviceworker.js')
+            .then(function (register) {
+                messaging.useServiceWorker(register);
+
+                // Solicitar permiso al usuario
+                messaging.requestPermission()
+                    .then(function () {
+                        console.log("el usuario aceptó el permiso")
+                    })
+                    .catch(function () {
+                        console.log("el usuario no aceptó")
+                    })
+            })
+    </script>
 </head>
 <body class="text-center" style="background-color: #036749; padding-bottom: 50px">
 <main>
