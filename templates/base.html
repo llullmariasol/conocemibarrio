@@ -37,12 +37,11 @@
        }
     </style>
 
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-messaging.js"></script>
+
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-app.js";
-        import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.0/firebase-messaging.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -55,26 +54,30 @@
         };
 
         // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
 
-        let messaging = getMessaging();
+        const messaging = firebase.messaging();
+        console.log(messaging.getToken());
+        messaging.getToken({ vapidKey: 'BKXmHplx8qZkh8l7DXbfWE-hZr9yllqKYdue0p503DCb_lqgTTpE9QeniXDHuE5jMDJFzHX8p84aODT6npPvP1A' }).then((currentToken) => {
+            if (currentToken) {
+                console.log(currentToken)
+            } else {
+                console.log('No registration token available. Request permission to generate one.');
+            }
+        }).catch((err) => {
+            console.log('An error occurred while retrieving token. ', err);
+        });
 
-        // Enlazamos el serviceWorker
-        navigator.serviceWorker
-            .register('./serviceworker.js')
-            .then(function (register) {
-                messaging.useServiceWorker(register);
-
-                // Solicitar permiso al usuario
-                messaging.requestPermission()
-                    .then(function () {
-                        console.log("el usuario aceptó el permiso")
-                    })
-                    .catch(function () {
-                        console.log("el usuario no aceptó")
-                    })
+        messaging
+            .requestPermission()
+            .then(function () {
+                console.log("Notification permission granted.");
+                return messaging.getToken()
             })
-    <script>
+            .catch(function (err) {
+                console.log("Unable to get permission to notify.", err);
+            });
 
     let deferredPrompt;
 
