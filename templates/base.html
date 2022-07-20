@@ -136,6 +136,11 @@
     {% endblock content %}
 
     {% if not request.user.is_authenticated or request.user.is_authenticated and user.is_superuser != 1 and user.groups.all.0.name != "neighborhood-admin" %}
+        {% if request.path == '/' %}
+            {% block list %}
+                {% include "neighborhood_list.html" %}
+            {% endblock list %}
+        {% endif %}
         {% block menu %}
             {% include "menu.html" %}
         {% endblock menu %}

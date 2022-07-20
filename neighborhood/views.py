@@ -1,7 +1,7 @@
 import json
 
 import cloudinary
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
@@ -72,7 +72,6 @@ def showNeighborhoodImages(request):
     images = None
     user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
     n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
-    # n = Neighborhood.objects.all().filter(user_id=request.user).first()
     if n is not None:
         images = NeighborhoodImage.objects.all().filter(neighborhood=n)
     return render(request, 'neighborhood_images.html', {'images': images, 'neighborhood': n, })
@@ -163,7 +162,6 @@ def editPointOfInterest(request, pk):
 
     user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
     neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
-    # neighborhood = Neighborhood.objects.filter(user=request.user).first()
     shape = GEOSGeometry(neighborhood.shape)
     input_string_shape = shape.geojson
     coordinates_data_neighborhood = json.loads(input_string_shape)
@@ -190,7 +188,6 @@ def showPointsOfInterest(request):
     points_of_interest = None
     user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
     n = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
-    # n = Neighborhood.objects.all().filter(user_id=request.user).first()
     if n is not None:
         points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=n)
     return render(request, 'neighborhood_points_of_interest.html',
@@ -255,3 +252,77 @@ def editPointOfInterestImage(request, pk):
         return HttpResponseRedirect("/neighborhood/point_of_interest/" + str(point_of_interest.pk) + "/images/")
 
     return render(request, 'edit_point_of_interest_image.html', args)
+
+
+def neighborhoodProfile(request, pk):
+    args = {}
+
+    neighborhood = Neighborhood.objects.get(pk=2)
+    args['neighborhood'] = neighborhood
+
+    images = NeighborhoodImage.objects.all().filter(neighborhood=neighborhood)
+    args['images'] = images
+
+    points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=neighborhood)
+
+    points = []
+    for p in points_of_interest:
+        point = PointOfInterest.objects.get(pk=p.pk)
+        points.append(point)
+
+    args['points'] = points
+
+    point_of_interest = PointOfInterest.objects.get(pk=pk)
+    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+
+    return render(request, 'neighborhood_profile.html', args)
+
+
+def pointOfInterestImagesList(request, pk):
+    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+
+    if is_ajax:
+        if request.method == 'GET':
+            point_of_interest = PointOfInterest.objects.get(pk=pk)
+            images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest).values()
+            imageList = []
+
+            for img in images:
+                item = {"image": img.get('image').url, "description": img.get('description')}
+                imageList.append(item)
+
+            #todos = list(images)
+            return JsonResponse({'context': imageList})
+
+        # if request.method == 'POST':
+        #    data = json.load(request)
+        #    todo = data.get('payload')
+        #    Todo.objects.create(task=todo['task'], completed=todo['completed'])
+        #    return JsonResponse({'status': 'Todo added!'})
+        return JsonResponse({'status': 'Invalid request'}, status=400)
+    else:
+        return HttpResponseBadRequest('Invalid request')
+
+
+def pointOfInterestProfile(request, pk):
+    args = {}
+
+    point_of_interest = PointOfInterest.objects.get(pk=pk)
+    args['point'] = point_of_interest
+
+    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+    args['images'] = images
+
+    #points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=neighborhood)
+#
+    #points = []
+    #for p in points_of_interest:
+    #    point = PointOfInterest.objects.get(pk=p.pk)
+    #    points.append(point)
+#
+    #args['points'] = points
+#
+    #point_of_interest = PointOfInterest.objects.get(pk=pk)
+    #images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
+
+    return render(request, 'point_of_interest_profile.html', args)

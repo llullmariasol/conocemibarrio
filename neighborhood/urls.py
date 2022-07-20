@@ -14,6 +14,9 @@ from .views import (createNeighborhood,
                     showPointOfInterestImages,
                     editNeighborhoodImage,
                     editPointOfInterestImage,
+                    neighborhoodProfile,
+                    pointOfInterestImagesList,
+                    pointOfInterestProfile,
                     )
 
 app_name = 'neighborhood'
@@ -29,10 +32,20 @@ urlpatterns = [
     path('neighborhood/point_of_interest/<int:pk>/edit/', editPointOfInterest, name='editPointOfInterest'),
     path('neighborhood/points_of_interest/', showPointsOfInterest, name='showPointsOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/delete/', deletePointOfInterest, name='deletePointOfInterest'),
-    path('neighborhood/points_of_interest/image/<int:pk>/delete/', deletePointOfInterestImage, name='deletePointOfInterestImage'),
-    path('neighborhood/point_of_interest/<int:pk>/image/upload/', uploadPointOfInterestImage, name='uploadPointOfInterestImage'),
+    path('neighborhood/points_of_interest/image/<int:pk>/delete/',
+         deletePointOfInterestImage, name='deletePointOfInterestImage'),
+    path('neighborhood/point_of_interest/<int:pk>/image/upload/',
+         uploadPointOfInterestImage, name='uploadPointOfInterestImage'),
 
-    path('neighborhood/points_of_interest/image/<int:pk>/edit/', editPointOfInterestImage, name='editPointOfInterestImage'),
+    path('neighborhood/points_of_interest/image/<int:pk>/edit/',
+         editPointOfInterestImage, name='editPointOfInterestImage'),
 
-    path('neighborhood/point_of_interest/<int:pk>/images/', showPointOfInterestImages, name='showPointOfInterestImages')
+    path('neighborhood/point_of_interest/<int:pk>/images/',
+         showPointOfInterestImages, name='showPointOfInterestImages'),
+    path('neighborhood/<int:pk>/profile/', neighborhoodProfile, name='neighborhoodProfile'),
+
+    path('todos/<int:pk>/images/',
+         pointOfInterestImagesList, name='pointOfInterestImagesList'),
+
+    path('point_of_interest/<int:pk>/profile/', pointOfInterestProfile, name='pointOfInterestProfile'),
 ]
