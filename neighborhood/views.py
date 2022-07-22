@@ -313,6 +313,11 @@ def pointOfInterestProfile(request, pk):
     images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
     args['images'] = images
 
+    location = GEOSGeometry(point_of_interest.location)
+    input_string = location.geojson
+    coordinates_data = json.loads(input_string)
+    args['coordinates'] = coordinates_data['coordinates']
+
     #points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=neighborhood)
 #
     #points = []

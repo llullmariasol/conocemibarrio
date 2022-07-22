@@ -2,10 +2,35 @@
 {% load static %}
 {% block content %}
 <link rel="stylesheet" href="{% static '/css/modal.css' %}">
+<link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
 <style>
+body { margin: 0; padding: 0; }
+#map { position: absolute; top: 0; bottom: 0; width: 100%; }
+</style>
+<style>
+.carousel .slide {
+  height: 200px;
+}
+
+.item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 200px;
+}
     *, *::before, *::after {
   box-sizing: border-box;
 }
+    #map-container {
+        position:relative;
+        height: 180px;
+        width: 100%;
+        left:2px;
+         right:2px;
+        margin-right: auto;
+         margin-left: auto;
+    }
 
 .carousel {
     position: absolute;
@@ -95,7 +120,7 @@
                         </button>
                         <ul data-slides>
                             {% for image in images %}
-                            <li class="slide" data-active>
+                            <li class="slide"  {% if forloop.counter0 == 0 %}data-active{% endif %}>
                                 <img src="{{ image.image.url }}" alt="{{ image.description }}">
                                 <div style="background:white;">
                                     <small style="color:grey;">{{ image.description }}</small>
@@ -110,6 +135,11 @@
                 <div>
                     <p style="text-align:justify;">{{ point.description }}</p>
                 </div>
+
+                <h4 class="fw-bold mb-0" style="text-align:justify;">Ubicación</h4>
+                <br>
+                <div id="map-container"><div id="map"></div></div>
+
             </div>
         </div>
     </div>
@@ -133,5 +163,24 @@ buttons.forEach(button => {
     delete activeSlide.dataset.active
   })
 })
+
+var coords = [
+    {% for p in coordinates %}
+      {{ p }},
+    {% endfor %}
+  ]
+
+mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
+const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: coords,
+            zoom: 12
+            });
+
+const marker2 = new mapboxgl.Marker({ color: 'black'})
+.setLngLat(coords)
+.addTo(map);
 </script>
+
 {% endblock content %}
