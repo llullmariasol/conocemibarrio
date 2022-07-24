@@ -6,11 +6,15 @@
     <table class="table table-hover light" id="images-table">
         <tbody>
         {% for n in neighborhoods %}
-        <!-- Si está el vinculado al user, destacarlo de alguna forma, con etiqueta "tu barrio"-->
         <tr>
-            <a href="{% url 'neighborhood:neighborhoodProfile' n.pk %}" class="stretched-link">
-                <td>{{n.name}}</td>
-            </a>
+            <td>
+                <a href="/neighborhood/{{n.pk}}/profile/" style="text-decoration:none; color:black;">
+                    {{ n.name }}
+                    {% if n.pk == neighborhood.neighborhood.pk %}
+                        <small><strong>(tu barrio)</strong></small>
+                    {% endif %}
+                </a>
+            </td>
         </tr>
         {% endfor %}
         </tbody>

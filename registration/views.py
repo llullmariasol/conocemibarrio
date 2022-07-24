@@ -49,7 +49,7 @@ def home(request):
             args['n'] = n
 
     neighborhoods = Neighborhood.objects.filter(is_active=1)
-    args['neighborhoods'] = neighborhoods
+    args['neighborhoods'] = list(neighborhoods)
 
     return render(request, 'base.html', args)
 

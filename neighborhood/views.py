@@ -257,7 +257,7 @@ def editPointOfInterestImage(request, pk):
 def neighborhoodProfile(request, pk):
     args = {}
 
-    neighborhood = Neighborhood.objects.get(pk=2)
+    neighborhood = Neighborhood.objects.get(pk=pk)
     args['neighborhood'] = neighborhood
 
     images = NeighborhoodImage.objects.all().filter(neighborhood=neighborhood)
@@ -271,9 +271,6 @@ def neighborhoodProfile(request, pk):
         points.append(point)
 
     args['points'] = points
-
-    point_of_interest = PointOfInterest.objects.get(pk=pk)
-    images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
 
     return render(request, 'neighborhood_profile.html', args)
 
