@@ -1,0 +1,23 @@
+{% block list %}
+<br>
+<h3 class="fw-bold mb-0" style="color:white;">Barrios</h3>
+<br>
+<div class="table-responsive" style="background:white;">
+    <table class="table table-hover light" id="images-table">
+        <tbody>
+        {% for n in neighborhoods %}
+        <tr>
+            <td>
+                <a href="/neighborhood/{{n.pk}}/profile/" style="text-decoration:none; color:black;">
+                    {{ n.name }}
+                    {% if n.pk == neighborhood.neighborhood.pk %}
+                        <small><strong>(tu barrio)</strong></small>
+                    {% endif %}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock list %}
