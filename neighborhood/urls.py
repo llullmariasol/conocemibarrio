@@ -15,7 +15,6 @@ from .views import (createNeighborhood,
                     editNeighborhoodImage,
                     editPointOfInterestImage,
                     neighborhoodProfile,
-                    pointOfInterestImagesList,
                     pointOfInterestProfile,
                     )
 
@@ -43,9 +42,5 @@ urlpatterns = [
     path('neighborhood/point_of_interest/<int:pk>/images/',
          showPointOfInterestImages, name='showPointOfInterestImages'),
     path('neighborhood/<int:pk>/profile/', neighborhoodProfile, name='neighborhoodProfile'),
-
-    path('todos/<int:pk>/images/',
-         pointOfInterestImagesList, name='pointOfInterestImagesList'),
-
     path('point_of_interest/<int:pk>/profile/', pointOfInterestProfile, name='pointOfInterestProfile'),
 ]

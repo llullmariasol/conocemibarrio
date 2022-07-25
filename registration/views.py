@@ -1,6 +1,7 @@
 import threading
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -230,6 +231,7 @@ def joinNeighborhood(request):
     return render(request, 'join_neighborhood.html', args)
 
 
+@login_required
 def administrationRequests(request):
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
@@ -276,6 +278,7 @@ def administrationRequests(request):
     return render(request, 'administration_requests.html', args)
 
 
+@login_required
 def approveAdministrationRequest(request, pk):
     user = User.objects.get(pk=pk)
     user.is_active = True
@@ -320,6 +323,7 @@ def approveAdministrationRequest(request, pk):
     return render(request, 'administration_requests.html', args)
 
 
+@login_required
 def rejectAdministrationRequest(request, pk):
     user = User.objects.get(pk=pk)
     user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()
