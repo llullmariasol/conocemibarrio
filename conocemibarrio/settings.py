@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'pwa',
     'profile',
+    'webpush',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,12 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
 ]
+
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "vapid_public_key",
+    "VAPID_PRIVATE_KEY": "vapid_private_key",
+    "VAPID_ADMIN_EMAIL": "conocemibarriorafaela@gmail.com"
+}
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True

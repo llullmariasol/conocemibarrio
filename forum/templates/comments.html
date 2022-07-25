@@ -87,8 +87,24 @@
 
 <div id="respond" class="comment-respond; text-center">
     <form method="post" id="form" class="comment-form">{% csrf_token %}
+        <input type="hidden" id="token" name="token" value="">
         <input class="form-control" required="" placeholder="Tu respuesta" name="content">
         <br>
         <button class="btn btn-lg btn-primary btn-block publicar" type="submit">Responder</button>
     </form>
 </div>
+
+<script>
+    const messaging = firebase.messaging();
+    console.log(messaging.getToken());
+    messaging.getToken({ vapidKey: 'BKXmHplx8qZkh8l7DXbfWE-hZr9yllqKYdue0p503DCb_lqgTTpE9QeniXDHuE5jMDJFzHX8p84aODT6npPvP1A' }).then((currentToken) => {
+        if (currentToken) {
+            console.log(currentToken)
+            document.getElementById('token').value = currentToken;
+        } else {
+            console.log('No registration token available. Request permission to generate one.');
+        }
+    }).catch((err) => {
+        console.log('An error occurred while retrieving token. ', err);
+    });
+</script>
