@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from registration.models import UserNeighborhood
-from webpush import send_user_notification
 from .models import (
     Post,
     Comment,
@@ -24,6 +23,7 @@ from .forms import (
 )
 
 logger = logging.getLogger('app_api')
+
 
 @login_required
 def posts(request):
@@ -42,6 +42,7 @@ def posts(request):
     return render(request, 'posts.html', {'posts': posts,
                                           'args': args})
 
+
 @login_required
 def addPost(request):
     if request.method == "POST":
@@ -57,13 +58,14 @@ def addPost(request):
         form = PostForm()
     return render(request, 'form.html', {'form': form})
 
+
 @login_required
 def postDetail(request, pk):
     post = Post.objects.get(pk = pk)
     comments = Comment.objects.filter(post = post).annotate(like_count=Count('likes')).order_by('-like_count')
     if request.method == "POST":
         token = request.POST.get('token')
-        #sendNotification([token], "CONOCE MI BARRIO", "El usuario " + request.user.username + "comentó tu foro")
+        # sendNotification([token], "CONOCE MI BARRIO", "El usuario " + request.user.username + "comentó tu foro")
         send_push(request)
         form = CommentForm(data=request.POST)
         if form.is_valid():
@@ -97,11 +99,13 @@ def postDetail(request, pk):
         }
     )
 
+
 @login_required
 def deletePost(request, pk):
     post = Post.objects.get(pk=pk)
     post.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 @login_required
 def likeComment(request, pk):
@@ -112,11 +116,13 @@ def likeComment(request, pk):
         comment.likes.add(request.user)
     return HttpResponseRedirect(reverse('forum:postDetail', args=[str(comment.post.id)]))
 
+
 @login_required
 def deleteComment(request, pk):
     comment = Comment.objects.get(pk=pk)
     comment.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 @login_required
 def reportComment(request, pk):
@@ -143,6 +149,7 @@ def reportComment(request, pk):
         },
     )
 
+
 def showFirebaseJS(request):
     data = 'importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js");' \
          'importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js"); ' \
@@ -168,6 +175,7 @@ def showFirebaseJS(request):
 
     return HttpResponse(data, content_type="text/javascript")
 
+
 def sendNotification(registration_ids, message_title, message_desc):
     fcm_api = "AAAAc-9vhcs:APA91bF32L5PxwnY3QG1VJ1wsPjeWW6h5ozkTwjzNO9CeQ_J-nMUgkDQMeszaJVBAeOgTXwgNe0XWwjyHLyNA6jUtf3X59zJvK4aknJhkXaJ5Ze_L6ZrZ3PYgEWy549oA0diUHFo0ITy"
     url = "https://fcm.googleapis.com/fcm/send"
@@ -191,10 +199,12 @@ def sendNotification(registration_ids, message_title, message_desc):
     result = requests.post(url,  data=json.dumps(payload), headers=headers)
     print(result.json())
 
+
 def send(request):
     registration = ['cYe5DrcQGn6hdZSn1QSTbn:APA91bEiyIjngtGsivld2RE2w7vFytPB5tnf32nU8VHV545nGJF7OoQOce-MeovEqxCqZrT84NUaEjwjx0xI0ezNonkmO7dlaMVFPCTn7iwiFSiIw-cVHyTQAymIIyaR99Ru67COIiFN']
     sendNotification(registration, 'Code Keen added a new video', 'Code Keen new video alert')
     return HttpResponse("sent")
+
 
 @require_POST
 @csrf_exempt
@@ -211,7 +221,7 @@ def send_push(request):
         user_id = data['id']
         user = get_object_or_404(User, pk=user_id)
         payload = {'head': data['head'], 'body': data['body']}
-        send_user_notification(user=user, payload=payload, ttl=1000)
+        # send_user_notification(user=user, payload=payload, ttl=1000)
         logger.info("web pushh successful")
         return JsonResponse(status=200, data={"message": "Web push successful"})
     except TypeError:

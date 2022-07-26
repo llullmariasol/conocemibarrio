@@ -20,16 +20,16 @@ def profile(request):
             user_profile.save()
 
         # ver cómo se pasa data FILES en cloudinary
-        #profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        # profile_form = UpdateProfileForm(request.POST, request.FILES, instance=request.user.profile)
 
-        if user_form.is_valid(): #and profile_form.is_valid():
+        if user_form.is_valid(): # and profile_form.is_valid():
             user_form.save()
-            #profile_form.save()
+            # profile_form.save()
             messages.success(request, 'Your profile is updated successfully')
             return redirect('/profile/')
     else:
         user_form = UpdateUserForm(instance=request.user)
         profile_form = UpdateProfileForm(instance=request.user.profile)
 
-    #return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    # return render(request, 'profile.html', {'user_form': user_form, 'profile_form': profile_form})
     return render(request, 'profile.html', {'user_form': user_form})

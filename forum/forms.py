@@ -5,20 +5,23 @@ from .models import (
     Complaint,
 )
 
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('tittle', 'body',)
+        fields = ['tittle', 'body']
+
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['content',]
+        fields = ['content']
+
 
 class ComplaintForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(ComplaintForm, self).__init__(*args,**kwargs)
+        super(ComplaintForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Complaint
-        fields = ['reason',]
+        fields = ['reason']
