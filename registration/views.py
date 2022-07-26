@@ -48,6 +48,9 @@ def home(request):
             n = Neighborhood.objects.get(pk=neighborhood_id)
             args['n'] = n
 
+    neighborhoods = Neighborhood.objects.filter(is_active=1)
+    args['neighborhoods'] = list(neighborhoods)
+
     return render(request, 'base.html', args)
 
 
