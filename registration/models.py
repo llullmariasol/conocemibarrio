@@ -7,7 +7,6 @@ class Neighborhood(models.Model):
     description = models.TextField(default='', null=True)
     shape = models.MultiPolygonField(default='')
     is_active = models.SmallIntegerField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     class Meta:
         db_table = 'neighborhood'
