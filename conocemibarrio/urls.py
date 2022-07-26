@@ -13,9 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 # from forum.views import showFirebaseJS, send, send_push
+from django.views.generic import TemplateView
+
+from conocemibarrio import settings
+from registration.views import house, send_push
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +29,8 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
     path('', include('pwa.urls')),
     path('', include('profile.urls')),
-    # path('firebase-messaging-sw.js', showFirebaseJS, name="show_firebase_js"),
-    # path('send', send_push),
-]
+    path('send_push', send_push),
+    path('webpush/', include('webpush.urls')),
+    path('house/', house),
+    path('house/sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript'))
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

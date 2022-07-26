@@ -26,7 +26,8 @@ SECRET_KEY = 'django-insecure-+gj0caznve=v!w387ens4gnv2qbz5fjbgl%k6efcvb(j+k0$7z
 DEBUG = True
 
 # ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'https://b3fa-190-185-228-228.ngrok.io']
+CSRF_TRUSTED_ORIGINS = ['https://*', 'https://d1ec-190-185-228-228.ngrok.io/']
 
 # Application definition
 
@@ -66,16 +67,13 @@ MIDDLEWARE = [
 ]
 
 WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": "vapid_public_key",
-    "VAPID_PRIVATE_KEY": "vapid_private_key",
+    "VAPID_PUBLIC_KEY": "BKXmHplx8qZkh8l7DXbfWE-hZr9yllqKYdue0p503DCb_lqgTTpE9QeniXDHuE5jMDJFzHX8p84aODT6npPvP1A",
+    "VAPID_PRIVATE_KEY": "nA8Gielc4rT58SQhIYzuLZ9Vlf35jTIPsLhQfFBMjtM",
     "VAPID_ADMIN_EMAIL": "conocemibarriorafaela@gmail.com"
 }
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
-# SECURE_SSL_REDIRECT = False
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SECURE = False
 
 ROOT_URLCONF = 'conocemibarrio.urls'
 
@@ -236,5 +234,3 @@ PWA_APP_ICONS_APPLE = [
         "purpose": "maskable any"
     }
 ]
-
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'serviceworker.js')
