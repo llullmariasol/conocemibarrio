@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from forum.views import showFirebaseJS, send, send_push
+# from forum.views import showFirebaseJS, send, send_push
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +24,6 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
     path('', include('pwa.urls')),
     path('', include('profile.urls')),
-    path('firebase-messaging-sw.js', showFirebaseJS, name="show_firebase_js"),
-    path('send', send_push),
+    # path('firebase-messaging-sw.js', showFirebaseJS, name="show_firebase_js"),
+    # path('send', send_push),
 ]
