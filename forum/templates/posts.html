@@ -60,7 +60,7 @@
             <h4 class="alert-heading">
                 <a href="{% url 'forum:postDetail' post.pk %}" class="alert-link" onmouseover="this.style.color='#d4bd22'"
                    onMouseOut="this.style.color='#000000'"
-                >{{ post.tittle }}</a>
+                >{{ post.title }}</a>
             </h4><small>(click para ver más)</small>
             <hr>
             {% if post.author.username == request.user.username %}
