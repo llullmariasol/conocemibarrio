@@ -22,6 +22,7 @@ from .forms import (
     ComplaintForm,
 )
 
+
 # logger = logging.getLogger('app_api')
 
 
@@ -61,18 +62,24 @@ def addPost(request):
 
 @login_required
 def postDetail(request, pk):
-    post = Post.objects.get(pk = pk)
-    comments = Comment.objects.filter(post = post).annotate(like_count=Count('likes')).order_by('-like_count')
+    post = Post.objects.get(pk=pk)
+    author_user_id = post.author.pk
+    print("AUTHOR")
+    print(author_user_id)
+    comments = Comment.objects.filter(post=post).annotate(like_count=Count('likes')).order_by('-like_count')
     if request.method == "POST":
         # token = request.POST.get('token')
         # sendNotification([token], "CONOCE MI BARRIO", "El usuario " + request.user.username + "comentó tu foro")
         # send_push(request)
         form = CommentForm(data=request.POST)
+        for field in form:
+            print("Field Error:", field.name,  field.errors)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
             comment.author = request.user
             comment.save()
+            print("COMENTARIO GUARDADO !!!")
     else:
         form = CommentForm()
 
@@ -96,6 +103,7 @@ def postDetail(request, pk):
             'form': form,
             'comments': comments,
             'complaints': reported_comments,
+            'author_user_id': author_user_id,
         }
     )
 
@@ -148,7 +156,6 @@ def reportComment(request, pk):
             'comment': comment,
         },
     )
-
 
 # def showFirebaseJS(request):
 #     data = 'importScripts("https://www.gstatic.com/firebasejs/8.2.0/firebase-app.js");' \
