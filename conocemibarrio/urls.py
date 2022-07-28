@@ -32,5 +32,6 @@ urlpatterns = [
     path('send_push', send_push),
     path('webpush/', include('webpush.urls')),
     path('house/', house),
-    path('house/sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript'))
+    path('house/sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),
+    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript'))
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
