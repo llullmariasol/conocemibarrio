@@ -39,7 +39,8 @@ class EmailThread(threading.Thread):
 
 def home(request):
     args = {}
-
+    webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
+    vapid_key = webpush_settings.get('VAPID_PUBLIC_KEY')
     if request.user.is_authenticated:
         users_neighborhoods = UserNeighborhood.objects.all()
         if users_neighborhoods is not None:
@@ -55,6 +56,7 @@ def home(request):
 
     neighborhoods = Neighborhood.objects.filter(is_active=1)
     args['neighborhoods'] = list(neighborhoods)
+    args['vapid_key'] = vapid_key
 
     return render(request, 'base.html', args)
 
