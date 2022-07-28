@@ -23,7 +23,8 @@
         margin: auto;
     }
 </style>
-
+<script src="{% static '/js/registerSw.js' %}"></script>
+<script src="{% static '/js/site.js' %}"></script>
 <h2 class="text-center" style="color: whitesmoke">Respuestas</h2>
 {% for comment in comments %}
     {% if comment.removed == False %}
