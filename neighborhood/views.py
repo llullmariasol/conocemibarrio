@@ -84,14 +84,14 @@ def showPointOfInterestImages(request, pk):
                   'point_of_interest_images.html', {'images': images, 'point': point_of_interest, })
 
 
-def uploadNeighborhoodImage(request):
+def uploadNeighborhoodImage(request, pk):
     context = dict(backend_form=NeighborhoodImageForm())
 
     if request.method == 'POST':
         desc = request.POST.get('image-description')
         archivo = request.FILES['image-file']
 
-        n = Neighborhood.objects.get(user_id=request.user)
+        n = Neighborhood.objects.get(pk=pk)
         neighborhood_image = NeighborhoodImage()
         neighborhood_image.neighborhood = n
         neighborhood_image.image = archivo
