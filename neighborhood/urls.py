@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.generic import TemplateView
 
 from .views import (createNeighborhood,
                     showNeighborhoodImages,
@@ -25,7 +26,11 @@ urlpatterns = [
     path('neighborhood/information/', createNeighborhood, name='createNeighborhood'),
     path('neighborhood/information/edit/', editNeighborhood, name='editNeighborhood'),
     path('neighborhood/images/', showNeighborhoodImages, name='showNeighborhoodImages'),
+    path('neighborhood/images/sw.js', TemplateView.as_view(template_name='sw.js',
+                                                           content_type='application/x-javascript')),
     path('neighborhood/<int:pk>/images/upload/', uploadNeighborhoodImage, name='uploadNeighborhoodImage'), # TODO - agregar parametro de barrio id
+    path('neighborhood/<int:pk>/images/sw.js', TemplateView.as_view(template_name='sw.js',
+                                                                    content_type='application/x-javascript')),
     path('neighborhood/image/<int:pk>/delete/', deleteNeighborhoodImage, name='deleteNeighborhoodImage'),
     path('neighborhood/image/<int:pk>/edit/', editNeighborhoodImage, name='editNeighborhoodImage'),
     path('neighborhood/points_of_interest/add/', addPointOfInterest, name='addPointOfInterest'), # TODO - agregar parametro de barrio id
@@ -43,9 +48,5 @@ urlpatterns = [
     path('neighborhood/point_of_interest/<int:pk>/images/',
          showPointOfInterestImages, name='showPointOfInterestImages'),
     path('neighborhood/<int:pk>/profile/', neighborhoodProfile, name='neighborhoodProfile'),
-
-    path('todos/<int:pk>/images/',
-         pointOfInterestImagesList, name='pointOfInterestImagesList'),
-
     path('point_of_interest/<int:pk>/profile/', pointOfInterestProfile, name='pointOfInterestProfile'),
 ]
