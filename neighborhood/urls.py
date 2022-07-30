@@ -28,14 +28,14 @@ urlpatterns = [
     path('neighborhood/images/', showNeighborhoodImages, name='showNeighborhoodImages'),
     path('neighborhood/images/sw.js', TemplateView.as_view(template_name='sw.js',
                                                            content_type='application/x-javascript')),
-    path('neighborhood/<int:pk>/images/upload/', uploadNeighborhoodImage, name='uploadNeighborhoodImage'), # TODO - agregar parametro de barrio id
+    path('neighborhood/<int:pk>/images/upload/', uploadNeighborhoodImage, name='uploadNeighborhoodImage'),
     path('neighborhood/<int:pk>/images/sw.js', TemplateView.as_view(template_name='sw.js',
                                                                     content_type='application/x-javascript')),
     path('neighborhood/image/<int:pk>/delete/', deleteNeighborhoodImage, name='deleteNeighborhoodImage'),
     path('neighborhood/image/<int:pk>/edit/', editNeighborhoodImage, name='editNeighborhoodImage'),
-    path('neighborhood/points_of_interest/add/', addPointOfInterest, name='addPointOfInterest'), # TODO - agregar parametro de barrio id
+    path('neighborhood/<int:pk>/points_of_interest/add/', addPointOfInterest, name='addPointOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/edit/', editPointOfInterest, name='editPointOfInterest'),
-    path('neighborhood/points_of_interest/', showPointsOfInterest, name='showPointsOfInterest'), # TODO - agregar parametro de barrio id
+    path('neighborhood/points_of_interest/', showPointsOfInterest, name='showPointsOfInterest'),
     path('neighborhood/point_of_interest/<int:pk>/delete/', deletePointOfInterest, name='deletePointOfInterest'),
     path('neighborhood/points_of_interest/image/<int:pk>/delete/',
          deletePointOfInterestImage, name='deletePointOfInterestImage'),

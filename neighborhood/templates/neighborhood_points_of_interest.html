@@ -9,7 +9,7 @@
 {% if neighborhood is not None %}
 <br>
 <div class="text-center" style="width:200px; margin:auto;">
-    <a href="/neighborhood/points_of_interest/add/">
+    <a href="/neighborhood/{{neighborhood.pk}}/points_of_interest/add/">
         <button id="btn-new-point" type="button" class="btn btn-outline-dark" style="width:100%;">
             Nuevo punto de interés
         </button>
@@ -40,8 +40,7 @@
                 </a>
             </td>
             <td>
-                <!-- ESTO TIENE QUE LLEVAR A LA GALERÍA DONDE PUEDA BORRAR Y CARGAR IMAGENES-->
-                <a href="/neighborhood/point_of_interest/{{ point.point_of_interest.pk }}/images/">
+                <a href="/neighborhood/point_of_interest/{{point.point_of_interest.pk}}/images/">
                     <button type="button" class="btn btn-outline-secondary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-images" viewBox="0 0 16 16">
                             <path d="M4.502 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
@@ -51,7 +50,7 @@
                 </a>
             </td>
             <td>
-                <a href="/neighborhood/point_of_interest/{{ point.point_of_interest.pk }}/delete/" onClick="return confirm('¿Seguro que quieres borrar el punto de interés {{ point.point_of_interest.name }}?');">
+                <a href="/neighborhood/point_of_interest/{{point.point_of_interest.pk}}/delete/" onClick="return confirm('¿Seguro que quieres borrar el punto de interés {{ point.point_of_interest.name }}?');">
                     <button type="button" class="btn btn-outline-danger">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>

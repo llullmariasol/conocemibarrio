@@ -124,9 +124,9 @@ def deleteNeighborhoodImage(request, pk):
     return HttpResponseRedirect('/neighborhood/images/')
 
 
-def addPointOfInterest(request):
+def addPointOfInterest(request, pk):
     args = {}
-    neighborhood = Neighborhood.objects.filter(user=request.user).first()
+    neighborhood = Neighborhood.objects.get(pk=pk)
     shape = GEOSGeometry(neighborhood.shape)
     input_string = shape.geojson
     coordinates_data = json.loads(input_string)
@@ -142,7 +142,7 @@ def addPointOfInterest(request):
         point_of_interest.save()
 
         neighborhood_point_of_interest = NeighborhoodPointOfInterest()
-        neighborhood_point_of_interest.neighborhood = Neighborhood.objects.filter(user=request.user).first()
+        neighborhood_point_of_interest.neighborhood = neighborhood
         neighborhood_point_of_interest.point_of_interest = point_of_interest
         neighborhood_point_of_interest.save()
 
