@@ -315,16 +315,4 @@ def pointOfInterestProfile(request, pk):
     coordinates_data = json.loads(input_string)
     args['coordinates'] = coordinates_data['coordinates']
 
-    #points_of_interest = NeighborhoodPointOfInterest.objects.all().filter(neighborhood=neighborhood)
-#
-    #points = []
-    #for p in points_of_interest:
-    #    point = PointOfInterest.objects.get(pk=p.pk)
-    #    points.append(point)
-#
-    #args['points'] = points
-#
-    #point_of_interest = PointOfInterest.objects.get(pk=pk)
-    #images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest)
-
     return render(request, 'point_of_interest_profile.html', args)
