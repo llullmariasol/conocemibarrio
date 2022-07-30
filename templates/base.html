@@ -6,7 +6,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="vapid-key" content="{{ vapid_key }}">
-    <link rel="manifest" href="manifest.json">
     {% load pwa %}
     {% progressive_web_app_meta %}
     <link rel="manifest" href="manifest.json">
@@ -41,6 +40,10 @@
    cursor: pointer;
 }
     </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.3/firebase-messaging.js"></script>
     <!--
     <script type="module">
 

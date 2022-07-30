@@ -42,7 +42,8 @@ const subscribe = async (reg) => {
         return;
     }
 
-    const key = "BKXmHplx8qZkh8l7DXbfWE-hZr9yllqKYdue0p503DCb_lqgTTpE9QeniXDHuE5jMDJFzHX8p84aODT6npPvP1A";
+    const vapidMeta = document.querySelector('meta[name="vapid-key"]');
+    const key = vapidMeta.content;
     const options = {
         userVisibleOnly: true,
         // if key exists, create applicationServerKey property
