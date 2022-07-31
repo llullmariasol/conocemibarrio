@@ -40,35 +40,6 @@
 }
     </style>
 
-    <!--
-    <script type="module">
-
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyBdGZanwe4TlpxENzBV8EuUoRxgClGf-RQ",
-            authDomain: "conocemibarrio.firebaseapp.com",
-            projectId: "conocemibarrio",
-            storageBucket: "conocemibarrio.appspot.com",
-            messagingSenderId: "497938302411",
-            appId: "1:497938302411:web:cd5cea068c5df16ca1e24e"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-
-        const messaging = firebase.messaging();
-
-        messaging
-            .requestPermission()
-            .then(function () {
-                console.log("Notification permission granted.");
-                return messaging.getToken()
-            })
-            .catch(function (err) {
-                console.log("Unable to get permission to notify.", err);
-            });
-    -->
     <script>
     let deferredPrompt;
 
