@@ -279,7 +279,7 @@ def neighborhoodProfile(request, pk):
 
     points = []
     for p in points_of_interest:
-        point = PointOfInterest.objects.get(pk=p.pk)
+        point = PointOfInterest.objects.get(pk=p.point_of_interest.id)
         points.append(point)
 
     args['points'] = points
