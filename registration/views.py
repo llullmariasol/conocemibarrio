@@ -1,6 +1,7 @@
 import threading
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -230,10 +231,12 @@ def joinNeighborhood(request):
     return render(request, 'join_neighborhood.html', args)
 
 
+@login_required
 def administrationRequests(request):
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
-    users = group.user_set.all().filter(is_active=0)
+    users = group.user_set.all().filter(is_active=0)  # users que quieren ser administradores de barrios
+    current_neighborhood_admins = list(group.user_set.all().filter(is_active=1))
     users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
     users_list = []
     if len(users) > 0:
@@ -244,10 +247,38 @@ def administrationRequests(request):
             except User.DoesNotExist:
                 pass
 
-    args['users_list'] = users_list
+    # lista de barrios que ya tienen administradores
+    neighborhoods_with_admin = []
+    #recorrer user_neighborhood tabla, si el user id está en current_neighborhood_admins,
+    #agregar el neighborhood id a neighborhoods_with_admin
+    users_neighborhoods_list = list(UserNeighborhood.objects.all())
+    for un in users_neighborhoods_list:
+        for c in current_neighborhood_admins:
+            if un.user.id == c.id:
+                neighborhoods_with_admin.append(un.neighborhood.id)
+
+    new_list = []
+    # si el user de la request es administrador general
+    # recorrer la lista de usuarios y eliminar cuyo barrio ya tiene admin
+    if request.user.is_superuser:
+        for x in users_list:
+            if x.neighborhood.id not in neighborhoods_with_admin:
+                new_list.append(x)
+        args['users_list'] = new_list
+    else:
+        # si el user de la request es administrador de un barrio
+        #buscar solicitudes de ese barrio
+        if request.user.groups.all().exists() and request.user.groups.all()[0].name == "neighborhood-admin":
+            admin = UserNeighborhood.objects.all().filter(user=request.user).first()
+            for y in users_list:
+                if y.neighborhood.id == admin.neighborhood.id:
+                    new_list.append(y)
+
+    args['users_list'] = new_list
     return render(request, 'administration_requests.html', args)
 
 
+@login_required
 def approveAdministrationRequest(request, pk):
     user = User.objects.get(pk=pk)
     user.is_active = True
@@ -292,6 +323,7 @@ def approveAdministrationRequest(request, pk):
     return render(request, 'administration_requests.html', args)
 
 
+@login_required
 def rejectAdministrationRequest(request, pk):
     user = User.objects.get(pk=pk)
     user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()

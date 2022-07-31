@@ -71,7 +71,7 @@
 <body class="text-center" style="background-color: #036749; padding-bottom: 50px">
 <main>
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
-        {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path and 'image' not in request.path %}
+        {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/administration/requests/' and request.path != '/neighborhood/points_of_interest/add/' and 'edit' not in request.path and 'image' not in request.path %}
     <br>
     <div role="group" style="width:80%; margin:auto;">
         {% if n.is_active == 0 %}
@@ -100,13 +100,28 @@
                 Puntos de interés
             </button>
         </a>
+
+        <br><br>
+        <a href="/administration/requests/">
+            <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Solicitudes de administración del barrio
+            </button>
+        </a>
+
     </div>
     {% endif %}
     {% else %}
     {% if request.user.is_authenticated and user.is_superuser == 0 and request.path != '/profile/'%}
-    Hola {{ user.username }} del grupo {{ user.groups.all.0 }}
-    {% if neighborhood == null and request.path != '/join_neighborhood/' and user.groups.all.0.name != "neighborhood-admin"%}
-        <a href="/join_neighborhood/" style="color: black">Unirme a un barrio</a>
+    {% if neighborhood == null and request.path != '/join_neighborhood/' and user.groups.all.0.name != "neighborhood-admin" and request.path != '/forum/'%}
+        <div role="group" style="width:80%; margin:auto;">
+            <br>
+            <a href="/join_neighborhood/">
+                <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                    Unirme a un barrio
+                </button>
+            </a>
+            <br>
+        </div>
     {% endif %}
     {% endif %}
     {% endif %}
@@ -121,14 +136,6 @@
                 Solicitudes de administración de barrios
             </button>
         </a>
-        <br><br>
-        {% else %}
-        <a href="/neighborhood/information/edit/">
-            <button id="btn-edit-n" type="button" class="btn btn-outline-dark" style="width:100%;">
-                Opción 2
-            </button>
-        </a>
-        <br><br>
         {% endif %}
     </div>
     {% endif %}
