@@ -9,7 +9,7 @@ class Post(models.Model):
     title = models.CharField(max_length=30)
     body = RichTextField(blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, default=1)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title + ' | ' + str(self.author)
