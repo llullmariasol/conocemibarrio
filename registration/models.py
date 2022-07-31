@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Neighborhood(models.Model):
     name = models.CharField(max_length=45)
     description = models.TextField(default='', null=True, blank=True)
-    shape = models.MultiPolygonField(default='', blank=True)
+    shape = models.MultiPolygonField(default='', blank=True, null=True)
     is_active = models.SmallIntegerField()
 
     class Meta:
