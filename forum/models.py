@@ -2,11 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
+from registration.models import Neighborhood
+
 
 class Post(models.Model):
     title = models.CharField(max_length=30)
     body = RichTextField(blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.title + ' | ' + str(self.author)

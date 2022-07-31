@@ -112,8 +112,8 @@
     </div>
     {% endif %}
     {% else %}
-    {% if request.user.is_authenticated and user.is_superuser == 0 and request.path != '/profile/'%}
-    {% if neighborhood == null and request.path != '/join_neighborhood/' and user.groups.all.0.name != "neighborhood-admin" and request.path != '/forum/'%}
+    {% if request.user.is_authenticated and user.is_superuser == 0%}
+    {% if neighborhood == null and request.path == '/' and user.groups.all.0.name != "neighborhood-admin" and request.path != '/forum/'%}
         <div role="group" style="width:80%; margin:auto;">
             <br>
             <a href="/join_neighborhood/">

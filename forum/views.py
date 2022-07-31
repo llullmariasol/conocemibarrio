@@ -19,17 +19,14 @@ from .forms import (
 
 @login_required
 def posts(request):
-    posts = Post.objects.all()
     args = {}
-    found = False
-    users_neighborhoods = UserNeighborhood.objects.all()
-    if users_neighborhoods is not None:
-        for user_neighborhood in users_neighborhoods:
-            if user_neighborhood.user == request.user:
-                found = True
-    if not found:
-        args['error'] = "Para ingresar a esta sección, unite a un barrio de Rafaela!"
-    return render(request, 'posts.html', {'posts': posts,
+    post_list = []
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    if user_neighborhood is None:
+        args['error'] = "Para ingresar a esta sección, ¡unite a un barrio de Rafaela!"
+    else:
+        post_list = Post.objects.all().filter(neighborhood=user_neighborhood.neighborhood)
+    return render(request, 'posts.html', {'posts': post_list,
                                           'args': args})
 
 
@@ -38,8 +35,10 @@ def addPost(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
+            user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
             forum_post = form.save(commit=False)
             forum_post.author = request.user
+            forum_post.neighborhood = user_neighborhood
             forum_post.save()
             return redirect('forum:posts')
     else:
