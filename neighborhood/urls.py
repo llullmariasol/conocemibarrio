@@ -16,7 +16,6 @@ from .views import (createNeighborhood,
                     editNeighborhoodImage,
                     editPointOfInterestImage,
                     neighborhoodProfile,
-                    pointOfInterestImagesList,
                     pointOfInterestProfile,
                     )
 

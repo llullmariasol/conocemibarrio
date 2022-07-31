@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Neighborhood(models.Model):
-    name = models.CharField(max_length=45)  # TODO - que en el form le deje elegir entre los disponibles??
+    name = models.CharField(max_length=45)
     description = models.TextField(default='', null=True)
     shape = models.MultiPolygonField(default='')
     is_active = models.SmallIntegerField()

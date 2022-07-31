@@ -1,7 +1,8 @@
 import json
 
 import cloudinary
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
@@ -10,6 +11,7 @@ from neighborhood.models import NeighborhoodImage, PointOfInterest, Neighborhood
 from registration.models import Neighborhood, UserNeighborhood
 
 
+@login_required
 def createNeighborhood(request):
     args = {}
     user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
@@ -34,6 +36,7 @@ def createNeighborhood(request):
     return render(request, 'create_neighborhood.html', args)
 
 
+@login_required
 def editNeighborhood(request):
     args = {}
     user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
@@ -84,6 +87,7 @@ def showPointOfInterestImages(request, pk):
                   'point_of_interest_images.html', {'images': images, 'point': point_of_interest, })
 
 
+@login_required
 def uploadNeighborhoodImage(request, pk):
     context = dict(backend_form=NeighborhoodImageForm())
 
@@ -103,6 +107,7 @@ def uploadNeighborhoodImage(request, pk):
     return render(request, 'upload_neighborhood_image.html', context)
 
 
+@login_required
 def editNeighborhoodImage(request, pk):
     args = {}
     image = NeighborhoodImage.objects.get(pk=pk)
@@ -117,6 +122,7 @@ def editNeighborhoodImage(request, pk):
     return render(request, 'edit_neighborhood_image.html', args)
 
 
+@login_required
 def deleteNeighborhoodImage(request, pk):
     image = NeighborhoodImage.objects.get(pk=pk)
     image.delete()
@@ -124,6 +130,7 @@ def deleteNeighborhoodImage(request, pk):
     return HttpResponseRedirect('/neighborhood/images/')
 
 
+@login_required
 def addPointOfInterest(request, pk):
     args = {}
     neighborhood = Neighborhood.objects.get(pk=pk)
@@ -151,6 +158,7 @@ def addPointOfInterest(request, pk):
     return render(request, 'add_point_of_interest.html', args)
 
 
+@login_required
 def editPointOfInterest(request, pk):
     args = {}
     point_of_interest = PointOfInterest.objects.get(pk=pk)
@@ -194,6 +202,7 @@ def showPointsOfInterest(request):
                   {'points': points_of_interest, 'neighborhood': n, })
 
 
+@login_required
 def deletePointOfInterest(request, pk):
     point_of_interest = PointOfInterest.objects.get(pk=pk)
 
@@ -205,6 +214,7 @@ def deletePointOfInterest(request, pk):
     return HttpResponseRedirect('/neighborhood/points_of_interest/')
 
 
+@login_required
 def deletePointOfInterestImage(request, pk):
     image = PointOfInterestImage.objects.get(pk=pk)
     point_of_interest = image.point_of_interest
@@ -215,6 +225,7 @@ def deletePointOfInterestImage(request, pk):
                   'point_of_interest_images.html', {'images': images, 'point': point_of_interest, })
 
 
+@login_required
 def uploadPointOfInterestImage(request, pk):
     args = {}
     context = dict(backend_form=PointOfInterestImageForm())
@@ -238,6 +249,7 @@ def uploadPointOfInterestImage(request, pk):
     return render(request, 'upload_point_of_interest_image.html', args)
 
 
+@login_required
 def editPointOfInterestImage(request, pk):
     args = {}
     image = PointOfInterestImage.objects.get(pk=pk)
@@ -273,32 +285,6 @@ def neighborhoodProfile(request, pk):
     args['points'] = points
 
     return render(request, 'neighborhood_profile.html', args)
-
-
-def pointOfInterestImagesList(request, pk):
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-
-    if is_ajax:
-        if request.method == 'GET':
-            point_of_interest = PointOfInterest.objects.get(pk=pk)
-            images = PointOfInterestImage.objects.all().filter(point_of_interest=point_of_interest).values()
-            imageList = []
-
-            for img in images:
-                item = {"image": img.get('image').url, "description": img.get('description')}
-                imageList.append(item)
-
-            #todos = list(images)
-            return JsonResponse({'context': imageList})
-
-        # if request.method == 'POST':
-        #    data = json.load(request)
-        #    todo = data.get('payload')
-        #    Todo.objects.create(task=todo['task'], completed=todo['completed'])
-        #    return JsonResponse({'status': 'Todo added!'})
-        return JsonResponse({'status': 'Invalid request'}, status=400)
-    else:
-        return HttpResponseBadRequest('Invalid request')
 
 
 def pointOfInterestProfile(request, pk):

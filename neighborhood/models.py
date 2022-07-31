@@ -33,7 +33,6 @@ class PointOfInterestImage(models.Model):
 class NeighborhoodPointOfInterest(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False, null=True)
     point_of_interest = models.ForeignKey(PointOfInterest, on_delete=models.CASCADE, db_constraint=False, null=True)
-    # TODO dbconstraint cambiar a true para que aparezca en diagrama????
 
     class Meta:
         db_table = 'neighborhood_point_of_interest'
