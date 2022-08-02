@@ -20,6 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from webpush import send_user_notification
 import json
 
+from forum.models import Notification
 from .forms import (RegistrationForm,
                     LogInForm,
                     JoinNeighborhoodForm)
@@ -387,9 +388,13 @@ def send_push(request):
         user = get_object_or_404(User, pk=user_id)
         payload = {'head': data['head'], 'body': data['body']}
         send_user_notification(user=user, payload=payload, ttl=1000)
-        print("PUSH")
-        print(user_id)
-        print(payload)
+
+        if user_id != str(request.user.id):
+            notification = Notification()
+            notification.body = data['body']
+            notification.recipient = user
+            notification.save()
+
         return JsonResponse(status=200, data={"message": "Web push successful"})
     except TypeError:
         return JsonResponse(status=500, data={"message": "An error occurred"})

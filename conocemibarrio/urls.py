@@ -20,12 +20,14 @@ from django.views.generic import TemplateView
 
 from conocemibarrio import settings
 from registration.views import send_push
+from forum.views import notifications
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('registration.urls')),
     path('', include('neighborhood.urls')),
     path('forum/', include('forum.urls')),
+    path('notifications/', notifications, name='notifications'),
     path('', include('pwa.urls')),
     path('', include('profile.urls')),
     path('send_push', send_push),

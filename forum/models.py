@@ -46,3 +46,12 @@ class Complaint(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='reported_comment')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_who_reports')
     reason = models.CharField(choices=REASONS, default=1, max_length=30)
+
+
+class Notification(models.Model):
+    body = models.CharField(max_length=100)
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
+    creationDate = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'notification'

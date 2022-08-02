@@ -8,7 +8,7 @@ from registration.models import UserNeighborhood
 from .models import (
     Post,
     Comment,
-    Complaint,
+    Complaint, Notification,
 )
 from .forms import (
     PostForm,
@@ -38,7 +38,7 @@ def addPost(request):
             user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
             forum_post = form.save(commit=False)
             forum_post.author = request.user
-            forum_post.neighborhood = user_neighborhood
+            forum_post.neighborhood = user_neighborhood.neighborhood
             forum_post.save()
             return redirect('forum:posts')
     else:
@@ -136,3 +136,8 @@ def reportComment(request, pk):
             'comment': comment,
         },
     )
+
+
+def notifications(request):
+    notifications_list = Notification.objects.filter(recipient=request.user).order_by('creationDate').reverse()
+    return render(request, 'notification_list.html', {'notifications': notifications_list})
