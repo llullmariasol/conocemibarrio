@@ -223,14 +223,14 @@ PWA_APP_SCOPE = '/'
 PWA_APP_ICONS = [
     {
         'src': 'static/img/square.png',
-        'sizes': '512x512 192x192',
+        'sizes': '512x512 192x192 144x144',
         "purpose": "maskable any"
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
         'src': 'static/img/square.png',
-        'sizes': '512x512 192x192',
+        'sizes': '512x512 192x192 144x144',
         "purpose": "maskable any"
     }
 ]
