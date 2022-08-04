@@ -23,4 +23,5 @@ urlpatterns = [
     path('forum/', include('forum.urls')),
     path('', include('pwa.urls')),
     path('', include('profile.urls')),
+    path('chat/', include('chat.urls')),
 ]

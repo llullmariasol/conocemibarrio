@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .comment-form {
+        width: 100%;
+        max-width: 500px;
+        padding: 15px;
+        margin: auto;
+    }
+
+    body{
+        background-color: #f0f0f0;
+    }
+
+    .msgs{
+        width: 100%;
+    }
+
+    .msgs .msg{
+        width: 100%;
+    }
+
+    .msgs .msg p{
+        margin: 0 0 10px 0;
+    }
+
+    .leftBubble{
+        position: relative;
+        background-color: #fff;
+        padding: 4px;
+        color: #222;
+        border-radius: 8px;
+    }
+
+    .leftBubble:after{
+        content: "";
+        display: block;
+        position: absolute;
+
+        top: 5px;
+        left: -15px;
+
+        width: 0;
+        height: 0;
+        border-top: 13px solid transparent;
+        border-bottom: 13px solid transparent;
+
+        border-right: 15px solid #fff;
+    }
+
+    .rightBubble{
+        position: relative;
+        background-color: #e8ecf1;
+        padding: 4px;
+        color: #222;
+        border-radius: 8px;
+    }
+
+    .rightBubble:after{
+        content: "";
+        position: absolute;
+
+        top: 5px;
+        right: -25px;
+
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-color: transparent;
+        border-width: 13px 13px 13px 13px;
+
+        border-left-color: #e8ecf1;
+    }
+
+    .container-text{
+        position: relative;
+        text-align:center;
+    }
+
+    .text{
+        bottom: 5%;
+        width: 100%;
+        position: fixed;
+    }
+
+    .text-right{text-align: right;}
+
+    .text-left{text-align: left;}
+
+    .right{
+        float: right;
+    }
+
+    .messages{
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+</style>
+
+<h2 class="text-center" style="color: whitesmoke">Chat</h2>
+<div class="container-text">
+    <div class="messages">
+        <div class="alert alert-warning" role="alert">
+            {% for message in msgs %}
+            <div class="container">
+                <div class="row">
+                    {% if message.user == request.user %}
+                    <div class="right">
+                        <div class="msgs">
+                            <div class="text-right">
+                                <small><strong>Tu</strong></small>
+                            </div>
+                            <div class="msg rightBubble">
+                                <p>{{ message.message|linebreaks }}</p>
+                            </div>
+                            <div class="text-right">
+                                <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="msgs">
+                        <div class="text-left">
+                            <small><strong>{{ message.user }}</strong></small>
+                        </div>
+                        <div class="msg leftBubble">
+                            <p>{{ message.message|linebreaks }}</p>
+                        </div>
+                        <div class="text-left">
+                            <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="respond" class="text">
+        <form method="post" id="form" class="comment-form">{% csrf_token %}
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Escribe aqui..." name="message">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-light" type="submit">Enviar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
