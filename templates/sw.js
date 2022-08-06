@@ -61,16 +61,15 @@ self.addEventListener('activate', (event) => {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     addResourcesToCache([
-      "../static/img/chat.png",
-      "../static/img/default.jpeg",
-      "../static/img/forum.png",
-      "../static/img/home.png",
-      "../static/img/location.png",
-      "../static/img/logo.png",
-      "../static/img/profile.png",
-      "../static/img/safetypin.png",
-      "../static/img/square.png",
-      "../static/css/*",
+      "/static/img/chat.png",
+      "/static/img/default.jpeg",
+      "/static/img/forum.png",
+      "/static/img/home.png",
+      "/static/img/location.png",
+      "/static/img/logo.png",
+      "/static/img/profile.png",
+      "/static/img/safetypin.png",
+      "/static/img/square.png",
     ])
   );
 });
