@@ -22,6 +22,6 @@ urlpatterns = [
     path('like-comment/<int:pk>/', likeComment, name='likeComment'),
     path('comment/<int:pk>/delete/', deleteComment, name='deleteComment'),
     path('report-comment/<int:pk>/', reportComment, name='reportComment'),
-    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript'))
-
+    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),
+    path('manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json'))
 ]
