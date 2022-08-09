@@ -47,15 +47,15 @@ const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
 };
 
 // Enable navigation preload
-const enableNavigationPreload = async () => {
-  if (self.registration.navigationPreload) {
-    // Enable navigation preloads!
-    await self.registration.navigationPreload.enable();
-  }
-};
+//const enableNavigationPreload = async () => {
+//  if (self.registration.navigationPreload) {
+//    // Enable navigation preloads!
+//    await self.registration.navigationPreload.enable();
+//  }
+//};
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(enableNavigationPreload());
+  console.log('Ready to handle fetches!');
 });
 
 self.addEventListener("install", (event) => {
