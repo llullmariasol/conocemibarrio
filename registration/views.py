@@ -209,8 +209,7 @@ def logIn(request):
 
 def logOut(request):
     logout(request)
-    return HttpResponseRedirect('/')
-
+    # return HttpResponseRedirect('/')
     return render(request, 'base.html', {})
 
 
