@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['conocemibarrio.herokuapp.com']
-CSRF_COOKIE_DOMAIN = '.herokuapp.com'
 
 # Application definition
 
