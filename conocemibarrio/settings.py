@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'pwa',
     'profile',
     'webpush',
+    'realtime_map',
 ]
 
 MIDDLEWARE = [
