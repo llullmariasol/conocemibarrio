@@ -23,7 +23,6 @@
         margin: auto;
     }
 </style>
-
 <h2 class="text-center" style="color: whitesmoke">Respuestas</h2>
 {% for comment in comments %}
     {% if comment.removed == False %}
@@ -85,10 +84,47 @@
     </div>
 {% endfor %}
 
+<input id="author" hidden value="{{ author_user_id }}">
 <div id="respond" class="comment-respond; text-center">
     <form method="post" id="form" class="comment-form">{% csrf_token %}
-        <input class="form-control" required="" placeholder="Tu respuesta" name="content">
+        <!-- <input type="hidden" id="token" name="token" value=""> -->
+        <input class="form-control" required="" placeholder="Tu respuesta" id="content" name="content">
         <br>
-        <button class="btn btn-lg btn-primary btn-block publicar" type="submit">Responder</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Responder</button>
     </form>
 </div>
+
+<script>
+const pushForm = document.getElementById('form');
+const author = document.getElementById('author');
+const content = document.getElementById('content');
+
+pushForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const input = this[0];
+    const textarea = this[1];
+
+    const head = "[conocemibarrio]";
+    const body = '{{ request.user.username }} ' +  "ha comentado tu post";
+    const id = author.value;
+    const text = content.value;
+
+    if (head && body && id) {
+        const res = await fetch('/send_push', {
+            method: 'POST',
+            body: JSON.stringify({head, body, id}),
+            headers: {
+                'content-type': 'application/json'
+            }
+        });
+    }
+
+    $.ajax({
+        type:'POST',
+        url: "/forum/topic/" + {{ post.pk }} + "/",
+        headers: { "X-CSRFToken": '{{csrf_token}}' },
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}', content: text  }
+    });
+    window.location.reload();
+});
+</script>

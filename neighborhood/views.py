@@ -2,7 +2,7 @@ import json
 
 import cloudinary
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.gis.geos import GEOSGeometry
 
@@ -88,14 +88,14 @@ def showPointOfInterestImages(request, pk):
 
 
 @login_required
-def uploadNeighborhoodImage(request):
+def uploadNeighborhoodImage(request, pk):
     context = dict(backend_form=NeighborhoodImageForm())
 
     if request.method == 'POST':
         desc = request.POST.get('image-description')
         archivo = request.FILES['image-file']
 
-        n = Neighborhood.objects.get(user_id=request.user)
+        n = Neighborhood.objects.get(pk=pk)
         neighborhood_image = NeighborhoodImage()
         neighborhood_image.neighborhood = n
         neighborhood_image.image = archivo
@@ -131,9 +131,9 @@ def deleteNeighborhoodImage(request, pk):
 
 
 @login_required
-def addPointOfInterest(request):
+def addPointOfInterest(request, pk):
     args = {}
-    neighborhood = Neighborhood.objects.filter(user=request.user).first()
+    neighborhood = Neighborhood.objects.get(pk=pk)
     shape = GEOSGeometry(neighborhood.shape)
     input_string = shape.geojson
     coordinates_data = json.loads(input_string)
@@ -149,7 +149,7 @@ def addPointOfInterest(request):
         point_of_interest.save()
 
         neighborhood_point_of_interest = NeighborhoodPointOfInterest()
-        neighborhood_point_of_interest.neighborhood = Neighborhood.objects.filter(user=request.user).first()
+        neighborhood_point_of_interest.neighborhood = neighborhood
         neighborhood_point_of_interest.point_of_interest = point_of_interest
         neighborhood_point_of_interest.save()
 
@@ -279,7 +279,7 @@ def neighborhoodProfile(request, pk):
 
     points = []
     for p in points_of_interest:
-        point = PointOfInterest.objects.get(pk=p.pk)
+        point = PointOfInterest.objects.get(pk=p.point_of_interest.id)
         points.append(point)
 
     args['points'] = points

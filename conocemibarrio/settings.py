@@ -25,8 +25,9 @@ SECRET_KEY = 'django-insecure-+gj0caznve=v!w387ens4gnv2qbz5fjbgl%k6efcvb(j+k0$7z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['.herokuapp.com', '127.0.0.1']
 ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://*']
 
 # Application definition
 
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'pwa',
     'profile',
+    'webpush',
 ]
 
 MIDDLEWARE = [
@@ -64,11 +66,14 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
 ]
 
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "BKXmHplx8qZkh8l7DXbfWE-hZr9yllqKYdue0p503DCb_lqgTTpE9QeniXDHuE5jMDJFzHX8p84aODT6npPvP1A",
+    "VAPID_PRIVATE_KEY": "nA8Gielc4rT58SQhIYzuLZ9Vlf35jTIPsLhQfFBMjtM",
+    "VAPID_ADMIN_EMAIL": "conocemibarriorafaela@gmail.com"
+}
+
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SECURE_SSL_REDIRECT = True
-# SECURE_SSL_REDIRECT = False
-# SESSION_COOKIE_SECURE = False
-# CSRF_COOKIE_SECURE = False
 
 ROOT_URLCONF = 'conocemibarrio.urls'
 
@@ -218,16 +223,14 @@ PWA_APP_SCOPE = '/'
 PWA_APP_ICONS = [
     {
         'src': 'static/img/square.png',
-        'sizes': '512x512 192x192',
+        'sizes': '512x512 192x192 144x144',
         "purpose": "maskable any"
     }
 ]
 PWA_APP_ICONS_APPLE = [
     {
         'src': 'static/img/square.png',
-        'sizes': '512x512 192x192',
+        'sizes': '512x512 192x192 144x144',
         "purpose": "maskable any"
     }
 ]
-
-PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'serviceworker.js')

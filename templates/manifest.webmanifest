@@ -1,0 +1,21 @@
+{
+  "name": "conocemibarrio",
+  "short_name": "conocemibarrio",
+  "description": "conocemibarrio app",
+  "icons": [
+    {
+      "src": "static/img/square.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "static/img/square.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone", //fullscreen
+  "theme_color": "#036749",
+  "background_color": "#FFFFFF"
+}

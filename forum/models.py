@@ -2,13 +2,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from ckeditor.fields import RichTextField
 
+from registration.models import Neighborhood
+
+
 class Post(models.Model):
-    tittle = models.CharField(max_length=30)
+    title = models.CharField(max_length=30)
     body = RichTextField(blank=True, null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.title + ' | ' + str(self.author)
+
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,6 +34,7 @@ class Comment(models.Model):
     def total_complaints(self):
         return self.complaints.count()
 
+
 class Complaint(models.Model):
     REASONS = (
         (1, 'Contenido discriminativo'),
@@ -40,3 +46,12 @@ class Complaint(models.Model):
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='reported_comment')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_who_reports')
     reason = models.CharField(choices=REASONS, default=1, max_length=30)
+
+
+class Notification(models.Model):
+    body = models.CharField(max_length=100)
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE)
+    creationDate = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'notification'

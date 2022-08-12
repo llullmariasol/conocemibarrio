@@ -103,6 +103,7 @@
                     $.ajax({
                         method: "POST",
                         url: "/administration/request/" + pk + "/reject/",
+                        headers: { "X-CSRFToken": '{{csrf_token}}' },
                         data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
                     })
                     window.location.href = window.location.href;
@@ -118,6 +119,7 @@
                     $.ajax({
                         method: "POST",
                         url: "/administration/request/" + pk + "/approve/",
+                        headers: { "X-CSRFToken": '{{csrf_token}}' },
                         data: { csrfmiddlewaretoken: '{{ csrf_token }}' }
                     })
                     window.location.href = window.location.href;
