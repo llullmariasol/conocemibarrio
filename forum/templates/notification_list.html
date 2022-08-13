@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<br>
+<h3 class="fw-bold mb-0" style="color:white;">Notificaciones</h3>
+<br>
+<div class="table-responsive" style="background:white;">
+    <table class="table table-hover light" id="images-table">
+        <tbody>
+        {% for n in notifications %}
+        <tr>
+            <td style='text-align:left'>
+                <small style="color:grey;font-size:9px;">
+                    {{ n.creationDate }}
+                </small> &nbsp;
+                <a href="#" style="text-decoration:none; color:black;">
+                    {{ n.body }}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

@@ -3,11 +3,12 @@ from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
+
 from registration.models import UserNeighborhood
 from .models import (
     Post,
     Comment,
-    Complaint,
+    Complaint, Notification,
 )
 from .forms import (
     PostForm,
@@ -15,44 +16,45 @@ from .forms import (
     ComplaintForm,
 )
 
+
 @login_required
 def posts(request):
-    posts = Post.objects.all()
     args = {}
-    found = False
-    users_neighborhoods = UserNeighborhood.objects.all()
-    if users_neighborhoods is not None:
-        for user_neighborhood in users_neighborhoods:
-            if user_neighborhood.user == request.user:
-                found = True
-                # return render(request, 'posts.html', {'posts': posts})
-    if not found:
-        args['error'] = "Para ingresar a esta sección, unite a un barrio de Rafaela!"
-        # return render(request, 'base.html', {'args': args})
-    return render(request, 'posts.html', {'posts': posts,
+    post_list = []
+    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
+    if user_neighborhood is None:
+        args['error'] = "Para ingresar a esta sección, ¡unite a un barrio de Rafaela!"
+    else:
+        post_list = Post.objects.all().filter(neighborhood=user_neighborhood.neighborhood)
+    return render(request, 'posts.html', {'posts': post_list,
                                           'args': args})
+
 
 @login_required
 def addPost(request):
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
+            user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
             forum_post = form.save(commit=False)
             forum_post.author = request.user
+            forum_post.neighborhood = user_neighborhood.neighborhood
             forum_post.save()
-            # redireccionar al detalle después: return redirect('forumpostdetail', pk=forum_post.pk)
             return redirect('forum:posts')
     else:
-        # después del login redireccionar al for
         form = PostForm()
     return render(request, 'form.html', {'form': form})
 
+
 @login_required
 def postDetail(request, pk):
-    post = Post.objects.get(pk = pk)
-    comments = Comment.objects.filter(post = post).annotate(like_count=Count('likes')).order_by('-like_count')
+    post = Post.objects.get(pk=pk)
+    author_user_id = post.author.pk
+    comments = Comment.objects.filter(post=post).annotate(like_count=Count('likes')).order_by('-like_count')
     if request.method == "POST":
         form = CommentForm(data=request.POST)
+        for field in form:
+            print("Field Error:", field.name,  field.errors)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.post = post
@@ -81,14 +83,17 @@ def postDetail(request, pk):
             'form': form,
             'comments': comments,
             'complaints': reported_comments,
+            'author_user_id': author_user_id,
         }
     )
+
 
 @login_required
 def deletePost(request, pk):
     post = Post.objects.get(pk=pk)
     post.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 @login_required
 def likeComment(request, pk):
@@ -99,11 +104,13 @@ def likeComment(request, pk):
         comment.likes.add(request.user)
     return HttpResponseRedirect(reverse('forum:postDetail', args=[str(comment.post.id)]))
 
+
 @login_required
 def deleteComment(request, pk):
     comment = Comment.objects.get(pk=pk)
     comment.delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 @login_required
 def reportComment(request, pk):
@@ -129,3 +136,8 @@ def reportComment(request, pk):
             'comment': comment,
         },
     )
+
+
+def notifications(request):
+    notifications_list = Notification.objects.filter(recipient=request.user).order_by('creationDate').reverse()
+    return render(request, 'notification_list.html', {'notifications': notifications_list})

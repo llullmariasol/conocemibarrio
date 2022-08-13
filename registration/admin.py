@@ -4,6 +4,5 @@ from .models import (
     UserNeighborhood,
 )
 
-# Register your models here.
 admin.site.register(Neighborhood)
 admin.site.register(UserNeighborhood)

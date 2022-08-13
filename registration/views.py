@@ -1,11 +1,11 @@
 import threading
 
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core import mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
@@ -13,7 +13,14 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.views.decorators.http import require_POST
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+from webpush import send_user_notification
+import json
 
+from forum.models import Notification
 from .forms import (RegistrationForm,
                     LogInForm,
                     JoinNeighborhoodForm)
@@ -34,7 +41,8 @@ class EmailThread(threading.Thread):
 
 def home(request):
     args = {}
-
+    webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
+    vapid_key = webpush_settings.get('VAPID_PUBLIC_KEY')
     if request.user.is_authenticated:
         users_neighborhoods = UserNeighborhood.objects.all()
         if users_neighborhoods is not None:
@@ -50,6 +58,7 @@ def home(request):
 
     neighborhoods = Neighborhood.objects.filter(is_active=1)
     args['neighborhoods'] = list(neighborhoods)
+    args['vapid_key'] = vapid_key
 
     return render(request, 'base.html', args)
 
@@ -230,10 +239,12 @@ def joinNeighborhood(request):
     return render(request, 'join_neighborhood.html', args)
 
 
+@login_required
 def administrationRequests(request):
     args = {}
     group = Group.objects.all().filter(name='neighborhood-admin').first()
-    users = group.user_set.all().filter(is_active=0)
+    users = group.user_set.all().filter(is_active=0)  # users que quieren ser administradores de barrios
+    current_neighborhood_admins = list(group.user_set.all().filter(is_active=1))
     users_neighborhoods = UserNeighborhood.objects.all().filter(rejected=0)
     users_list = []
     if len(users) > 0:
@@ -244,10 +255,38 @@ def administrationRequests(request):
             except User.DoesNotExist:
                 pass
 
-    args['users_list'] = users_list
+    # lista de barrios que ya tienen administradores
+    neighborhoods_with_admin = []
+    #recorrer user_neighborhood tabla, si el user id está en current_neighborhood_admins,
+    #agregar el neighborhood id a neighborhoods_with_admin
+    users_neighborhoods_list = list(UserNeighborhood.objects.all())
+    for un in users_neighborhoods_list:
+        for c in current_neighborhood_admins:
+            if un.user.id == c.id:
+                neighborhoods_with_admin.append(un.neighborhood.id)
+
+    new_list = []
+    # si el user de la request es administrador general
+    # recorrer la lista de usuarios y eliminar cuyo barrio ya tiene admin
+    if request.user.is_superuser:
+        for x in users_list:
+            if x.neighborhood.id not in neighborhoods_with_admin:
+                new_list.append(x)
+        args['users_list'] = new_list
+    else:
+        # si el user de la request es administrador de un barrio
+        #buscar solicitudes de ese barrio
+        if request.user.groups.all().exists() and request.user.groups.all()[0].name == "neighborhood-admin":
+            admin = UserNeighborhood.objects.all().filter(user=request.user).first()
+            for y in users_list:
+                if y.neighborhood.id == admin.neighborhood.id:
+                    new_list.append(y)
+
+    args['users_list'] = new_list
     return render(request, 'administration_requests.html', args)
 
 
+@login_required
 def approveAdministrationRequest(request, pk):
     user = User.objects.get(pk=pk)
     user.is_active = True
@@ -292,6 +331,7 @@ def approveAdministrationRequest(request, pk):
     return render(request, 'administration_requests.html', args)
 
 
+@login_required
 def rejectAdministrationRequest(request, pk):
     user = User.objects.get(pk=pk)
     user_neighborhood = UserNeighborhood.objects.all().filter(user=user).first()
@@ -332,3 +372,29 @@ def rejectAdministrationRequest(request, pk):
     args['users_list'] = users_list
 
     return render(request, 'administration_requests.html', args)
+
+
+@require_POST
+@csrf_exempt
+def send_push(request):
+    try:
+        body = request.body
+        data = json.loads(body)
+
+        if 'head' not in data or 'body' not in data or 'id' not in data:
+            return JsonResponse(status=400, data={"message": "Invalid data format"})
+
+        user_id = data['id']
+        user = get_object_or_404(User, pk=user_id)
+        payload = {'head': data['head'], 'body': data['body']}
+        send_user_notification(user=user, payload=payload, ttl=1000)
+
+        if user_id != str(request.user.id):
+            notification = Notification()
+            notification.body = data['body']
+            notification.recipient = user
+            notification.save()
+
+        return JsonResponse(status=200, data={"message": "Web push successful"})
+    except TypeError:
+        return JsonResponse(status=500, data={"message": "An error occurred"})
