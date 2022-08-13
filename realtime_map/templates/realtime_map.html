@@ -72,27 +72,34 @@ const allPoints = listOfObjects.map(point => ({
 
 console.log(allPoints);
 
-map.on('load', function () {
+map.on('load', () => {
     geoTracker._geolocateButton.click();
 
-    map.addSource('points-of-interest', {
-        'type': 'geojson',
-        'data': {
-            'type': 'FeatureCollection',
-            'features': allPoints
-        }
-    });
+    map.loadImage(
+        'https://conocemibarrio.herokuapp.com/static/img/location-pin.png',
+        (error, image) => {
+            if (error) throw error;
+            map.addImage('custom-marker', image);
 
-    map.addLayer({
-        id: 'points',
-        type: 'circle',
-        'source': 'points-of-interest',
-        'paint': {
-            'circle-radius': 6,
-            'circle-color': '#B42222'
-        },
-        'filter': ['==', '$type', 'Point']
-    });
+            map.addSource('points-of-interest', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': allPoints
+                }
+            });
+
+            map.addLayer({
+                'id': 'points',
+                'type': 'symbol',
+                'source': 'points-of-interest',
+                'layout': {
+                    'icon-image': 'custom-marker',
+                    'icon-size': 0.3
+                }
+            });
+        }
+    );
 });
 
 </script>
