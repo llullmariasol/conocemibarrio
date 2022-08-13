@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <style>
     .comment-form {
         width: 100%;
-        max-width: 500px;
         padding: 15px;
         margin: auto;
     }
@@ -22,12 +22,13 @@
     }
 
     .msgs .msg p{
+        color: black;
         margin: 0 0 10px 0;
     }
 
     .leftBubble{
         position: relative;
-        background-color: #fff;
+        background-color: whitesmoke;
         padding: 4px;
         color: #222;
         border-radius: 8px;
@@ -39,19 +40,19 @@
         position: absolute;
 
         top: 5px;
-        left: -15px;
+        left: -11px;
 
         width: 0;
         height: 0;
         border-top: 13px solid transparent;
         border-bottom: 13px solid transparent;
 
-        border-right: 15px solid #fff;
+        border-right: 15px solid whitesmoke;
     }
 
     .rightBubble{
         position: relative;
-        background-color: #e8ecf1;
+        background-color: mistyrose;
         padding: 4px;
         color: #222;
         border-radius: 8px;
@@ -62,7 +63,7 @@
         position: absolute;
 
         top: 5px;
-        right: -25px;
+        right: -23px;
 
         width: 0;
         height: 0;
@@ -70,12 +71,7 @@
         border-color: transparent;
         border-width: 13px 13px 13px 13px;
 
-        border-left-color: #e8ecf1;
-    }
-
-    .container-text{
-        position: relative;
-        text-align:center;
+        border-left-color: mistyrose;
     }
 
     .text{
@@ -92,61 +88,67 @@
         float: right;
     }
 
-    .messages{
-        margin-left: 5%;
-        margin-right: 5%;
+    #global {
+        width: 90%;
+        background: #036749;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 </style>
 
-<h2 class="text-center" style="color: whitesmoke">Chat</h2>
-<div class="container-text">
-    <div class="messages">
-        <div class="alert alert-warning" role="alert">
-            {% for message in msgs %}
-            <div class="container">
-                <div class="row">
-                    {% if message.user == request.user %}
-                    <div class="right">
-                        <div class="msgs">
-                            <div class="text-right">
-                                <small><strong>Tu</strong></small>
-                            </div>
-                            <div class="msg rightBubble">
-                                <p>{{ message.message|linebreaks }}</p>
-                            </div>
-                            <div class="text-right">
-                                <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
+<div id="respond" class="text">
+    <h2 class="text-center" style="color: whitesmoke">Chat Barrio {{ neighbothood.name }}</h2>
+    <br>
+    <div id="global" class="container">
+        {% for message in msgs %}
+            <div class="row">
+                {% if message.user == request.user %}
+                <div class="right">
                     <div class="msgs">
-                        <div class="text-left">
-                            <small><strong>{{ message.user }}</strong></small>
+                        <div class="text-right">
+                            <small><strong>Tu</strong></small>
                         </div>
-                        <div class="msg leftBubble">
+                        <div class="msg rightBubble">
                             <p>{{ message.message|linebreaks }}</p>
                         </div>
-                        <div class="text-left">
+                        <div class="text-right">
                             <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
                         </div>
                     </div>
-                    {% endif %}
                 </div>
+                {% else %}
+                <div class="msgs">
+                    <div class="text-left">
+                        <small><strong>{{ message.user }}</strong></small>
+                    </div>
+                    <div class="msg leftBubble">
+                        <p>{{ message.message|linebreaks }}</p>
+                    </div>
+                    <div class="text-left">
+                        <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
+                    </div>
+                </div>
+                {% endif %}
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 
-    <div id="respond" class="text">
-        <form method="post" id="form" class="comment-form">{% csrf_token %}
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Escribe aqui..." name="message">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-light" type="submit">Enviar</button>
-                </div>
+    <form method="post" id="form" class="comment-form">{% csrf_token %}
+        <div class="input-group mb-3" style="width: 100%">
+            <input type="text" class="form-control" placeholder="Escribe aqui..." name="message">
+            <div class="input-group-append">
+                <button id="animado" class="btn btn-outline-light" type="submit">Enviar</button>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $("#global").animate({ scrollTop: 1000000000 }, "fast");
+    });
+    var height = $(window).height();
+    var percentage = (40*height)/100;
+    $('#global').height(height-percentage);
+</script>
 {% endblock content %}

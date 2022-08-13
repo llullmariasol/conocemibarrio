@@ -26,5 +26,6 @@ def chat(request):
         {
             'form': form,
             'msgs': messages,
+            'neighbothood': neighborhood,
         },
     )
