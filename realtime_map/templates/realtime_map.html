@@ -9,23 +9,42 @@
     <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css" rel="stylesheet">
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.js"></script>
     <style>
-body { margin: 0; padding: 0; }
-#map { position: absolute; top: 0; bottom: 0; width: 100%; }
-#map-container {
-        position:relative;
-        height: 100%;
-        width: 100%;
-        left:2px;
-         right:2px;
-        margin-right: auto;
-         margin-left: auto;
+    body { margin: 0; padding: 0; }
+    #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+    .mapboxgl-marker:hover {
+    cursor: pointer;
     }
-</style>
+
+    #map-container {
+            position:relative;
+            height: 100%;
+            width: 100%;
+            left:2px;
+             right:2px;
+            margin-right: auto;
+             margin-left: auto;
+        }
+
+    #info-box {
+    position: absolute;
+    z-index: 10;
+    left: 7px;
+    font-family: sans-serif;
+    background: #dedede;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 2rem;
+    border: 1px solid #969696;
+    bottom: 34px;
+    }
+    </style>
 </head>
 <body>
 <div id="map-container">
     <div id="map"></div>
 </div>
+<div id="info-box">Click a City</div>
 <script>
 	mapboxgl.accessToken = 'pk.eyJ1IjoibGx1bGxtYXJpYXNvbCIsImEiOiJjbDFteGZ5YnowMzRuM2RvNTVjYXNoOXJqIn0.T0K0fWkWlBEsqTDKXw6Qyw';
     const map = new mapboxgl.Map({
@@ -74,34 +93,37 @@ console.log(allPoints);
 
 map.on('load', () => {
     geoTracker._geolocateButton.click();
-
-    map.loadImage(
-        'https://conocemibarrio.herokuapp.com/static/img/location-pin.png',
-        (error, image) => {
-            if (error) throw error;
-            map.addImage('custom-marker', image);
-
-            map.addSource('points-of-interest', {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': allPoints
-                }
-            });
-
-            map.addLayer({
-                'id': 'points',
-                'type': 'symbol',
-                'source': 'points-of-interest',
-                'layout': {
-                    'icon-image': 'custom-marker',
-                    'icon-size': 0.3
-                }
-            });
-        }
-    );
 });
 
+// extend mapboxGL Marker so we can pass in an onClick handler
+class ClickableMarker extends mapboxgl.Marker {
+  // new method onClick, sets _handleClick to a function you pass in
+  onClick(handleClick) {
+    this._handleClick = handleClick;
+    return this;
+  }
+
+  // the existing _onMapClick was there to trigger a popup
+  // but we are hijacking it to run a function we define
+  _onMapClick(e) {
+    const targetElement = e.originalEvent.target;
+    const element = this._element;
+
+    if (this._handleClick && (targetElement === element || element.contains((targetElement)))) {
+      this._handleClick();
+    }
+  }
+};
+
+listOfObjects.forEach((punto) => {
+  new ClickableMarker({ "color": "#036749" })
+    .setLngLat(punto.location)
+    .onClick(() => { // onClick() is a thing now!
+      document.getElementById('info-box')
+        .innerHTML = `You clicked ${punto.name}!`;
+    })
+    .addTo(map);
+});
 </script>
 
 </body>
