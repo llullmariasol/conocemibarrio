@@ -35,7 +35,7 @@
     padding: 12px;
     border-radius: 8px;
     font-size: 10px;
-    border: 1px solid #036749;
+    border: white;
     bottom: 34px;
     height: 20%;
     width: 50%;
@@ -65,12 +65,12 @@
             <div>
                 <div align="left" style="display: inline-block; width:50%; float:left;">
                     <strong>
-                        <a href="/" style="color:#036749; text-decoration: none;">Ver más</a>
+                        <a id="ver-mas" href="#" style="color:#036749; text-decoration: none;">Ver más</a>
                     </strong>
                 </div>
                 <div align="right" style="display: inline-block; width:50%; float:right;">
                     <strong>
-                        <a onclick="document.getElementById('info-box').hidden = true;" style="color:grey; text-decoration: none;">Cerrar</a>
+                        <a onclick="document.getElementById('info-box').hidden = true;" style="color:grey; text-decoration: none; cursor: pointer;">Cerrar</a>
                     </strong>
                 </div>
             </div>
@@ -153,6 +153,9 @@ listOfObjects.forEach((point) => {
   new ClickableMarker({ "color": "#036749" })
     .setLngLat(point.location)
     .onClick(() => { // onClick() is a thing now!
+        let pointId = point.id;
+        console.log(pointId);
+        document.getElementById("ver-mas").href = '/point_of_interest/' + pointId + '/profile/';
         document.getElementById("info-box").hidden = false;
         document.getElementById('point-name')
             .innerHTML = `${point.name}`;
