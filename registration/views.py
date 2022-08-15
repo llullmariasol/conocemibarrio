@@ -16,7 +16,7 @@ from django.contrib.auth.models import Group
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from webpush import send_user_notification
 import json
 
@@ -181,6 +181,7 @@ def activation(request, uidb64, token):
     return render(request, 'base.html', {})
 
 
+@csrf_protect
 def logIn(request):
     args = {}
     valueNext = request.POST.get('next')
