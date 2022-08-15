@@ -33,5 +33,6 @@ urlpatterns = [
     path('chat/', include('chat.urls')),
     path('send_push', send_push),
     path('webpush/', include('webpush.urls')),
-    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript'))
+    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),
+    path('', include('realtime_map.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
