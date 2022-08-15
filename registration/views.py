@@ -201,9 +201,9 @@ def logIn(request):
                     if valueNext:
                         return HttpResponseRedirect(valueNext)
                     else:
-                        return HttpResponseRedirect('/')
+                        return render(request, 'base.html', {})
                 else:
-                    return HttpResponseRedirect('/')
+                    return render(request, 'base.html', {})
     else:
         form = LogInForm()
 
