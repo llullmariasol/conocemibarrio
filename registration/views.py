@@ -181,7 +181,7 @@ def activation(request, uidb64, token):
     return render(request, 'base.html', {})
 
 
-@csrf_protect
+@csrf_exempt
 def logIn(request):
     args = {}
     valueNext = request.POST.get('next')
