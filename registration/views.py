@@ -1,6 +1,6 @@
 import threading
 
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -188,18 +188,22 @@ def logIn(request):
     if request.method == "POST":
         form = LogInForm(request.POST)
         if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
+            # username = request.POST['username']
+            # password = request.POST['password']
+            # user = authenticate(request, username=username, password=password)
+            user = auth.authenticate(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data["password"]
+            )
             if user is not None:
                 if user.is_active:
-                    login(request, user)
+                    auth.login(request, user)
                     if valueNext:
                         return HttpResponseRedirect(valueNext)
                     else:
                         return HttpResponseRedirect('/')
                 else:
-                    return HttpResponseRedirect('/home')
+                    return HttpResponseRedirect('/')
     else:
         form = LogInForm()
 
