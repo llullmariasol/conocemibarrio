@@ -36,3 +36,10 @@ class NeighborhoodPointOfInterest(models.Model):
 
     class Meta:
         db_table = 'neighborhood_point_of_interest'
+
+
+class PointOfInterestDTO:
+    id = models.IntegerField()
+    name = models.CharField(max_length=45)
+    location = []
+    description = models.TextField(default='')

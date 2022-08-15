@@ -34,3 +34,5 @@ django-on-heroku==1.1.2
 django-ckeditor==6.4.2
 django-pwa==1.0.10
 django-webpush==0.3.4
+
+numpy~=1.23.1
