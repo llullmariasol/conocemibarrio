@@ -101,3 +101,9 @@ self.addEventListener('push', function (event) {
         })
     );
 });
+
+self.addEventListener('notificationclick', function(event) {
+  var body = event.notification.body;
+  console.log("Click en notificación")
+  console.log(body);
+});
