@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <style>
@@ -17,8 +17,14 @@
         width: 100%;
     }
 
-    .msgs .msg{
-        width: 100%;
+    .msgs .right-msg{
+        float: left;
+        width: 80%;
+    }
+
+    .msgs .left-msg{
+        float: right;
+        width: 80%;
     }
 
     .msgs .msg p{
@@ -29,7 +35,7 @@
     .leftBubble{
         position: relative;
         background-color: whitesmoke;
-        padding: 4px;
+        padding: 1px;
         color: #222;
         border-radius: 8px;
     }
@@ -53,7 +59,7 @@
     .rightBubble{
         position: relative;
         background-color: mistyrose;
-        padding: 4px;
+        padding: 1px; /* ancho mensaje */
         color: #222;
         border-radius: 8px;
     }
@@ -62,14 +68,14 @@
         content: "";
         position: absolute;
 
-        top: 5px;
+        top: 5px; /* distancia del piquito */
         right: -23px;
 
         width: 0;
         height: 0;
         border-style: solid;
         border-color: transparent;
-        border-width: 13px 13px 13px 13px;
+        border-width: 13px 13px 13px 13px; /* forma del piquito */
 
         border-left-color: mistyrose;
     }
@@ -94,6 +100,36 @@
         overflow-y: scroll;
         overflow-x: hidden;
     }
+
+    .circle-img-right {
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        margin-left: auto;
+        float: right;
+    }
+
+    .circle-img-right img {
+        height: 100%;
+        margin-left: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .circle-img-left {
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        margin-right: auto;
+        float: left;
+    }
+
+    .circle-img-left img {
+        height: 100%;
+        margin-left: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 
 <div id="respond" class="text">
@@ -108,25 +144,39 @@
                         <div class="text-right">
                             <small><strong>Tu</strong></small>
                         </div>
-                        <div class="msg rightBubble">
+                        <div class="circle-img-right rounded-circle">
+                            {% if message.user.profile.avatar.url == None %}
+                                <img src="{% static '/img/default.jpeg' %}" style="cursor: pointer;"/>
+                            {% else %}
+                                <img src="{{ user.profile.avatar.url }}" style="cursor: pointer;"/>
+                            {% endif %}
+                        </div>
+                        <div class="right-msg rightBubble">
                             <p>{{ message.message|linebreaks }}</p>
                         </div>
-                        <div class="text-right">
-                            <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
-                        </div>
                     </div>
+                </div>
+                <div class="text-right">
+                    <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
                 </div>
                 {% else %}
                 <div class="msgs">
                     <div class="text-left">
                         <small><strong>{{ message.user }}</strong></small>
                     </div>
-                    <div class="msg leftBubble">
+                    <div class="circle-img-left rounded-circle">
+                        {% if message.user.profile.avatar.url == None %}
+                            <img src="{% static '/img/default.jpeg' %}" style="cursor: pointer;"/>
+                        {% else %}
+                            <img src="{{ user.profile.avatar.url }}" style="cursor: pointer;"/>
+                        {% endif %}
+                    </div>
+                    <div class="left-msg leftBubble">
                         <p>{{ message.message|linebreaks }}</p>
                     </div>
-                    <div class="text-left">
-                        <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
-                    </div>
+                </div>
+                <div class="text-left">
+                    <small style="font-size: x-small">{{ message.time.time }} {{ message.time.day }}/{{ message.time.month }}</small>
                 </div>
                 {% endif %}
             </div>
