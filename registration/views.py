@@ -1,6 +1,6 @@
 import threading
 
-from django.contrib import messages
+from django.contrib import messages, auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
@@ -16,7 +16,7 @@ from django.contrib.auth.models import Group
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from webpush import send_user_notification
 import json
 
@@ -181,24 +181,26 @@ def activation(request, uidb64, token):
     return render(request, 'base.html', {})
 
 
+@csrf_exempt
 def logIn(request):
     args = {}
     valueNext = request.POST.get('next')
     if request.method == "POST":
         form = LogInForm(request.POST)
         if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(request, username=username, password=password)
+            user = auth.authenticate(
+                username=form.cleaned_data["username"],
+                password=form.cleaned_data["password"]
+            )
             if user is not None:
                 if user.is_active:
-                    login(request, user)
+                    auth.login(request, user)
                     if valueNext:
                         return HttpResponseRedirect(valueNext)
                     else:
                         return HttpResponseRedirect('/')
                 else:
-                    return HttpResponseRedirect('/home')
+                    return HttpResponseRedirect('/')
     else:
         form = LogInForm()
 
