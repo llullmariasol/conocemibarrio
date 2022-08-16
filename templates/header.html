@@ -6,7 +6,7 @@
                 <img src="{% static '/img/logo.png' %}" width="100%">
             </a>
         </div>
-        {% if request.path == '/login/' %}
+        {% if 'login' in request.path %}
         <ul class="nav nav-pills">
             <li class="nav-item">
             </li>
