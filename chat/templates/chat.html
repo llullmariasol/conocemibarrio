@@ -148,7 +148,7 @@
                             {% if message.user.profile.avatar.url == None %}
                                 <img src="{% static '/img/default.jpeg' %}" style="cursor: pointer;"/>
                             {% else %}
-                                <img src="{{ user.profile.avatar.url }}" style="cursor: pointer;"/>
+                                <img src="{{ message.user.profile.avatar.url }}" style="cursor: pointer;"/>
                             {% endif %}
                         </div>
                         <div class="right-msg rightBubble">
@@ -168,7 +168,7 @@
                         {% if message.user.profile.avatar.url == None %}
                             <img src="{% static '/img/default.jpeg' %}" style="cursor: pointer;"/>
                         {% else %}
-                            <img src="{{ user.profile.avatar.url }}" style="cursor: pointer;"/>
+                            <img src="{{ message.user.profile.avatar.url }}" style="cursor: pointer;"/>
                         {% endif %}
                     </div>
                     <div class="left-msg leftBubble">
