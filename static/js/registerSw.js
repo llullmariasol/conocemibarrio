@@ -85,8 +85,7 @@ const initialiseState = (registration) => {
         console.log('Push is not allowed in your browser');
         return
     }
-    subscribe(registration);
-
+    //subscribe(registration);
     // Use serviceWorker.ready to ensure that you can subscribe for push
     navigator.serviceWorker.ready.then(
       (registration) => {
