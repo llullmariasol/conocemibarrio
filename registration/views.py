@@ -188,9 +188,6 @@ def logIn(request):
     if request.method == "POST":
         form = LogInForm(request.POST)
         if form.is_valid():
-            # username = request.POST['username']
-            # password = request.POST['password']
-            # user = authenticate(request, username=username, password=password)
             user = auth.authenticate(
                 username=form.cleaned_data["username"],
                 password=form.cleaned_data["password"]
