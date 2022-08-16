@@ -86,47 +86,74 @@ const initialiseState = (registration) => {
         return
     }
     subscribe(registration);
+
+    // Use serviceWorker.ready to ensure that you can subscribe for push
+    navigator.serviceWorker.ready.then(
+      (registration) => {
+        const vapidMeta = document.querySelector('meta[name="vapid-key"]');
+        const key = vapidMeta.content;
+        console.log(key);
+        const options = {
+          userVisibleOnly: true,
+          applicationServerKey: urlB64ToUnit8Array(key),
+        };
+        registration.pushManager.subscribe(options).then(
+          (pushSubscription) => {
+            console.log(pushSubscription.endpoint);
+            // The push subscription details needed by the application
+            // server are now available, and can be sent to it using,
+            // for example, an XMLHttpRequest.
+          }, (error) => {
+            // During development it often helps to log errors to the
+            // console. In a production environment it might make sense to
+            // also report information about errors back to the
+            // application server.
+            console.error(error);
+          }
+        );
+      });
+
 }
 
-const subscribe = async (registration) => {
-    const subscription = await registration.pushManager.getSubscription();
-    if (subscription) {
-        sendSubData(subscription);
-        return;
-    }
+//const subscribe = async (registration) => {
+//    const subscription = await registration.pushManager.getSubscription();
+//    if (subscription) {
+//        sendSubData(subscription);
+//        return;
+//    }
+//
+//    const vapidMeta = document.querySelector('meta[name="vapid-key"]');
+//    const key = vapidMeta.content;
+//    const sub = await registration.pushManager.subscribe({
+//        userVisibleOnly: true,
+//        applicationServerKey: urlB64ToUnit8Array(key)
+//        });
+//
+//    sendSubData(sub)
+//};
 
-    const vapidMeta = document.querySelector('meta[name="vapid-key"]');
-    const key = vapidMeta.content;
-    const sub = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlB64ToUnit8Array(key)
-        });
+//const sendSubData = async (subscription) => {
+//    const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
+//    const data = {
+//        status_type: 'subscribe',
+//        subscription: subscription.toJSON(),
+//        browser: browser,
+//    };
+//
+//    const res = await fetch('/webpush/save_information', {
+//        method: 'POST',
+//        body: JSON.stringify(data),
+//        headers: {
+//            'content-type': 'application/json'
+//        },
+//        credentials: "include"
+//    });
+//
+//    handleResponse(res);
+//};
 
-    sendSubData(sub)
-};
-
-const sendSubData = async (subscription) => {
-    const browser = navigator.userAgent.match(/(firefox|msie|chrome|safari|trident)/ig)[0].toLowerCase();
-    const data = {
-        status_type: 'subscribe',
-        subscription: subscription.toJSON(),
-        browser: browser,
-    };
-
-    const res = await fetch('/webpush/save_information', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'content-type': 'application/json'
-        },
-        credentials: "include"
-    });
-
-    handleResponse(res);
-};
-
-const handleResponse = (res) => {
-    console.log(res.status);
-};
+//const handleResponse = (res) => {
+//    console.log(res.status);
+//};
 
 registerServiceWorker();
