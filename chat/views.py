@@ -7,12 +7,17 @@ from registration.models import Neighborhood, UserNeighborhood
 @login_required
 def chat(request):
     user = request.user
-    user_neighborhood = UserNeighborhood.objects.get(user_id=user.pk)
-    neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
     try:
-        neighborhood_chat = NeighborhoodChat.objects.get(neighborhood=neighborhood)
-    except neighborhood_chat.DoesNotExist:
-        neighborhood_chat = NeighborhoodChat(neighborhood=neighborhood)
+        user_neighborhood = UserNeighborhood.objects.get(user_id=user.pk)
+    except UserNeighborhood.DoesNotExist:
+        return render(
+            request,
+            'join_a_neighborhood.html',
+            {'function': "chat barrial"}
+        )
+    neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
+    neighborhood_chat, created = NeighborhoodChat.objects.get_or_create(neighborhood=neighborhood)
+    if created:
         neighborhood_chat.save()
     messages = Message.objects.filter(chat=neighborhood_chat)
     if(request.method == 'POST'):
