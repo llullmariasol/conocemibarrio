@@ -57,7 +57,7 @@ function urlB64ToUnit8Array(base64String) {
 const registerServiceWorker = async () => {
   if ('serviceWorker' in navigator) {
     try {
-      const registration = await navigator.serviceWorker.register('/sw.js');
+      const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/'});
       initialiseState(registration);
       if (registration.installing) {
         console.log('Service worker installing');
