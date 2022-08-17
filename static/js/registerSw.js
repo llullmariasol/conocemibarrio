@@ -89,11 +89,9 @@ const initialiseState = (registration) => {
     // Use serviceWorker.ready to ensure that you can subscribe for push
     navigator.serviceWorker.ready.then(
       (registration) => {
-        const vapidMeta = document.querySelector('meta[name="vapid-key"]');
-        const key = vapidMeta.content;
-        console.log(key);
         const options = {
           userVisibleOnly: true,
+          applicationServerKey: urlB64ToUnit8Array('BOa-DtP0ktSOXAwtBLz2aAZVGavW-RlISU6annk3V-1YysTP_nT4Ztzqz1b2FREwQYy66KaNKGsPI9uS3kNWKR8'),
         };
         registration.pushManager.subscribe(options).then(
           (pushSubscription) => {
