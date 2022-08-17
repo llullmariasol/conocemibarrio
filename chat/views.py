@@ -9,8 +9,9 @@ def chat(request):
     user = request.user
     user_neighborhood = UserNeighborhood.objects.get(user_id=user.pk)
     neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
-    neighborhood_chat = NeighborhoodChat.objects.get(neighborhood=neighborhood)
-    if (neighborhood_chat == None):
+    try:
+        neighborhood_chat = NeighborhoodChat.objects.get(neighborhood=neighborhood)
+    except neighborhood_chat.DoesNotExist:
         neighborhood_chat = NeighborhoodChat(neighborhood=neighborhood)
         neighborhood_chat.save()
     messages = Message.objects.filter(chat=neighborhood_chat)
