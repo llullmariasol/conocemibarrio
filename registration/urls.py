@@ -21,6 +21,7 @@ urlpatterns = [
     path('registration/neighborhood/admin/', registrationNeighborhoodAdmin, name='registrationNeighborhoodAdmin'),
     path('activation/<uidb64>/<token>/', activation, name='activation'),
     path('login/', logIn, name='logIn'),
+    path('login/manifest.json', TemplateView.as_view(template_name='manifest.json', content_type='application/json')),
     path('logout/', logOut, name='logOut'),
     path('password_reset/',
          auth_views.PasswordResetView.as_view(
