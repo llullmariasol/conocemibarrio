@@ -1,16 +1,26 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
 <br/>
-<br/>
-<div class="container">
-    <div class="jumbotron">
-        <h1 class="display-4">{{ post.title }}</h1>
-        <p class="lead">Por <strong>{{ post.author }}</strong></p>
-        <hr class="my-4" color="#000000">
-        {{ post.body | safe }}
-        <a class="btn btn-primary btn-lg" href="{% url 'forum:posts' %}" role="button">Volver</a>
+
+<div class="modal modal-signin position-static d-block py-4" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;" >
+    <div style="width: 90%; margin-right: auto;
+             margin-left: auto;">
+        <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-7 border-bottom-0">
+                <h4 class="fw-bold mb-0">
+                    <a href="{% url 'forum:postDetail' post.pk %}" onmouseover="this.style.color='#036749'"
+                       onMouseOut="this.style.color='black'" style="color:black;">{{ post.title }}</a>
+                </h4>
+            </div>
+            <p style="font-size:9px; color:black;">Por <strong>{{ post.author }}</strong></p>
+            <hr style="margin:8px 15px">
+            <div class="modal-body p-7 pt-7">
+                {{ post.body | safe }}
+            </div>
+        </div>
     </div>
 </div>
 
