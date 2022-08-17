@@ -94,7 +94,6 @@ const initialiseState = (registration) => {
         console.log(key);
         const options = {
           userVisibleOnly: true,
-          applicationServerKey: urlB64ToUnit8Array(key),
         };
         registration.pushManager.subscribe(options).then(
           (pushSubscription) => {
