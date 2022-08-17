@@ -10,6 +10,9 @@ def chat(request):
     user_neighborhood = UserNeighborhood.objects.get(user_id=user.pk)
     neighborhood = Neighborhood.objects.get(pk=user_neighborhood.neighborhood.pk)
     neighborhood_chat = NeighborhoodChat.objects.get(neighborhood=neighborhood)
+    if (neighborhood_chat == None):
+        neighborhood_chat = NeighborhoodChat(neighborhood=neighborhood)
+        neighborhood_chat.save()
     messages = Message.objects.filter(chat=neighborhood_chat)
     if(request.method == 'POST'):
         form = MessageForm(data=request.POST)
