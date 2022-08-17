@@ -12,6 +12,4 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     chat = models.ForeignKey(NeighborhoodChat, on_delete=models.CASCADE)
     message = models.CharField(max_length=255, blank=True)
-    image = models.ImageField(upload_to="messages_images", blank=True)
-    file = models.FileField(upload_to="messages_files", blank=True)
     time = models.DateTimeField(default=timezone.now)
