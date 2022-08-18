@@ -27,6 +27,17 @@
      .wrap{
      width:100%;
      }
+
+         .btn-outline-dark {
+          color: black;
+          border-color: white;
+          background-color: white;
+        }
+        .btn-outline-dark:hover {
+          color: white;
+          background-color: black;
+          border-color: black;
+        }
 </style>
 {% for comment in comments %}
     {% if comment.removed == False %}
@@ -113,7 +124,7 @@
             <form method="post" id="form" class="comment-form">{% csrf_token %}
                 <input class="form-control" required="" placeholder="Tu respuesta" id="content" name="content">
                 <br>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Responder</button>
+                <button class="btn btn-outline-dark" type="submit" style="width:100%;">Responder</button>
             </form>
         </div>
     </div>
