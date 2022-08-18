@@ -24,6 +24,3 @@ class UserNeighborhood(models.Model):
 
     class Meta:
         db_table = 'user_neighborhood'
-
-    def __str__(self):
-        return self.user.name + ' | ' + self.neighborhood.name
