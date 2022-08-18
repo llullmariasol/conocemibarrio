@@ -151,6 +151,6 @@ pushForm.addEventListener('submit', async function (e) {
         headers: { "X-CSRFToken": '{{csrf_token}}' },
         data: { csrfmiddlewaretoken: '{{ csrf_token }}', content: text  }
     });
-    window.location.href = window.location.href;
+    window.location.reload();
 });
 </script>
