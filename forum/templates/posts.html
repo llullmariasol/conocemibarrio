@@ -22,33 +22,7 @@
     }
 </style>
 
-{% if args.error %}
-    <br>
-    <br>
-    <button type="button" class="btn btn-info btn-lg" id="myBtn">Mostrar foros</button>
-    <div class="modal fade" id="myModal" role="dialog">
-        <div class="modal-dialog">
-
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Lo sentimos, no puedes ingresar</h4>
-                </div>
-                <div class="modal-body">
-                    <p>{{ args.error }}</p>
-                </div>
-                <div class="modal-footer">
-                    <a class="btn btn-primary" href="{% url 'registration:joinNeighborhood' %}" role="button">Unirme</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-{% else %}
-
-    {% if request.user.is_authenticated and user.is_superuser != 1 and user.groups.all.0.name != "neighborhood-admin" %}
+{% if request.user.is_authenticated and user.is_superuser != 1 and user.groups.all.0.name != "neighborhood-admin" %}
     <br/>
     <div class="container">
         <h1>Foros</h1>
@@ -81,14 +55,5 @@
     <br/>
     {% endfor %}
     <br/>
-    {% endif %}
 {% endif %}
-
-<script>
-    $(document).ready(function(){
-        $("#myBtn").click(function(){
-            $("#myModal").modal();
-        });
-    });
-</script>
 {% endblock content %}

@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'pwa',
     'profile',
+    'chat',
     'webpush',
     'realtime_map',
 ]
