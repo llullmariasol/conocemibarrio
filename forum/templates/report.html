@@ -2,24 +2,26 @@
 <script type="text/javascript" src="lib.js"></script>
 {% block content %}
 <style>
-    h2 {
-        font-family: "Trebuchet MS", Verdana, sans-serif;
-        color: white;
-    }
-    p {
-        font-family: "Trebuchet MS", Verdana, sans-serif;
-        font-size: large;
-        font-weight: bold;
-    }
+        .btn-outline-dark {
+          color: black;
+          border-color: white;
+          background-color: white;
+        }
+        .btn-outline-dark:hover {
+          color: white;
+          background-color: black;
+          border-color: black;
+        }
 </style>
 <div class="text-center">
     <form action="" method="POST" class="post-form">{% csrf_token %}
         <br>
-        <h2>Elija un motivo de denuncia</h2>
+        <h4 style="color:white;">Elija un motivo de denuncia</h4>
+        <br>
         {{ form.reason }}
         <br>
         <br>
-        <a class="btn btn-secondary" type="button" value="Cancelar" href="{% url 'forum:postDetail' comment.post.pk %}">Cancelar</a>
+        <a class="btn btn-outline-dark" role="button" value="Cancelar" href="{% url 'forum:postDetail' comment.post.pk %}">Cancelar</a>
         <button class="btn btn-danger btn-denunciar" type="submit" value="Denunciar">Denunciar</button>
         <br>
         <br>
