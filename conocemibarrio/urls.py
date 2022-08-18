@@ -30,6 +30,7 @@ urlpatterns = [
     path('notifications/', notifications, name='notifications'),
     path('', include('pwa.urls')),
     path('', include('profile.urls')),
+    path('chat/', include('chat.urls')),
     path('send_push', send_push),
     path('webpush/', include('webpush.urls')),
     path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/x-javascript')),

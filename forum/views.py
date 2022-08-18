@@ -19,15 +19,16 @@ from .forms import (
 
 @login_required
 def posts(request):
-    args = {}
-    post_list = []
-    user_neighborhood = UserNeighborhood.objects.all().filter(user=request.user).first()
-    if user_neighborhood is None:
-        args['error'] = "Para ingresar a esta sección, ¡unite a un barrio de Rafaela!"
-    else:
-        post_list = Post.objects.all().filter(neighborhood=user_neighborhood.neighborhood)
-    return render(request, 'posts.html', {'posts': post_list,
-                                          'args': args})
+    try:
+        user_neighborhood = UserNeighborhood.objects.get(user=request.user)
+    except UserNeighborhood.DoesNotExist:
+        return render(
+            request,
+            'join_a_neighborhood.html',
+            {'function': "foro"}
+        )
+    post_list = Post.objects.all().filter(neighborhood=user_neighborhood.neighborhood)
+    return render(request, 'posts.html', {'posts': post_list})
 
 
 @login_required
