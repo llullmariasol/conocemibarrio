@@ -105,7 +105,9 @@ body { margin: 0; padding: 0; }
             <div class="modal-header p-5 pb-4 border-bottom-0">
                 <h2 class="fw-bold mb-0">{{ point.name }}</h2>
             </div>
+
             <div class="modal-body p-5 pt-0">
+                {% if images.count > 0 %}
                 <div style="display: flex; position: relative; width:100%; height:200px; background-color:white; object-fit: contain; ">
                     <div class="carousel" data-carousel>
                         <button class="carousel-button prev" data-carousel-button="prev">
@@ -132,6 +134,7 @@ body { margin: 0; padding: 0; }
                 </div>
                 <br>
                 <hr>
+                {% endif %}
                 <div>
                     <p style="text-align:justify;">{{ point.description }}</p>
                 </div>
