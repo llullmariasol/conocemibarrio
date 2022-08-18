@@ -11,6 +11,9 @@ class NeighborhoodImage(models.Model):
     class Meta:
         db_table = 'neighborhood_image'
 
+    def __str__(self):
+        return self.neighborhood.name + ' | ' + self.description
+
 
 class PointOfInterest(models.Model):
     name = models.CharField(max_length=45)
@@ -19,6 +22,9 @@ class PointOfInterest(models.Model):
 
     class Meta:
         db_table = 'point_of_interest'
+
+    def __str__(self):
+        return self.name
 
 
 class PointOfInterestImage(models.Model):
@@ -29,6 +35,9 @@ class PointOfInterestImage(models.Model):
     class Meta:
         db_table = 'point_of_interest_image'
 
+    def __str__(self):
+        return self.point_of_interest.name + ' | ' + self.description
+
 
 class NeighborhoodPointOfInterest(models.Model):
     neighborhood = models.ForeignKey(Neighborhood, on_delete=models.CASCADE, db_constraint=False, null=True)
@@ -36,6 +45,9 @@ class NeighborhoodPointOfInterest(models.Model):
 
     class Meta:
         db_table = 'neighborhood_point_of_interest'
+
+    def __str__(self):
+        return self.neighborhood.name + ' | ' + self.point_of_interest.name
 
 
 class PointOfInterestDTO:
