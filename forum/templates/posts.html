@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block content %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -9,51 +10,98 @@
 <style>
     .btn-primary {
         color: white;
-        background-color: darkslategrey;
+        background-color: black;
         border-color: white;
+        width:100%;
     }
     .btn-primary:hover {
         color: white;
-        background-color: lightslategrey;
-        border-color: #fff;
+        background-color: #036749;
+        border-color: white;
     }
-    h1 {
+    h1, h2 {
         color: white;
     }
+
+    .btn-outline-dark {
+          color: black;
+          border-color: white;
+          background-color: white;
+        }
+        .btn-outline-dark:hover {
+          color: white;
+          background-color: black;
+          border-color: black;
+        }
 </style>
 
-{% if request.user.is_authenticated and user.is_superuser != 1 and user.groups.all.0.name != "neighborhood-admin" %}
-    <br/>
-    <div class="container">
-        <h1>Foros</h1>
-        <a class="btn btn-primary btn-lg" href="{% url 'forum:addPost' %}" role="button" style="width:100%">Crear un tema</a>
-    </div>
+{% if args.error %}
+    <br>
+    <br>
+    <button type="button" class="btn btn-info btn-lg" id="myBtn">Mostrar foros</button>
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
 
-    <br/>
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Lo sentimos, no puedes ingresar</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{{ args.error }}</p>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" href="{% url 'registration:joinNeighborhood' %}" role="button">Unirme</a>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% else %}
+
+    {% if request.user.is_authenticated and user.is_superuser != 1 and user.groups.all.0.name != "neighborhood-admin" %}
+    <div role="group" style="width:90%; margin:auto;">
+        <h2>Foros</h2>
+        <br>
+        <a class="btn btn-outline-dark" href="{% url 'forum:addPost' %}" role="button" style="width:100%;">
+            Publicar
+        </a>
+    </div>
+    <br>
     {% for post in posts %}
-    <div class="container">
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">
-                <a href="{% url 'forum:postDetail' post.pk %}" class="alert-link" onmouseover="this.style.color='#d4bd22'"
-                   onMouseOut="this.style.color='#000000'"
-                >{{ post.title }}</a>
-            </h4><small>(click para ver más)</small>
-            <hr>
-            {% if post.author.username == request.user.username %}
-            <p class="mb-0">Publicado por <strong>vos</strong></p>
-            <span style="text-align:right;">
+    <div class="modal modal-signin position-static d-block py-4" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+        <div style="width: 90%; margin-right: auto;
+             margin-left: auto;">
+            <div class="modal-content rounded-5 shadow" >
+                <div class="modal-header p-7 border-bottom-0">
+                    <h4 class="fw-bold mb-0">
+                        <a href="{% url 'forum:postDetail' post.pk %}" onmouseover="this.style.color='#036749'"
+                       onMouseOut="this.style.color='black'" style="color:black;">{{ post.title }}</a>
+                    </h4>
+
+                </div>
+                <p style="font-size:9px; color:black;">(Click para ver mas)</p>
+                <hr style="margin:8px 15px">
+                <div class="modal-body p-7 pt-7">
+                    {% if post.author.username == request.user.username %}
+                    <p class="mb-0" style="color:black;">Publicado por <strong>vos</strong></p>
+                    <span style="text-align:right;">
                         <a href="{% url 'forum:deletePost' post.pk %}" class="badge badge-danger"
-                           onClick="return confirm('¿Seguro que quieres borrar el tema del foro?');">
+                           onClick="return confirm('¿Seguro que quieres borrar el tema del foro?');" style="background-color:#dc3545;">
                         <strong>Eliminar</strong>
                     </a>
                     </span>
-            {% else %}
-            <p class="mb-0">Publicado por <strong>{{ post.author }}</strong></p>
-            {% endif %}
+                    {% else %}
+                    <p class="mb-0" style="color:black;">Publicado por <strong>{{ post.author }}</strong></p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
-    <br/>
     {% endfor %}
-    <br/>
+
+    {% endif %}
 {% endif %}
 {% endblock content %}

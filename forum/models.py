@@ -32,7 +32,7 @@ class Comment(models.Model):
         return self.likes.count()
 
     def total_complaints(self):
-        return self.complaints.count()
+        return self.complaints.all().count()
 
 
 class Complaint(models.Model):

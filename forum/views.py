@@ -121,7 +121,7 @@ def reportComment(request, pk):
         complaint = Complaint()
         if form.is_valid:
             comment.complaints.add(request.user)
-            if comment.complaints > 4:
+            if comment.total_complaints() > 4:
                 comment.removed = True
             complaint.comment = comment
             complaint.user = request.user

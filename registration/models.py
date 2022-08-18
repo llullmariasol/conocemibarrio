@@ -11,6 +11,9 @@ class Neighborhood(models.Model):
     class Meta:
         db_table = 'neighborhood'
 
+    def __str__(self):
+        return self.name
+
 
 class UserNeighborhood(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', null=True)
@@ -21,3 +24,6 @@ class UserNeighborhood(models.Model):
 
     class Meta:
         db_table = 'user_neighborhood'
+
+    def __str__(self):
+        return self.user.name + ' | ' + self.neighborhood.name
