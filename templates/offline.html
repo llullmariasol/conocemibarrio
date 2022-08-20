@@ -1,1 +1,7 @@
-<h1>You are currently offline! :(</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <br>
+    <h2 style="color:white">Sin conexión a Internet</h2>
+    <small style="color:white">Comprobá que tu dispositivo esté conectado a una red Wi-Fi o datos móviles.</small>
+{% endblock content %}
