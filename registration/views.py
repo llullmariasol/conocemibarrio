@@ -10,13 +10,13 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth import get_user_model, authenticate, login, logout
+from django.contrib.auth import get_user_model, logout
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 from webpush import send_user_notification
 import json
 
@@ -61,6 +61,10 @@ def home(request):
     args['vapid_key'] = vapid_key
 
     return render(request, 'base.html', args)
+
+
+def about(request):
+    return render(request, 'about.html')
 
 
 def registration(request):
@@ -389,9 +393,9 @@ def send_push(request):
         user_id = data['id']
         user = get_object_or_404(User, pk=user_id)
         payload = {'head': data['head'], 'body': data['body']}
-        send_user_notification(user=user, payload=payload, ttl=1000)
 
         if user_id != str(request.user.id):
+            send_user_notification(user=user, payload=payload, ttl=1000)
             notification = Notification()
             notification.body = data['body']
             notification.recipient = user

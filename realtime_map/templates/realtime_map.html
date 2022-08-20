@@ -110,7 +110,7 @@ var listOfObjects = [];
     singleObj['id'] = {{ p.id }};
     singleObj['name'] = "{{ p.name }}";
     singleObj['location'] = {{ p.location }};
-    singleObj['description'] = "{{ p.description }}";
+    singleObj['description'] = `{{ p.description }}`;
     listOfObjects.push(singleObj);
 {% endfor %}
 
