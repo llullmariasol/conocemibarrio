@@ -84,8 +84,6 @@
                     <br>
                     <q style="text-align:left">{{ comment.content }}</q>
 
-                    {% if comment.author == user %}
-                    {% else %}
                     <div class="wrap">
                         <div class ="right">
                             <form action="{% url 'forum:likeComment' comment.pk %}" method="POST">
@@ -107,7 +105,7 @@
                         </div>
                         <div class ="left"><small>{{ comment.total_likes }} me gusta &nbsp;</small></div>
                     </div>
-                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -122,9 +120,9 @@
         <input id="author" hidden value="{{ author_user_id }}">
         <div id="respond" class="comment-respond; text-center">
             <form method="post" id="form" class="comment-form">{% csrf_token %}
-                <input class="form-control" required="" placeholder="Tu respuesta" id="content" name="content">
+                <input class="form-control" required="" placeholder="Tu comentario" id="content" name="content">
                 <br>
-                <button class="btn btn-outline-dark" type="submit" style="width:100%;">Responder</button>
+                <button class="btn btn-outline-dark" type="submit" style="width:100%;">Comentar</button>
             </form>
         </div>
     </div>

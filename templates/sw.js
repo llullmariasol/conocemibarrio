@@ -46,14 +46,6 @@ const cacheFirst = async ({ request, preloadResponsePromise, fallbackUrl }) => {
   }
 };
 
-// Enable navigation preload
-//const enableNavigationPreload = async () => {
-//  if (self.registration.navigationPreload) {
-//    // Enable navigation preloads!
-//    await self.registration.navigationPreload.enable();
-//  }
-//};
-
 self.addEventListener('activate', (event) => {
   console.log('Ready to handle fetches!');
 });

@@ -11,7 +11,8 @@ from .views import (registration,
                     registrationNeighborhoodAdmin,
                     administrationRequests,
                     approveAdministrationRequest,
-                    rejectAdministrationRequest)
+                    rejectAdministrationRequest,
+                    about)
 
 app_name = 'registration'
 
@@ -49,4 +50,5 @@ urlpatterns = [
     path('administration/requests/', administrationRequests, name='administrationRequests'),
     path('administration/request/<int:pk>/approve/', approveAdministrationRequest, name='approveAdministrationRequest'),
     path('administration/request/<int:pk>/reject/', rejectAdministrationRequest, name='rejectAdministrationRequest'),
+    path('about/', about, name='about'),
 ]

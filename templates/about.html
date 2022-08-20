@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static '/css/modal.css' %}">
+<div class="modal modal-signin position-static d-block py-5" tabindex="-1" role="dialog" id="modalSignin" style="background-color: #036749; width:100%;align-items:center;" >
+    <div style="width: 90%; margin-right: auto; margin-left: auto;">
+        <div class="modal-content rounded-5 shadow" >
+            <div class="modal-header p-5 pb-4 border-bottom-0">
+            </div>
+            <div class="modal-body p-5 pt-0">
+                <div>
+                    <p style="text-align:justify;">
+                        &nbsp;<strong style="font-size:18px;">CONOCE MI BARRIO</strong> es un proyecto desarrollado por estudiantes de la Carrera
+                        Ingeniería en Informática (en el marco de la Cátedra Trabajo Final) de la Universidad Católica de
+                        Santiago del Estero, Departamento Académico Rafaela.
+                    </p>
+                    <p style="text-align:justify;">
+                        &nbsp;Si tenés dudas sobre el funcionamiento de la aplicación, podés acceder al <a href="#">Manual de Usuario</a>.
+                    </p>
+                    <p style="text-align:justify;">
+                        &nbsp;Si te interesa conocer en profundidad sobre el desarrollo del proyecto, podés acceder a la <a href="#">Documentación</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
