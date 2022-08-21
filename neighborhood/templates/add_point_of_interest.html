@@ -79,14 +79,14 @@
                     {% csrf_token %}
 
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control rounded-4" id="point-name" placeholder="Nombre" name="point-name">
+                        <input type="text" class="form-control rounded-4" id="point-name" placeholder="Nombre" name="point-name" required>
                         <label for="point-name">Nombre</label>
                     </div>
 
                     <div class="form-floating mb-3">
                         <textarea type="textarea" class="form-control rounded-4" id="point-description"
                                   placeholder="Descripción" name="point-description"
-                                  style="height: 150px; resize: none; text-indent: 0;"></textarea>
+                                  style="height: 150px; resize: none; text-indent: 0;" required></textarea>
                         <label for="point-description">Descripción</label>
                     </div>
 
@@ -130,9 +130,25 @@
     map.on('draw.delete', updateAreaWhenDeleting);
     map.on('draw.update', updateArea);
 
+    function inside(point, vs) {
+        var x = point[0], y = point[1];
+
+        var inside = false;
+        for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+            var xi = vs[i][0], yi = vs[i][1];
+            var xj = vs[j][0], yj = vs[j][1];
+
+            var intersect = ((yi > y) != (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+
+        return inside;
+    };
+
     function updateArea(e) {
         const data = draw.getAll();
-        const coordinates = data['features'][0]['geometry']['coordinates'];
+        const coordinates = data['features'][data.features.length - 1]['geometry']['coordinates'];
         document.getElementById('point').value = coordinates;
 
         if (data.features.length > 1) {
@@ -140,11 +156,31 @@
             document.querySelector('#btn-login').disabled = true;
         } else {
              document.querySelector('#btn-login').disabled = false;
+        }
+
+        var polygon = labels;
+        console.log(inside(coordinates, polygon));
+
+        if (inside(coordinates, polygon) == false) {
+            alert("El punto de interés debe estar dentro del área del barrio.");
+            document.querySelector('#btn-login').disabled = true;
+        } else {
+          document.querySelector('#btn-login').disabled = false;
+        }
+
+        if (data.features.length == 0) {
+            document.querySelector('#btn-login').disabled = true;
         }
     }
 
     function updateAreaWhenDeleting(e) {
         const data = draw.getAll();
+
+        if (data['features'].length == 0) {
+            document.querySelector('#btn-login').disabled = true;
+            return;
+        }
+
         const coordinates = data['features'][0]['geometry']['coordinates'];
         document.getElementById('point').value = coordinates;
 
@@ -153,10 +189,12 @@
             document.querySelector('#btn-login').disabled = true;
         } else {
              document.querySelector('#btn-login').disabled = false;
+             updateArea(e);
         }
     }
 
     map.on('load', () => {
+        document.querySelector('#btn-login').disabled = true;
         map.addSource('national-park', {
         'type': 'geojson',
         'data': {

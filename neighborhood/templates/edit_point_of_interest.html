@@ -125,14 +125,14 @@
           {% csrf_token %}
 
           <div class="form-floating mb-3">
-            <input type="text" class="form-control rounded-4" id="point-name" placeholder="Nombre" name="point-name" value='{{ point.name }}'>
+            <input type="text" class="form-control rounded-4" id="point-name" placeholder="Nombre" name="point-name" value='{{ point.name }}' required>
             <label for="point-name">Nombre</label>
           </div>
 
           <div class="form-floating mb-3">
                         <textarea type="textarea" class="form-control rounded-4" id="point-description"
                                   placeholder="Descripción" name="point-description"
-                                  style="height: 150px; resize: none; text-indent: 0;">{{ point.description }}</textarea>
+                                  style="height: 150px; resize: none; text-indent: 0;" required>{{ point.description }}</textarea>
             <label for="point-description">Descripción</label>
           </div>
 
@@ -215,7 +215,7 @@ function inside(point, vs) {
 
         function updateArea(e) {
             const data = draw.getAll();
-            const coordinates = data['features'][0]['geometry']['coordinates'];
+            const coordinates = data['features'][data.features.length - 1]['geometry']['coordinates'];
             document.getElementById('point').value = coordinates;
             if (data.features.length > 1) {
                 alert("Debes selecccionar un solo punto.");
@@ -234,6 +234,10 @@ function inside(point, vs) {
             } else {
               document.querySelector('#btn-login').disabled = false;
             }
+
+            if (data.features.length == 0) {
+                document.querySelector('#btn-login').disabled = true;
+            }
         }
 
         function updateAreaWhenDeleting(e) {
@@ -245,6 +249,7 @@ function inside(point, vs) {
                 document.querySelector('#btn-login').disabled = true;
             } else {
                  document.querySelector('#btn-login').disabled = false;
+                 updateArea(e);
             }
             document.getElementById('coordinates-length').value = data.features.length;
         }

@@ -46,7 +46,7 @@
 <body class="text-center" style="background-color: #036749; padding-bottom: 50px">
 <main>
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
-        {% if request.path != '/create_neighborhood/' and request.path != '/neighborhood/images/' and request.path != '/neighborhood/images/upload/' and request.path !=  '/neighborhood/information/' and request.path !=  '/neighborhood/points_of_interest/' and request.path != '/administration/requests/' and '/points_of_interest/add/' not in request.path and 'edit' not in request.path and 'image' not in request.path %}
+        {% if request.path == '/' %}
     <br>
     <div role="group" style="width:80%; margin:auto;">
         {% if n.is_active == 0 %}

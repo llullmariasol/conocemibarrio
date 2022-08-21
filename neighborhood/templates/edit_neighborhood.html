@@ -61,14 +61,14 @@
         <form method="post" action="">
             {% csrf_token %}
             <div class="form-floating mb-3">
-                <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="neighborhood-name" value='{{ neighborhood.name }}'>
+                <input type="text" class="form-control rounded-4" id="neighborhood-name" placeholder="Nombre" name="neighborhood-name" value='{{ neighborhood.name }}' readonly>
                 <label for="neighborhood-name">Nombre</label>
             </div>
 
             <div class="form-floating mb-3">
                 <textarea type="textarea" class="form-control rounded-4" id="neighborhood-description"
                           placeholder="Descripción" name="neighborhood-description"
-                          style="height: 150px; resize: none; text-indent: 0;">{{ neighborhood.description }}</textarea>
+                          style="height: 150px; resize: none; text-indent: 0;" required>{{ neighborhood.description }}</textarea>
                 <label for="neighborhood-description">Descripción</label>
             </div>
 

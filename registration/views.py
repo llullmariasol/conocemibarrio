@@ -217,8 +217,6 @@ def logOut(request):
     logout(request)
     return HttpResponseRedirect('/')
 
-    return render(request, 'base.html', {})
-
 
 def joinNeighborhood(request):
     args = {}
