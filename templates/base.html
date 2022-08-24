@@ -48,6 +48,8 @@
     {% if request.user.is_authenticated and user.groups.all.0.name == "neighborhood-admin"%}
         {% if request.path == '/' %}
     <br>
+    <h3 class="fw-bold mb-0" style="color:white;">{{ n.name }}</h3>
+    <br>
     <div role="group" style="width:80%; margin:auto;">
         {% if n.is_active == 0 %}
         <a href="/neighborhood/information/">
@@ -80,6 +82,13 @@
         <a href="/administration/requests/">
             <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
                 Solicitudes de administración del barrio
+            </button>
+        </a>
+
+        <br><br>
+        <a href="/forum/">
+            <button id="btn-create-n" type="button" class="btn btn-outline-dark" style="width:100%;">
+                Foro
             </button>
         </a>
 

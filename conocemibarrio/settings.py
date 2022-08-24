@@ -20,7 +20,7 @@ SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+gj0caznve=v!w387ens4gnv2qbz5fjbgl%k6efcvb(j+k0$7z'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -68,8 +68,8 @@ MIDDLEWARE = [
 ]
 
 WEBPUSH_SETTINGS = {
-    "VAPID_PUBLIC_KEY": "BKXmHplx8qZkh8l7DXbfWE-hZr9yllqKYdue0p503DCb_lqgTTpE9QeniXDHuE5jMDJFzHX8p84aODT6npPvP1A",
-    "VAPID_PRIVATE_KEY": "nA8Gielc4rT58SQhIYzuLZ9Vlf35jTIPsLhQfFBMjtM",
+    "VAPID_PUBLIC_KEY": os.environ.get('VAPID_PUBLIC_KEY'),
+    "VAPID_PRIVATE_KEY": os.environ.get('VAPID_PRIVATE_KEY'),
     "VAPID_ADMIN_EMAIL": "conocemibarriorafaela@gmail.com"
 }
 
@@ -116,10 +116,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'd3ckt4s3lqv1eq',
-            'USER': 'pxxpubfxnxwmvx',
-            'PASSWORD': '51bc6ab3e826ca4b097e7b2e5ad93d1c0bae9b70373c8194bbff0678f3d683f9',
-            'HOST': 'ec2-52-4-104-184.compute-1.amazonaws.com',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
             'PORT': 5432,
         }
     }
@@ -153,7 +153,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "conocemibarriorafaela@gmail.com"
-EMAIL_HOST_PASSWORD = "awlikjxvqibgebtn"
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -180,12 +180,12 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '497938302411-oud6o1edpt427u169m4i8vs6eu4563it.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
 SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.8'
-SOCIAL_AUTH_FACEBOOK_KEY = '330003199184031'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'cd870cd6be93e9005fe4f20c1bb5965d'
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ.get('SOCIAL_AUTH_FACEBOOK_KEY')
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ.get('SOCIAL_AUTH_FACEBOOK_SECRET')
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email', 'user_link']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id, name, email, link'
@@ -205,12 +205,12 @@ LOGOUT_REDIRECT_URL = 'registration:logIn'
 GDAL_LIBRARY_PATH = os.environ.get('GDAL_LIBRARY_PATH')
 GEOS_LIBRARY_PATH = os.environ.get('GEOS_LIBRARY_PATH')
 
-CLOUDINARY_URL = 'cloudinary://566164783845727:WoFv-L_mVcqvdBICyWnInT-HbUY@dcexbym30'
+CLOUDINARY_URL = os.environ.get('CLOUDINARY_URL')
 
 cloudinary.config(
-    cloud_name="dcexbym30",
-    api_key="566164783845727",
-    api_secret="WoFv-L_mVcqvdBICyWnInT-HbUY"
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET')
 )
 
 PWA_APP_NAME = 'conocemibarrio'
