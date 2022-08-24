@@ -61,7 +61,7 @@
     </div>
 {% else %}
 
-    {% if request.user.is_authenticated and user.is_superuser != 1 and user.groups.all.0.name != "neighborhood-admin" %}
+    {% if request.user.is_authenticated and user.is_superuser != 1 %}
     <div role="group" style="width:90%; margin:auto;">
         <h2>Foros</h2>
         <br>
