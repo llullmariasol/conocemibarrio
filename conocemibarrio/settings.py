@@ -116,10 +116,10 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.postgis',
-            'NAME': 'd3ckt4s3lqv1eq',
-            'USER': 'pxxpubfxnxwmvx',
-            'PASSWORD': '51bc6ab3e826ca4b097e7b2e5ad93d1c0bae9b70373c8194bbff0678f3d683f9',
-            'HOST': 'ec2-52-4-104-184.compute-1.amazonaws.com',
+            'NAME': os.environ.get('DATABASE_NAME'),
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': os.environ.get('DATABASE_HOST'),
             'PORT': 5432,
         }
     }
