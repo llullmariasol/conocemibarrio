@@ -20,7 +20,7 @@ def chat(request):
     if created:
         neighborhood_chat.save()
     messages = Message.objects.filter(chat=neighborhood_chat)
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         form = MessageForm(data=request.POST)
         if form.is_valid():
             message = form.save(commit=False)
@@ -35,6 +35,6 @@ def chat(request):
         {
             'form': form,
             'msgs': messages,
-            'neighbothood': neighborhood,
+            'neighborhood': neighborhood,
         },
     )
