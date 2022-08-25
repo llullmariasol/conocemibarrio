@@ -110,6 +110,7 @@ if not os.environ.get("IN_HEROKU"):
             'PASSWORD': 'admin1234',
             'HOST': '127.0.0.1',
             'PORT': '3306',
+            'OPTIONS': {'charset': 'utf8mb4'},
         }
     }
 else:
@@ -121,6 +122,7 @@ else:
             'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
             'HOST': os.environ.get('DATABASE_HOST'),
             'PORT': 5432,
+            'OPTIONS': {'charset': 'utf8mb4'},
         }
     }
 
