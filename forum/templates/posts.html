@@ -63,7 +63,7 @@
 
     {% if request.user.is_authenticated and user.is_superuser != 1 %}
     <div role="group" style="width:90%; margin:auto;">
-        <h2>Foros</h2>
+        <h3>Foro de barrio {{ neighborhood }}</h3>
         <br>
         <a class="btn btn-outline-dark" href="{% url 'forum:addPost' %}" role="button" style="width:100%;">
             Publicar

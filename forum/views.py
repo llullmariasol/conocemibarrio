@@ -28,7 +28,8 @@ def posts(request):
             {'function': "foro"}
         )
     post_list = Post.objects.all().filter(neighborhood=user_neighborhood.neighborhood)
-    return render(request, 'posts.html', {'posts': post_list})
+    n = user_neighborhood.neighborhood.name
+    return render(request, 'posts.html', {'posts': post_list, 'neighborhood': n})
 
 
 @login_required
