@@ -17,7 +17,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments') # el related_name nos va a permitir acceder a los comentarios desde el post
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     content = models.CharField(max_length=500)
     creationDate = models.DateTimeField(auto_now_add=True)
     liked = models.BooleanField(default=False)
